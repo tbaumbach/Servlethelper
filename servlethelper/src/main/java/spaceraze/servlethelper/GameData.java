@@ -14,8 +14,6 @@ import spaceraze.world.Player;
 public class GameData implements Serializable {
 	static final long serialVersionUID = 1L;
 	private String gameName, mapName, status, nextUpdate, gameWorldName, updatesWeek, password, gameOverStatus;
-	// TODO 2019-12-01 ta bort kopplingar till android.
-	private String scenarioFileName; // used in droid client for single player games
 	private Calendar nextUpdateDate;
 	private int turn,maxTurn;
 	private int nrPlayers,nrPlayersMax; 
@@ -221,14 +219,6 @@ public class GameData implements Serializable {
 
 	public void setMapMaxPlayers(int mapMaxPlayers) {
 		this.mapMaxPlayers = mapMaxPlayers;
-	}
-
-	public String getScenarioFileName() {
-		return scenarioFileName;
-	}
-
-	public void setScenarioFileName(String scenarioFileName) {
-		this.scenarioFileName = scenarioFileName;
 	}
 
 }
