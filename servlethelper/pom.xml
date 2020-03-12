@@ -3,11 +3,12 @@
   <groupId>spaceraze</groupId>
   <artifactId>servlethelper</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>ServletHelper</name>
+  <name>SpaceRaze ServletHelper</name>
   <description>ServletHelper contains serializable objects used as contracts between server and swing client</description>
   <properties>
-  	<maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>13</maven.compiler.target>
+      <maven.compiler.source>13</maven.compiler.source>
+      <maven.complier.release>13</maven.complier.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
