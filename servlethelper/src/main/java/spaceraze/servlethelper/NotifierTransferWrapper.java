@@ -3,7 +3,7 @@ package spaceraze.servlethelper;
 import java.io.Serializable;
 import java.util.List;
 
-import spaceraze.servlethelper.ReturnGames;
+import spaceraze.util.general.RankedPlayer;
 import spaceraze.world.Map;
 
 public class NotifierTransferWrapper implements Serializable {
