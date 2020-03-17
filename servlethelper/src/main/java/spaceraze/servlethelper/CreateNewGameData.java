@@ -7,10 +7,22 @@ import spaceraze.world.StatisticGameType;
 
 public class CreateNewGameData implements Serializable {
 	static final long serialVersionUID = 1L;
-	private String gameWorldFileName, gameName, mapName, autoBalanceString, timeString, emailPlayers, maxNrPlayers, userLogin, gamePassword, groupFaction, randomFactionString, diplomacy;
+	private String gameWorldFileName;
+	private String gameName;
+	private String mapName;
+	private String autoBalanceString;
+	private String timeString;
+	private String emailPlayers;
+	private String maxNrPlayers;
+	private String userLogin;
+	private String gamePassword;
+	private String groupFaction;
+	private String randomFactionString;
+	private String diplomacy;
 	private List<String> selectableFactionNames;
 	private StatisticGameType statisticGameType;
-	private int endTurn, numberOfStartPlanet;
+	private int endTurn;
+	private int numberOfStartPlanet;
 	
 	public String getGameName() {
 		return gameName;

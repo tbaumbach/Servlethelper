@@ -16,14 +16,10 @@ public class NotifierTransferWrapper implements Serializable {
 	private boolean deleteGame;
 	private boolean getAllMaps; // hämta kartor och gameworlds
 	private CreateNewGameData createNewGameData;
-	private boolean android; // true if caller is the android client
-	private int androidVersion; // used if caller is android client. If version is too low returnCode should contain specific error message
 	// response data
 	private String returnCode;
 	private GameListData gameListData;
 	private List<Map> allMaps;
-	private RankedPlayer rankingData;
-	private int gameId; // används av Android för att veta id på ett nyskapat spel
 
 	public GameListData getGameListData() {
 		return gameListData;
@@ -103,38 +99,6 @@ public class NotifierTransferWrapper implements Serializable {
 
 	public void setAllMaps(List<Map> allMaps) {
 		this.allMaps = allMaps;
-	}
-	
-	public boolean isAndroid() {
-		return android;
-	}
-
-	public void setAndroid(boolean android) {
-		this.android = android;
-	}
-	
-	public int getAndroidVersion() {
-		return androidVersion;
-	}
-
-	public void setAndroidVersion(int androidVersion) {
-		this.androidVersion = androidVersion;
-	}
-
-	public RankedPlayer getRankingData() {
-		return rankingData;
-	}
-
-	public void setRankingData(RankedPlayer rankingData) {
-		this.rankingData = rankingData;
-	}
-
-	public int getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
 	}
 
 }

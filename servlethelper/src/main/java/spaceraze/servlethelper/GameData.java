@@ -13,10 +13,19 @@ import spaceraze.world.Player;
  */
 public class GameData implements Serializable {
 	static final long serialVersionUID = 1L;
-	private String gameName, mapName, status, nextUpdate, gameWorldName, updatesWeek, password, gameOverStatus;
+	private String gameName;
+	private String mapName;
+	private String status;
+	private String nextUpdate;
+	private String gameWorldName;
+	private String updatesWeek;
+	private String password;
+	private String gameOverStatus;
 	private Calendar nextUpdateDate;
-	private int turn,maxTurn;
-	private int nrPlayers,nrPlayersMax; 
+	private int turn;
+	private int maxTurn;
+	private int nrPlayers;
+	private int nrPlayersMax;
 	private int gameId;
 	private int mapMaxPlayers;
 	// TODO 2019-12-01 Klienten ska agera med en inloggad användare, möjligen ska vissa roller ha större rättigheter, men players borde inte behövas och i alla fall inte deras lösenord. Om players blir kvar ska den byta listtyp.
@@ -149,18 +158,14 @@ public class GameData implements Serializable {
 		this.updatesWeek = updatesWeek;
 	}
 	
-	public void setPlayers(List<Player> playersList, boolean isAndroid){
+	public void setPlayers(List<Player> playersList){
 		players = new String[playersList.size()][4];
 		int i = 0;
 		for (Player aPlayer : playersList) {
 			players[i][0] = aPlayer.getName();
-			if (isAndroid){ // för Androidklienten så skall inte lösenordet returneras, utan istället vill Androidklienten veta vad varje spelare är för faction
-				players[i][1] = aPlayer.getFaction().getName();
-			}else{
-				players[i][1] = aPlayer.getPassword();
-			}
+			players[i][1] = aPlayer.getPassword();
 			String statusChar = "x";
-			if (aPlayer.isFinishedThisTurn() | aPlayer.isDefeated()){
+			if (aPlayer.isFinishedThisTurn() || aPlayer.isDefeated()){
 				statusChar = "n";
 			}else
 			if (aPlayer.getUpdatedThisTurn()){
@@ -175,7 +180,7 @@ public class GameData implements Serializable {
 	public boolean containsPlayer(String playerName){
 		boolean containsPlayer = false;
 		int index = 0;
-		while((!containsPlayer) & (index < players.length)){
+		while((!containsPlayer) && (index < players.length)){
 			if (players[index][0].equals(playerName)){
 				containsPlayer = true;
 			}else{

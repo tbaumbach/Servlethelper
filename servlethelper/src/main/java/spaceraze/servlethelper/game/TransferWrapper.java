@@ -42,8 +42,6 @@ public class TransferWrapper implements Serializable {
 
 	private ReportLevel reportLevel;
 
-	private boolean android; // true if caller is the android client. Default is that the client is not the
-								// Android client.
 	private int mapInfoFromTurn; // used if caller only wants to have MapInfoTurn-objects from a certain turn.
 									// Default will return all turns
 
@@ -57,8 +55,7 @@ public class TransferWrapper implements Serializable {
 
 		// ny kod för att koppla loss Player objektet när ett drag görs.
 		if (aPlayer != null) {
-			// pi = aPlayer.getPlanetInfos(); // TODO Paul ta bort detta när du har hittat
-			// buggen / Tobbe
+			// pi = aPlayer.getPlanetInfos(); // TODO Paul ta bort detta när du har hittat buggen / Tobbe
 			orders = aPlayer.getOrders();
 			playerName = aPlayer.getName();
 			notes = aPlayer.getNotes();
@@ -102,7 +99,7 @@ public class TransferWrapper implements Serializable {
 	}
 
 	public boolean isGetTurn() {
-		return (playerName == null) & (message == null);
+		return (playerName == null) && (message == null);
 	}
 
 	public void setTurn(int turn) {
@@ -133,10 +130,6 @@ public class TransferWrapper implements Serializable {
 		return pi;
 	}
 
-	public void setPi(PlanetInfos pi) {
-		this.pi = pi;
-	}
-
 	public Orders getOrders() {
 		return orders;
 	}
@@ -147,10 +140,6 @@ public class TransferWrapper implements Serializable {
 
 	public String getPlayerName() {
 		return playerName;
-	}
-
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
 	}
 
 	public String getNotes() {
@@ -165,10 +154,6 @@ public class TransferWrapper implements Serializable {
 		return finishedThisTurn;
 	}
 
-	public void setFinishedThisTurn(boolean finishedThisTurn) {
-		this.finishedThisTurn = finishedThisTurn;
-	}
-
 	public Message getMailMessage() {
 		return mailMessage;
 	}
@@ -177,40 +162,16 @@ public class TransferWrapper implements Serializable {
 		return messageId;
 	}
 
-	public void setMessageId(int messageId) {
-		this.messageId = messageId;
-	}
-
 	public int getLatestReadMessage() {
 		return latestReadMessage;
-	}
-
-	public void setLatestReadMessage(int latestReadMessage) {
-		this.latestReadMessage = latestReadMessage;
 	}
 
 	public PlanetOrderStatuses getPlanetOrderStatuses() {
 		return planetOrderStatuses;
 	}
 
-	public void setPlanetOrderStatuses(PlanetOrderStatuses planetOrderStatuses) {
-		this.planetOrderStatuses = planetOrderStatuses;
-	}
-
-	public boolean isAndroid() {
-		return android;
-	}
-
-	public void setAndroid(boolean android) {
-		this.android = android;
-	}
-
 	public int getMapInfoFromTurn() {
 		return mapInfoFromTurn;
-	}
-
-	public void setMapInfoFromTurn(int mapInfoFromTurn) {
-		this.mapInfoFromTurn = mapInfoFromTurn;
 	}
 
 }

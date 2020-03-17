@@ -10,7 +10,7 @@ public class GameListData implements Serializable {
 	private List<GameData> games;
 	
 	public GameListData() {
-		games = new LinkedList<GameData>();
+		games = new LinkedList<>();
 	}
 	
 	public void addGame(GameData aGameData){

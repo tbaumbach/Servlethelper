@@ -27,7 +27,6 @@ import spaceraze.util.properties.PropertiesHandler;
 import spaceraze.world.Map;
 import spaceraze.world.Planet;
 import spaceraze.world.PlanetConnection;
-import spaceraze.servlethelper.map.GIFEncoder;;
 
 /**
  * @author WMPABOD

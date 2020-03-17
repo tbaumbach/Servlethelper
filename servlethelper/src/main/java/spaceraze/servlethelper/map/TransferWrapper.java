@@ -76,7 +76,6 @@ public class TransferWrapper implements Serializable{
 	/**
 	 * Used by server when responding to a save map action.
 	 * Also removes map from transfer object
-	 * @param aMessage
 	 */
 	public void setMessage(String aMessage){
 		this.message = aMessage;

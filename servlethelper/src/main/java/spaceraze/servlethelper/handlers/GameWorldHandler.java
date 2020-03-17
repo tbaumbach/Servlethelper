@@ -23,15 +23,15 @@ import spaceraze.world.gameworlds.Universe3051;
  * Also produces HTML lists etc for web pages.
  */
 public class GameWorldHandler{
-	static private List<GameWorld> gameWorldTypes;
-	
+	private static List<GameWorld> gameWorldTypes;
+
+	private GameWorldHandler() {}
+
 	//TODO 2020-12-03 This class is moved to the servlethelper module (for the Java client to use), but should move back to the server module and GameWorldServlet should use this this class.
 	public static List<GameWorld> getGameWorldTypes(){
 		if (gameWorldTypes == null){
-			gameWorldTypes = new ArrayList<GameWorld>();
-			// create all gameworlds
-			// createGameWorlds(gameWorldTypes);
-			// TODO (Paul) load from files instead (the line above)
+			gameWorldTypes = new ArrayList<>();
+			// create all gameWorlds
 			createHardcodedGameWorlds(gameWorldTypes);
 		}
 		return gameWorldTypes;	}
@@ -41,11 +41,7 @@ public class GameWorldHandler{
 		getGameWorldTypes();
 	}
 
-	/**
-	 * Create three hardcoded gameworlds...
-	 * @param gameWorldTypes
-	 */
-	private static void createHardcodedGameWorlds(List<GameWorld> gameWorldTypes){	
+	private static void createHardcodedGameWorlds(List<GameWorld> gameWorldTypes){
 		gameWorldTypes.add(getHardcodedGameWorld("srexpanded"));
 		gameWorldTypes.add(getHardcodedGameWorld("universe"));
 		gameWorldTypes.add(getHardcodedGameWorld("spaceopera"));
@@ -63,7 +59,7 @@ public class GameWorldHandler{
 		List<GameWorld> allGameWorlds = getGameWorldTypes();
 		int i = 0;
 		while ((i < allGameWorlds.size()) && (foundGW == null)) {
-			GameWorld tmpGW = (GameWorld)allGameWorlds.get(i);
+			GameWorld tmpGW = allGameWorlds.get(i);
 			if (tmpGW.getFileName().equals(gameWorldFileName)){
 				foundGW = tmpGW;
 			}else{
@@ -74,7 +70,7 @@ public class GameWorldHandler{
 	}
 	
 	public static String getGameWorldOptionsHTML(){
-		StringBuffer retHTML = new StringBuffer();
+		StringBuilder retHTML = new StringBuilder();
 		List<GameWorld> allGameWorlds = getGameWorldTypes();
 		for (GameWorld tmpGW : allGameWorlds) {
 			Logger.finer(tmpGW.getFileName());
@@ -88,12 +84,7 @@ public class GameWorldHandler{
 	}
 	
 	public static int getGameWorldsNr(){
-		int nr = 0;
-		List<GameWorld> GWs = getGameWorldTypes();
-		if (GWs != null){
-			nr = GWs.size();
-		}
-		return nr;
+		return getGameWorldTypes().size();
 	}
 
 	private static GameWorld getHardcodedGameWorld(String fileName){
@@ -135,44 +126,11 @@ public class GameWorldHandler{
 		return tmpGW;
 	}
 
-
-
-	/**
-	 * returns html with links to battlesim for all gameworlds
-	 * @return
-	 */
-	public static String getBattleSimListHTML(){
-		StringBuffer retHTML = new StringBuffer();
-		List<GameWorld> allGameWorlds = getGameWorldTypes();
-		for (GameWorld tmpGW : allGameWorlds) {
-			retHTML.append("<a href=\"battle_sim.jsp?gameworld=");
-			retHTML.append(tmpGW.getFileName());
-			retHTML.append("\">");
-			retHTML.append(tmpGW.getFullName());
-			retHTML.append("</a><br>");
-		}
-		return retHTML.toString();
-	}
-
-	public static String getBattleSimListHTMLNO(){
-		StringBuffer retHTML = new StringBuffer();
-		List<GameWorld> allGameWorlds = getGameWorldTypes();
-		for (GameWorld tmpGW : allGameWorlds) {
-			retHTML.append("<a href=\"battle_sim.jsp?gameworld=");
-			retHTML.append(tmpGW.getFileName());
-			retHTML.append("\">");
-			retHTML.append(tmpGW.getFullName());
-			retHTML.append("</a><br>");
-		}
-		return retHTML.toString();
-	}
-	
 	/**
 	 * returns html with links to gameworld.jsp for all gameworlds
-	 * @return
 	 */
 	public static String getListHTML(){
-		StringBuffer retHTML = new StringBuffer();
+		StringBuilder retHTML = new StringBuilder();
 		List<GameWorld> allGameWorlds = getGameWorldTypes();
 		Logger.finer("getGameWorldTypes()" + allGameWorlds.size());
 		for (GameWorld tmpGW : allGameWorlds) {
@@ -189,8 +147,7 @@ public class GameWorldHandler{
 
 
 	/**
-	 * Returns the first of the gameworlds with the highest counter 
-	 * @return
+	 * Returns the first of the gameworlds with the highest counter
 	 */
 	/*TODO 2020-01-03 Changed the statistics logic or activate this to be used by ?
 	public static GameWorld getMostUsedGameWorld(){
@@ -224,7 +181,7 @@ public class GameWorldHandler{
     	GameWorld found = null;
     	int i = 0;
     	List<GameWorld> gameWorlds = getGameWorldTypes();
-    	while ((found == null) & (i < gameWorlds.size())){
+    	while ((found == null) && (i < gameWorlds.size())){
     		GameWorld aGameWorld = gameWorlds.get(i);
     		if (aGameWorld.getFullName().equals(aGameWorldName)){
     			found = aGameWorld;
