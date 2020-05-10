@@ -52,14 +52,14 @@ public class ExpensePureFunction {
         if (type.equalsIgnoreCase("buildtroop")){
             // first check if there is an engineer at the planet
             VIP tempVIP = aGalaxy.findVIPTroopBuildBonus(planet, player , o);
-            TroopType troopType = player.findTroopType(expense.getTroopTypeName());
+            TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeName(), player, aGalaxy);
             cost = troopType.getCostBuild(tempVIP);
 
         }else
         if (type.equalsIgnoreCase("buildVIP")){
             VIPType tempVIPType = aGalaxy.getGameWorld().getVIPTypeByName(expense.getVipTypeName());
             if(tempVIPType == null){
-                tempVIPType = player.getVIPType(expense.getVipTypeName());
+                tempVIPType = aGalaxy.getGameWorld().getVIPTypeByName(expense.getVipTypeName());
             }
             cost = tempVIPType.getBuildCost();
         }else

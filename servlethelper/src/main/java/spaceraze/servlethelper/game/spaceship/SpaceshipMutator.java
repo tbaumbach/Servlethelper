@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.spaceship;
 
+import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.world.*;
 
 public class SpaceshipMutator {
@@ -7,11 +8,11 @@ public class SpaceshipMutator {
     private SpaceshipMutator(){}
 
     public static Spaceship createSpaceShip(Player player, SpaceshipType type,  VIP vipWithBonus, Galaxy galaxy, int factionTechBonus, int buildingBonus, int uniqueId){
-        PlayerSpaceshipType playerSpaceshipType = player.findOwnPlayerSpaceshipType(type.getName());
-        SpaceshipType spaceshipType = playerSpaceshipType != null ? new SpaceshipType(type, playerSpaceshipType) : type;
-        int nrProduced = playerSpaceshipType != null ? playerSpaceshipType.updateNrProduced() : uniqueId;
+        PlayerSpaceshipImprovement playerSpaceshipImprovement = PlayerPureFunctions.findSpaceshipImprovement(type.getName(), player);
+        SpaceshipType spaceshipType = playerSpaceshipImprovement != null ? new SpaceshipType(type, playerSpaceshipImprovement) : type;
+        int nrProduced = playerSpaceshipImprovement != null ? playerSpaceshipImprovement.updateNrProduced() : uniqueId;
 
-         return new Spaceship(spaceshipType, null, nrProduced, galaxy.getUniqueIdCounter("Ship").getUniqueId(),vipWithBonus,factionTechBonus,buildingBonus);
+         return new Spaceship(spaceshipType, null, nrProduced, uniqueId,vipWithBonus,factionTechBonus,buildingBonus);
     }
 
     public static Spaceship createSpaceShip(SpaceshipType type, Galaxy galaxy){

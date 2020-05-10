@@ -8,12 +8,12 @@ public class SpaceshipPureFunctions {
 
     private SpaceshipPureFunctions(){}
 
-    public static boolean isConstructible(Galaxy galaxy, Player player, SpaceshipType spaceshipType, PlayerSpaceshipType playerSpaceshipType){
+    public static boolean isConstructible(Galaxy galaxy, Player player, SpaceshipType spaceshipType, PlayerSpaceshipImprovement playerSpaceshipImprovement){
         //	LoggingHandler.fine("isConstructible aPlayer: " + aPlayer.getName() + " SpaceType namn: " + name);
         //	LoggingHandler.fine("isWorldUnique isFactionUnique isPlayerUnique : " + isWorldUnique() + " " + isFactionUnique() + " " +isPlayerUnique());
 
         boolean constructible =  true;
-        if((playerSpaceshipType != null && !playerSpaceshipType.isAvailableToBuild()) || (playerSpaceshipType == null && spaceshipType.isAvailableToBuild())){
+        if((playerSpaceshipImprovement != null && !playerSpaceshipImprovement.isAvailableToBuild()) || (playerSpaceshipImprovement == null && !spaceshipType.isAvailableToBuild())){
             constructible = false;
         }else if((spaceshipType.isWorldUnique() && galaxy.spaceshipTypeExist(spaceshipType, null, null))
                 || (spaceshipType.isFactionUnique() && galaxy.spaceshipTypeExist(spaceshipType, player.getFaction(), null))

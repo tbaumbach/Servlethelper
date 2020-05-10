@@ -2,6 +2,7 @@ package spaceraze.servlethelper.game.player;
 
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 
@@ -13,51 +14,89 @@ public class PlayerPureFunctions {
 
     private PlayerPureFunctions(){}
 
-    /*
-    public static List<SpaceshipType> getAvailableSpaceshipTypes(Galaxy galaxy, Player player){
-        //TODO 2020-04-18 used by client, should loop through player.getPlayerSpaceshipTypes() to get the correct values on the ship
+    public static List<SpaceshipType> getSpaceshipTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return player.getSpaceshipTypes().stream()
-                .filter(ship -> SpaceshipPureFunctions.isConstructible(galaxy, player, ship, null))
-                .collect(Collectors.toList());
-    }*/
+        return player.getSpaceshipImprovements().stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+    }
 
     public static List<SpaceshipType> getAvailableSpaceshipTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return getAvailablePlayerSpaceshipTypes(galaxy, player).stream().map(ship -> galaxy.getShipType(ship.getTypeId())).collect(Collectors.toList());
+        return getAvailableSpaceshipImprovements(galaxy, player).stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
     }
 
-    public static  List<PlayerSpaceshipType> getAvailablePlayerSpaceshipTypes(Galaxy galaxy, Player player){
+    public static List<PlayerSpaceshipImprovement> getAvailableSpaceshipImprovements(Galaxy galaxy, Player player){
         //TODO 2020-04-18 used by client, should loop through player.getPlayerSpaceshipTypes() to get the correct values on the ship
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return player.getPlayerSpaceshipTypes().stream()
-                .filter(ship -> SpaceshipPureFunctions.isConstructible(galaxy, player, galaxy.getShipType(ship.getTypeId()), ship))
+        return player.getSpaceshipImprovements().stream()
+                .filter(improvement -> SpaceshipPureFunctions.isConstructible(galaxy, player, galaxy.getShipType(improvement.getTypeId()), improvement))
                 .collect(Collectors.toList());
     }
+
+    public static PlayerSpaceshipImprovement findSpaceshipImprovement(String findName, Player player){
+        return player.getSpaceshipImprovements().stream()
+                .filter(improvement -> improvement.getTypeId().equalsIgnoreCase(findName)).findFirst().orElse(null);
+    }
+
+    public static List<TroopType> getTroopTypes(Galaxy galaxy, Player player){
+        //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
+
+        return player.getTroopImprovements().stream().map(improvement -> findOwnTroopType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+    }
+
+    public static List<TroopType> getAvailableTroopTypes(Galaxy galaxy, Player player){
+        //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
+
+        return getAvailableTroopImprovements(galaxy, player).stream().map(improvement -> findOwnTroopType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+    }
+
+    public static  List<PlayerTroopImprovement> getAvailableTroopImprovements(Galaxy galaxy, Player player){
+        //TODO 2020-04-18 used by client, should loop through player.getPlayerSpaceshipTypes() to get the correct values on the ship
+        //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
+
+        return player.getTroopImprovements().stream()
+                .filter(improvement -> TroopPureFunctions.isConstructable(player, galaxy, galaxy.findTroopType(improvement.getTypeId()), improvement))
+                .collect(Collectors.toList());
+    }
+
+    public static PlayerTroopImprovement findTroopImprovement(String findName, Player player){
+        return player.getTroopImprovements().stream()
+                .filter(improvement -> improvement.getTypeId().equalsIgnoreCase(findName)).findFirst().orElse(null);
+    }
+
+    /**
+     * Find a TroopType from the players types.
+     */
+    public static TroopType findOwnTroopType(String findName, Player player, Galaxy galaxy){
+        PlayerTroopImprovement playerTroopImprovement = findTroopImprovement(findName, player);
+
+        return playerTroopImprovement != null ? new TroopType(galaxy.findTroopType(findName), playerTroopImprovement) : null;
+    }
+
+    /**
+     * If the player researched/upgraded a TroopType that type will be returned instead of original one from the galaxy
+     */
+    public static TroopType findTroopType(String findName, Player player, Galaxy galaxy){
+        return findOwnTroopType(findName, player, galaxy) != null ? findOwnTroopType(findName, player, galaxy) : galaxy.findTroopType(findName);
+    }
+
 
     /**
      * Find a SpaceshipType from the players types.
      */
     public static SpaceshipType findOwnSpaceshipType(String findName, Player player, Galaxy galaxy){
-        PlayerSpaceshipType playerSpaceshipType = player.getPlayerSpaceshipTypes().stream()
-                .filter(ship -> ship.getTypeId().equalsIgnoreCase(findName)).findFirst().orElse(null);
+        PlayerSpaceshipImprovement playerSpaceshipImprovement = findSpaceshipImprovement(findName, player);
 
-        return playerSpaceshipType != null ? new SpaceshipType(galaxy.findSpaceshipType(findName), playerSpaceshipType) : null;
+        return playerSpaceshipImprovement != null ? new SpaceshipType(galaxy.findSpaceshipType(findName), playerSpaceshipImprovement) : null;
     }
 
     /**
      * If the player researched/upgraded a shipType that type will be returned instead of original one from the galaxy
      */
     public static SpaceshipType findSpaceshipType(String findName, Player player, Galaxy galaxy){
-        SpaceshipType sst = null;
-        sst = findOwnSpaceshipType(findName, player, galaxy);
-        if (sst == null){
-            sst = galaxy.findSpaceshipType(findName);
-        }
-        return sst;
+        return findOwnSpaceshipType(findName, player, galaxy) != null ? findOwnSpaceshipType(findName, player, galaxy) : galaxy.findSpaceshipType(findName);
     }
 
     /**
