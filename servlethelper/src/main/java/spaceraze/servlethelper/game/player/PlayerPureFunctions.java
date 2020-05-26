@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
@@ -31,7 +32,7 @@ public class PlayerPureFunctions {
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
         return player.getSpaceshipImprovements().stream()
-                .filter(improvement -> SpaceshipPureFunctions.isConstructible(galaxy, player, galaxy.getShipType(improvement.getTypeId()), improvement))
+                .filter(improvement -> SpaceshipPureFunctions.isConstructable(galaxy, player, galaxy.getShipType(improvement.getTypeId()), improvement))
                 .collect(Collectors.toList());
     }
 
@@ -93,10 +94,42 @@ public class PlayerPureFunctions {
     }
 
     /**
-     * If the player researched/upgraded a shipType that type will be returned instead of original one from the galaxy
+     * If the player researched/upgraded a BuildingType that type will be returned instead of original one from the galaxy
      */
-    public static SpaceshipType findSpaceshipType(String findName, Player player, Galaxy galaxy){
-        return findOwnSpaceshipType(findName, player, galaxy) != null ? findOwnSpaceshipType(findName, player, galaxy) : galaxy.findSpaceshipType(findName);
+    public static BuildingType findBuildingType(String findName, Player player){
+        return findOwnBuildingType(findName, player) != null ? findOwnBuildingType(findName, player) : player.getFaction().getBuildingTypeByName(findName);
+    }
+
+    public static List<BuildingType> getBuildingTypes(Player player){
+        //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
+
+        return player.getBuildingImprovements().stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
+    }
+
+    public static List<BuildingType> getAvailableBuildingTypes(Galaxy galaxy, Player player, Planet planet, int buildingId){
+        //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
+
+        return getAvailableBuildingImprovements(galaxy, player, planet, buildingId).stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
+    }
+
+    public static List<PlayerBuildingImprovement> getAvailableBuildingImprovements(Galaxy galaxy, Player player, Planet planet, int buildingId){
+        return player.getBuildingImprovements().stream()
+                .filter(improvement -> BuildingPureFunctions.isConstructable(galaxy, player, planet, galaxy.getGameWorld().getBuildingTypeByName(improvement.getName()), buildingId, improvement))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Find a BuildingType from the players types.
+     */
+    public static BuildingType findOwnBuildingType(String findName, Player player){
+        PlayerBuildingImprovement improvement = findBuildingImprovement(findName, player);
+
+        return improvement != null ? new BuildingType(player.getFaction().getBuildingTypeByName(findName), improvement) : null;
+    }
+
+    public static PlayerBuildingImprovement findBuildingImprovement(String findName, Player player){
+        return player.getBuildingImprovements().stream()
+                .filter(improvement -> improvement.getName().equalsIgnoreCase(findName)).findFirst().orElse(null);
     }
 
     /**

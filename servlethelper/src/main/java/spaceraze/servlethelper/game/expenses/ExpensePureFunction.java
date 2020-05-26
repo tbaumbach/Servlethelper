@@ -39,8 +39,7 @@ public class ExpensePureFunction {
             Logger.finer("planet: " + planet.getName());
             Logger.finer("planet.getPlayerInControl(): " + player);
             VIP tempVIP = aGalaxy.findVIPBuildingBuildBonus(planet, player, o);
-            Player aPlayer = aGalaxy.getPlayer(expense.getPlanetName());
-            BuildingType aBuildingType = aPlayer.findBuildingType(expense.getBuildingTypeName());
+            BuildingType aBuildingType = PlayerPureFunctions.findOwnBuildingType(expense.getBuildingTypeName(), player);
             cost =  aBuildingType.getBuildCost(tempVIP);
         }else
         if (type.equalsIgnoreCase("buildship")){
