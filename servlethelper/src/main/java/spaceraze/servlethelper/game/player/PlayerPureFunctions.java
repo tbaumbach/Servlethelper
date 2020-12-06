@@ -1,12 +1,16 @@
 package spaceraze.servlethelper.game.player;
 
 import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
+import spaceraze.world.diplomacy.DiplomacyLevel;
+import spaceraze.world.diplomacy.DiplomacyState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,14 +140,29 @@ public class PlayerPureFunctions {
      * Only used by client.
      */
     public static int getTreasuryAfterCosts(Player player, Galaxy galaxy){
-        Logger.finer("upkeepShips();" + player.upkeepShips());
-        Logger.finer("upkeepTroops();" + player.upkeepTroops());
-        Logger.finer("upkeepVIPs();" + player.upkeepVIPs());
-        Logger.finer("income();" + player.income());
+        Logger.finer("upkeepShips();" + CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships()));
+        Logger.finer("upkeepTroops();" + CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()));
+        Logger.finer("upkeepVIPs();" + CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()));
+        Logger.finer("income();" + IncomePureFunctions.getPlayerIncome(player, false));
         Logger.finer("orders.getExpensesCost();" + ExpensePureFunction.getExpensesCost(galaxy, player));
         Logger.finer("treasury;" + player.getTreasury());
-        int tmpIncome = player.getTreasury() - player.upkeepShips() - player.upkeepTroops() - player.upkeepVIPs() + player.income();
+        int tmpIncome = player.getTreasury() - CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships()) - CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()) -  CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()) + IncomePureFunctions.getPlayerIncome(player, false);
         tmpIncome -= ExpensePureFunction.getExpensesCost(galaxy, player);
         return tmpIncome;
+    }
+
+    public static List<Player> getAllies(Player player, List<Player> players, Galaxy galaxy) {
+
+        List<Player> allies = new ArrayList<>();
+
+        for (Player aPlayer : players) {
+            if (player != aPlayer) {
+                DiplomacyState diplomacyState = DiplomacyPureFunctions.getDiplomacyState(player, aPlayer, galaxy.getDiplomacyStates());
+                if (diplomacyState.getCurrentLevel().isHigher(DiplomacyLevel.PEACE)) {
+                    allies.add(aPlayer);
+                }
+            }
+        }
+        return allies;
     }
 }

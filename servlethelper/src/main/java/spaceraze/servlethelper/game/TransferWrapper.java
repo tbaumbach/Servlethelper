@@ -4,12 +4,10 @@
 package spaceraze.servlethelper.game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import spaceraze.world.GameWorld;
-import spaceraze.world.Message;
-import spaceraze.world.PlanetInfos;
-import spaceraze.world.PlanetOrderStatuses;
-import spaceraze.world.Player;
+import spaceraze.world.*;
 import spaceraze.world.orders.Orders;
 import spaceraze.world.spacebattle.ReportLevel;
 
@@ -30,8 +28,7 @@ public class TransferWrapper implements Serializable {
 	private GameWorld gameWorld;
 
 	// ny kod för att koppla loss Player objektet när ett drag görs.
-	private PlanetInfos pi;
-	private PlanetOrderStatuses planetOrderStatuses;
+	private List<PlanetOrderStatus> planetOrderStatuses = new ArrayList<>();
 	private Orders orders;
 	private String playerName = null;
 	private String notes;
@@ -55,7 +52,6 @@ public class TransferWrapper implements Serializable {
 
 		// ny kod för att koppla loss Player objektet när ett drag görs.
 		if (aPlayer != null) {
-			// pi = aPlayer.getPlanetInfos(); // TODO Paul ta bort detta när du har hittat buggen / Tobbe
 			orders = aPlayer.getOrders();
 			playerName = aPlayer.getName();
 			notes = aPlayer.getNotes();
@@ -126,10 +122,6 @@ public class TransferWrapper implements Serializable {
 		this.gameWorld = gameWorld;
 	}
 
-	public PlanetInfos getPi() {
-		return pi;
-	}
-
 	public Orders getOrders() {
 		return orders;
 	}
@@ -166,7 +158,7 @@ public class TransferWrapper implements Serializable {
 		return latestReadMessage;
 	}
 
-	public PlanetOrderStatuses getPlanetOrderStatuses() {
+	public List<PlanetOrderStatus> getPlanetOrderStatuses() {
 		return planetOrderStatuses;
 	}
 

@@ -3,6 +3,7 @@ package spaceraze.servlethelper.game;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
+import spaceraze.world.incomeExpensesReports.IncomeType;
 import spaceraze.world.orders.Expense;
 
 import java.util.ArrayList;
@@ -124,6 +125,59 @@ public class BuildingPureFunctions {
 
     public static List<BuildingType> getRootBuildings(List<BuildingType> buildingTypes){
         return buildingTypes.stream().filter(buildingType -> buildingType.getParentBuildingName() == null).collect(Collectors.toList());
+    }
+
+    public static int getPlanetBuildingsBonus(Planet tempPlanet, TurnInfo playerTurnInfo) {
+        int tempIncom = 0;
+        List<Building> tempBuildigns = tempPlanet.getBuildings();
+        for (Building building : tempBuildigns) {
+            if (tempPlanet.isOpen()) {
+                // if (building.getBuildingType().getOpenPlanetBonus() > tempIncom){
+                if (!building.getBuildingType().isInOrbit() || !tempPlanet.isBesieged()) {
+                    int openInc = building.getBuildingType().getOpenPlanetBonus();
+                    tempIncom += openInc;
+                    if (openInc > 0) {
+                        if (playerTurnInfo != null) {
+                            playerTurnInfo.addToLatestIncomeReport(IncomeType.BUILDING,
+                                    building.getName() + " open planet bonus", tempPlanet.getName(), openInc);
+                        }
+                    }
+                }
+                // }
+                // removed posility to have minus incom on buildings...
+                /*
+                 * else if(building.getBuildingType().getOpenPlanetBonus() != 0 && tempIncom ==
+                 * 0){// minus inkomst. if(!building.getBuildingType().isInOrbit() ||
+                 * !tempPlanet.isBesieged()){ tempIncom =
+                 * building.getBuildingType().getOpenPlanetBonus(); } }
+                 */
+
+            } else {
+                // LoggingHandler.finer("planet closed",this);
+                // if (building.getBuildingType().getClosedPlanetBonus() > tempIncom){
+                if (!building.getBuildingType().isInOrbit() || !tempPlanet.isBesieged()) {
+                    int closedInc = building.getBuildingType().getClosedPlanetBonus();
+                    tempIncom += closedInc;
+                    if (closedInc > 0) {
+                        if (playerTurnInfo != null) {
+                            playerTurnInfo.addToLatestIncomeReport(IncomeType.BUILDING,
+                                    building.getName() + " closed planet bonus", tempPlanet.getName(), closedInc);
+                        }
+                    }
+                    // }
+                    // removed posility to have minus incom on buildings...
+                    /*
+                     * else if(building.getBuildingType().getClosedPlanetBonus() != 0 && tempIncom
+                     * == 0){// minus inkomst. if(!building.getBuildingType().isInOrbit() ||
+                     * !tempPlanet.isBesieged()){ tempIncom =
+                     * building.getBuildingType().getClosedPlanetBonus(); } }
+                     */
+
+                    // LoggingHandler.finer("tmpIncome: " + tmpIncome,this);
+                }
+            }
+        }
+        return tempIncom;
     }
 
 }

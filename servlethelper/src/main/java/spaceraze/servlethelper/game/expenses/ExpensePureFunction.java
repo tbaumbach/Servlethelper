@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.expenses;
 
+import spaceraze.servlethelper.game.BlackMarketPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -76,5 +77,48 @@ public class ExpensePureFunction {
             }
         }
         return cost;
+    }
+
+    public static String getText(Galaxy aGalaxy, int cost, Expense expense){
+        String returnString = "";
+        if (expense.getType().equalsIgnoreCase("pop")){
+            returnString = "Increase production on " + expense.getPlanetName() + " with +1.";
+        }else
+        if (expense.getType().equalsIgnoreCase("res")){
+            returnString = "Increase resistance on " + expense.getPlanetName() + " with +1.";
+        }else
+        if (expense.getType().equalsIgnoreCase("building")){
+            BuildingType buildingType = aGalaxy.getGameWorld().getBuildingTypeByName(expense.getBuildingTypeName());
+            if(buildingType.getParentBuildingName() == null){
+                returnString = "Build new " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
+            }else{
+                returnString = "Upgrade " + buildingType.getParentBuildingName() + " to " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
+            }
+        }else
+        if (expense.getType().equalsIgnoreCase("buildship")){
+            SpaceshipType sst = aGalaxy.findSpaceshipType(expense.getSpaceshipTypeName());
+            returnString = "Build new " + sst.getName() + " at " + expense.getPlanetName() + ".";
+        }else
+        if (expense.getType().equalsIgnoreCase("buildtroop")){
+            TroopType troopType = aGalaxy.findTroopType(expense.getTroopTypeName());
+            returnString = "Build new " + troopType.getUniqueName() + " at " + expense.getPlanetName() + ".";
+        }else
+        if (expense.getType().equalsIgnoreCase("buildVIP")){
+            returnString = "Build new " + expense.getVIPType() + " at " + expense.getPlanetName() + ".";
+        }else
+        if (expense.getType().equalsIgnoreCase("transaction")){
+            returnString = "Transfer " + expense.getSum() + " money to Govenor " + aGalaxy.getPlayer(expense.getPlayerName()).getGovernorName();
+        }else
+        if(expense.getType().equalsIgnoreCase("blackmarketbid")){
+            returnString = BlackMarketBid.getBiddingText(BlackMarketPureFunctions.findBlackMarketOffer(expense.getBlackMarketBid().getOfferUniqueId(), aGalaxy), expense.getBlackMarketBid());
+        }else
+        if(expense.getType().equalsIgnoreCase("reconstruct")){
+            returnString = "Reconstruct the planet " + expense.getPlanetName();
+        }else
+        if(expense.getType().equalsIgnoreCase("research")){
+            returnString = "Research on " + expense.getResearchOrder().getAdvantageName();
+        }
+        returnString += " (cost: " + cost + ")";
+        return returnString;
     }
 }

@@ -24,6 +24,6 @@ public class TroopMutator {
 
     public static Troop createTroop(TroopType type, Galaxy galaxy){
 
-        return createTroop(null, type, null, 0, 0, galaxy.getUniqueIdCounter("Troop").getUniqueId());
+        return createTroop(null, type, null, 0, 0, galaxy.getUniqueIdCounter(CounterType.TROOP).getUniqueId());
     }
 }

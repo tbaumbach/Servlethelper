@@ -8,11 +8,11 @@ import java.util.List;
 
 import spaceraze.util.general.Logger;
 import spaceraze.world.GameWorld;
-import spaceraze.world.gameworlds.SpaceOpera;
-import spaceraze.world.gameworlds.SpaceRazeExpanded;
-import spaceraze.world.gameworlds.TheLastGreatWar;
-import spaceraze.world.gameworlds.Titanium;
-import spaceraze.world.gameworlds.Universe3051;
+import spaceraze.servlethelper.gameworlds.SpaceOpera;
+import spaceraze.servlethelper.gameworlds.SpaceRazeExpanded;
+import spaceraze.servlethelper.gameworlds.TheLastGreatWar;
+import spaceraze.servlethelper.gameworlds.Titanium;
+import spaceraze.servlethelper.gameworlds.Universe3051;
 
 
 /**
