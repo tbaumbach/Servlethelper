@@ -2,6 +2,7 @@ package spaceraze.servlethelper.game.expenses;
 
 import spaceraze.servlethelper.game.BlackMarketPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
+import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.orders.Expense;
@@ -39,19 +40,19 @@ public class ExpensePureFunction {
             Logger.finer("planetName: " + expense.getPlanetName());
             Logger.finer("planet: " + planet.getName());
             Logger.finer("planet.getPlayerInControl(): " + player);
-            VIP tempVIP = aGalaxy.findVIPBuildingBuildBonus(planet, player, o);
+            VIP tempVIP = VipPureFunctions.findVIPBuildingBuildBonus(planet, player, o, aGalaxy);
             BuildingType aBuildingType = PlayerPureFunctions.findOwnBuildingType(expense.getBuildingTypeName(), player);
             cost =  aBuildingType.getBuildCost(tempVIP);
         }else
         if (type.equalsIgnoreCase("buildship")){
             // kollar f�rst om det finns en engineer vid planeten
-            VIP tempEngineer = aGalaxy.findVIPShipBuildBonus(planet, player, o);
+            VIP tempEngineer = VipPureFunctions.findVIPShipBuildBonus(planet, player, o, aGalaxy);
             cost = PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeName(),  player, aGalaxy).getBuildCost(tempEngineer);
         }
         else
         if (type.equalsIgnoreCase("buildtroop")){
             // first check if there is an engineer at the planet
-            VIP tempVIP = aGalaxy.findVIPTroopBuildBonus(planet, player , o);
+            VIP tempVIP = VipPureFunctions.findVIPTroopBuildBonus(planet, player , o, aGalaxy);
             TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeName(), player, aGalaxy);
             cost = troopType.getCostBuild(tempVIP);
 

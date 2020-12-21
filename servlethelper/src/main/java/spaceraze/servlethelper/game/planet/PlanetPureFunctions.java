@@ -2,6 +2,7 @@ package spaceraze.servlethelper.game.planet;
 
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.util.move.FindPlanetCriterion;
 import spaceraze.world.*;
@@ -44,7 +45,7 @@ public class PlanetPureFunctions {
     }
 
     public static Planet findClosestOwnPlanetFromShip(Planet aLocation, Player aPlayer, Spaceship aSpaceship, Galaxy galaxy) {
-        return findClosestPlanet(aLocation, aPlayer, aSpaceship.getRange(), FindPlanetCriterion.OWN_PLANET_NOT_BESIEGED,
+        return findClosestPlanet(aLocation, aPlayer, SpaceshipPureFunctions.getRange(aSpaceship, galaxy), FindPlanetCriterion.OWN_PLANET_NOT_BESIEGED,
                 null, galaxy);
     }
 
@@ -140,30 +141,6 @@ public class PlanetPureFunctions {
                                 foundPlanets.add(tempPlanet);
                             }
                         }
-                    } else if (aCriterium == FindPlanetCriterion.EMPTY_VIP_TRANSPORT_WITHOUT_ORDERS) { // very specific
-                        // criterium
-                        // used by Droid
-                        // GW
-                        // List<Spaceship> shipsAtPlanet = getPlayersSpaceshipsOnPlanet(aPlayer,
-                        // tempPlanet);
-                        // for (Spaceship aShip : shipsAtPlanet){
-                        // if (aShip.getName().equals("VIP Transport")){
-                        // if (!aPlayer.getOrders().checkShipMove(aShip)){ // if there are no order
-                        // already for this ship
-                        // if (findAllVIPsOnShip(aShip).size() == 0){ // check that transport is empty
-                        // if (!foundPlanets.contains(tempPlanet)){
-                        // foundPlanets.add(tempPlanet);
-                        // }
-                        // }
-                        // }
-                        // }
-                        // }
-                        Spaceship foundShip = galaxy.findEmptyShipWithoutOrders(aPlayer, tempPlanet, "VIP Transport");
-                        if (foundShip != null) {
-                            if (!foundPlanets.contains(tempPlanet)) {
-                                foundPlanets.add(tempPlanet);
-                            }
-                        }
                     }
                 }
             }
@@ -222,7 +199,7 @@ public class PlanetPureFunctions {
         // om en destinationsplanet har hittats skall den 1:a planeten på väg dit hämtas
         if (foundPlanet != null){
             Logger.finer("foundPlanet: " + foundPlanet.getName());
-            firstDestination = findFirstJumpTowardsPlanet(spaceship.getLocation(), foundPlanet, spaceship.getRange(), galaxy);
+            firstDestination = findFirstJumpTowardsPlanet(spaceship.getLocation(), foundPlanet, SpaceshipPureFunctions.getRange(spaceship, galaxy), galaxy);
             Logger.finer("firstDestination: " + firstDestination.getName());
         }else{
             Logger.finer("no planet found");
@@ -257,9 +234,9 @@ public class PlanetPureFunctions {
                     Planet tempNeighbourPlanet = allNeighbours.get(j);
                     Logger.finest("tempNeighbourPlanet: " + tempNeighbourPlanet.getName());
                     // kolla att tempNeighbourPlanet inte redan finns i searchedPlanets
-                    if ((!Galaxy.containsPlanet(searchedPlanets,tempNeighbourPlanet)) & (!Galaxy.containsPlanet(newEdgePlanets,tempNeighbourPlanet))){
-                        Logger.finest("containsPlanet: " + !Galaxy.containsPlanet(searchedPlanets,tempNeighbourPlanet));
-                        Logger.finest("containsPlanet: " + !Galaxy.containsPlanet(newEdgePlanets,tempNeighbourPlanet));
+                    if ((!containsPlanet(searchedPlanets,tempNeighbourPlanet)) & (!containsPlanet(newEdgePlanets,tempNeighbourPlanet))){
+                        Logger.finest("containsPlanet: " + !containsPlanet(searchedPlanets,tempNeighbourPlanet));
+                        Logger.finest("containsPlanet: " + !containsPlanet(newEdgePlanets,tempNeighbourPlanet));
                         Logger.finest("inside if: ");
                         // sätt reachFrom så det går att hitta pathen senare
                         tempNeighbourPlanet.setReachFrom(tempPlanet);
@@ -319,7 +296,7 @@ public class PlanetPureFunctions {
         boolean foundShip = false;
         int i = 0;
         while (!foundShip && allies.size() > i) {
-            if (galaxy.findSurveyShip(planet, allies.get(i)) != null) {
+            if (SpaceshipPureFunctions.findSurveyShip(planet, allies.get(i), galaxy.getSpaceships(), galaxy.getGameWorld()) != null) {
                 foundShip = true;
             }
             i++;
@@ -370,5 +347,9 @@ public class PlanetPureFunctions {
             i++;
         }
         return foundSpy;
+    }
+
+    private static boolean containsPlanet(List<Planet> planets, Planet planet) {
+        return planets.stream().anyMatch(planetInList -> planetInList == planet);
     }
 }

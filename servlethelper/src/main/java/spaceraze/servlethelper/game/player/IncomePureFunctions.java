@@ -203,7 +203,7 @@ public class IncomePureFunctions {
                     DiplomacyState state = DiplomacyPureFunctions.getDiplomacyState(shipPlayer, planetPlayer, galaxy.getDiplomacyStates());
                     DiplomacyLevel level = state.getCurrentLevel();
                     if ((level == DiplomacyLevel.CONFEDERACY) || (level == DiplomacyLevel.ALLIANCE) || (level == DiplomacyLevel.LORD)) {
-                        spaceship.getIncFrendlyOpenBonus();
+                        spaceship.getIncFriendlyOpenBonus();
                     } else if ((level == DiplomacyLevel.CEASE_FIRE) || (level == DiplomacyLevel.PEACE)) {
                         spaceship.getIncNeutralOpenBonus();
                     } else if ((level == DiplomacyLevel.WAR) || (level == DiplomacyLevel.ETERNAL_WAR)) {
@@ -221,7 +221,7 @@ public class IncomePureFunctions {
                     DiplomacyState state = DiplomacyPureFunctions.getDiplomacyState(shipPlayer, planetPlayer, galaxy.getDiplomacyStates());
                     DiplomacyLevel level = state.getCurrentLevel();
                     if ((level == DiplomacyLevel.CONFEDERACY) || (level == DiplomacyLevel.ALLIANCE) || (level == DiplomacyLevel.LORD)) {
-                        spaceship.getIncFrendlyClosedBonus();
+                        spaceship.getIncFriendlyClosedBonus();
                     } else if ((level == DiplomacyLevel.CEASE_FIRE) || (level == DiplomacyLevel.PEACE)) {
                         spaceship.getIncNeutralClosedBonus();
                     } else if ((level == DiplomacyLevel.WAR) || (level == DiplomacyLevel.ETERNAL_WAR)) {

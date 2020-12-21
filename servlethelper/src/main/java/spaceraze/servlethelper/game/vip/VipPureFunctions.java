@@ -1,9 +1,12 @@
-package spaceraze.servlethelper.game;
+package spaceraze.servlethelper.game.vip;
 
+import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
 import spaceraze.world.diplomacy.DiplomacyState;
+import spaceraze.world.orders.Orders;
+import spaceraze.world.orders.VIPMovement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -238,5 +241,116 @@ public class VipPureFunctions {
             }
         }
         return possibleAssassination;
+    }
+
+    public static boolean isFTLMasterOnShip(Spaceship aShip, Galaxy galaxy) {
+        boolean found = false;
+        for (VIP vip : galaxy.getAllVIPs()) {
+            if (vip.getShipLocation() == aShip) {
+                if (vip.isFTLbonus()) {
+                    Orders orders = aShip.getOwner().getOrders();
+                    if (VIPWillStay(vip, aShip.getOwner().getOrders())) {
+                        found = true;
+                    }
+                }
+            }
+        }
+        return found;
+    }
+
+    // leta igenom alla VIPMoves och kolla om någon av dem förflyttar iväg denna vip
+    public static boolean VIPWillStay(VIP vip, Orders orders) {
+        boolean vipStays = true;
+        int i = 0;
+        while ((i < orders.getVIPMoves().size()) & (vipStays)) {
+            VIPMovement tempVIPMove = orders.getVIPMoves().get(i);
+            if (tempVIPMove.isThisVIP(vip)) {
+                vipStays = false;
+            } else {
+                i++;
+            }
+        }
+        return vipStays;
+    }
+
+    public static VIP findVIPTechBonus(Planet aPlanet, Player aPlayer, Orders orders, Galaxy galaxy) {
+        VIP foundVIP = null;
+        int bonus = 0;
+        for (VIP vip : galaxy.getAllVIPs()) {
+            if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
+                if (vip.getTechBonus() > bonus) {
+                    if (VIPWillStay(vip, orders)) {
+                        foundVIP = vip;
+                        bonus = vip.getTechBonus();
+                    }
+                }
+            }
+        }
+        return foundVIP;
+    }
+
+    public static VIP findVIPShipBuildBonus(Planet aPlanet, Player aPlayer, Orders orders, Galaxy galaxy) {
+        VIP foundVIP = null;
+        int bonus = 0;
+        for (VIP vip : galaxy.getAllVIPs()) {
+            if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
+                if (vip.getShipBuildBonus() > bonus) {
+                    if (VIPWillStay(vip, orders)) {
+                        foundVIP = vip;
+                        bonus = vip.getShipBuildBonus();
+                    }
+                }
+            }
+        }
+        return foundVIP;
+    }
+
+    public static VIP findVIPTroopBuildBonus(Planet aPlanet, Player aPlayer, Orders orders, Galaxy galaxy) {
+        VIP foundVIP = null;
+        int bonus = 0;
+        for (VIP vip : galaxy.getAllVIPs()) {
+            if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
+                if (vip.getTroopBuildBonus() > bonus) {
+                    if (VIPWillStay(vip, orders)) {
+                        foundVIP = vip;
+                        bonus = vip.getTroopBuildBonus();
+                    }
+                }
+            }
+        }
+        return foundVIP;
+    }
+
+    public static VIP findVIPBuildingBuildBonus(Planet aPlanet, Player aPlayer, Orders orders, Galaxy galaxy) {
+        VIP foundVIP = null;
+        int bonus = 0;
+        for (VIP vip : galaxy.getAllVIPs()) {
+            if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
+                if (vip.getBuildingBuildBonus() > bonus) {
+                    if (VIPWillStay(vip, orders)) {
+                        foundVIP = vip;
+                        bonus = vip.getBuildingBuildBonus();
+                    }
+                }
+            }
+        }
+        return foundVIP;
+    }
+
+    public static VIP findStealthVIPonShip(Planet aPlanet, Spaceship aShip, Galaxy galaxy) {
+        VIP foundVIP = null;
+        int index = 0;
+        while ((foundVIP == null) & (index < galaxy.getAllVIPs().size())) {
+            VIP aVIP = galaxy.getAllVIPs().get(index);
+            if (aVIP.getShipLocation() == aShip) {
+                if (aVIP.isStealth()) {
+                    foundVIP = aVIP;
+                }
+            }
+            if (foundVIP == null) {
+                index++;
+            }
+        }
+        return foundVIP;
     }
 }

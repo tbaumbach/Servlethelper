@@ -64,4 +64,23 @@ public class TroopPureFunctions {
         }
         return playerst;
     }
+
+    public static int getNoTroopsAssignedToCarrier(Spaceship aCarrier, Player player, List<Troop> troops) {
+        int count = 0;
+        Player aPlayer = aCarrier.getOwner();
+        List<Troop> troopsAtPlanet = getPlayersTroopsOnPlanet(player, aCarrier.getLocation(), troops);
+        for (Troop aTroop : troopsAtPlanet) {
+            if (aTroop.getShipLocation() == aCarrier) {
+                // check if sstemp has a move order
+                if (aPlayer != null) {
+                    boolean moveOrder = aPlayer.checkTroopMove(aTroop);
+                    // if not, inc counter
+                    if (!moveOrder) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
 }

@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.troop;
 
+import spaceraze.servlethelper.game.UniqueIdHandler;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.world.*;
 
@@ -24,6 +25,6 @@ public class TroopMutator {
 
     public static Troop createTroop(TroopType type, Galaxy galaxy){
 
-        return createTroop(null, type, null, 0, 0, galaxy.getUniqueIdCounter(CounterType.TROOP).getUniqueId());
+        return createTroop(null, type, null, 0, 0, UniqueIdHandler.getUniqueIdCounter(galaxy, CounterType.TROOP).getUniqueId());
     }
 }
