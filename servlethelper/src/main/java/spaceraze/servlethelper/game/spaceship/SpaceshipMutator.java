@@ -170,4 +170,11 @@ public class SpaceshipMutator {
             }
         }
     }
+
+    public static void performRepairs(Spaceship spaceship) {
+        spaceship.setCurrentDc(spaceship.getDamageCapacity());
+        if (spaceship.getOwner() != null) {
+            spaceship.getOwner().addToGeneral("Your ship " + spaceship.getName() + " at "	+ spaceship.getLocation().getName() + " has been repaired up to full damage capacity.");
+        }
+    }
 }

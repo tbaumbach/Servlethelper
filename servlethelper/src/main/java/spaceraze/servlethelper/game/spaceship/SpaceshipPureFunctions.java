@@ -468,4 +468,12 @@ public class SpaceshipPureFunctions {
         return !spaceshipType.isCivilian() & spaceshipType.getSize() != SpaceShipSize.SQUADRON & (spaceshipType.getRange() == SpaceshipRange.NONE);
     }
 
+    /**
+     * @return a percentage of remaning DC
+     */
+    public static int getHullStrength(Spaceship spaceship){
+        int hullStrength = (int) Math.round((100.0 * spaceship.getCurrentDc())	/ spaceship.getDamageCapacity());
+        return hullStrength;
+    }
+
 }
