@@ -334,8 +334,7 @@ public class TheLastGreatWar{
         // Neutral Squadrons
         // ---------
         // Freedom Fighter
-        tempsst = new SpaceshipType("Freedom Fighter","FreF",SpaceShipSize.SMALL,5,40,SpaceshipRange.NONE,1,12, 12,12);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Freedom Fighter","FreF",SpaceShipSize.SQUADRON,5,40,SpaceshipRange.NONE,1,12, 12,12);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsMaxSalvoesMedium(5);
@@ -817,8 +816,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // China Fighter
-        tempsst = new SpaceshipType("C Fighter","CFig",SpaceShipSize.SMALL,0,20,SpaceshipRange.NONE,1,2, 5,10);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("C Fighter","CFig",SpaceShipSize.SQUADRON,0,20,SpaceshipRange.NONE,1,2, 5,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanAppearOnBlackMarket(false);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
@@ -827,8 +825,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("C Fighter"));
         
         // China Fighter II ****************************************************
-        tempsst = new SpaceshipType("C Fighter II","CFig2",SpaceShipSize.SMALL,5,27,SpaceshipRange.NONE,1,4, 6,15);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("C Fighter II","CFig2",SpaceShipSize.SQUADRON,5,27,SpaceshipRange.NONE,1,4, 6,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanAppearOnBlackMarket(false);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
@@ -838,8 +835,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("C Fighter II"));
         
         // China Bomber
-        tempsst = new SpaceshipType("C Bomber","CBom",SpaceShipSize.SMALL,0,17,SpaceshipRange.NONE,1,2, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("C Bomber","CBom",SpaceShipSize.SQUADRON,0,17,SpaceshipRange.NONE,1,2, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(8);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -850,8 +846,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("C Bomber"));
         
         // China Bomber II *******************************************************
-        tempsst = new SpaceshipType("C Bomber II","CBom2",SpaceShipSize.SMALL,5,17,SpaceshipRange.NONE,1,4, 12,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("C Bomber II","CBom2",SpaceShipSize.SQUADRON,5,17,SpaceshipRange.NONE,1,4, 12,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(8);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -865,8 +860,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("C Bomber II"));
         
         // China Attacker *******************************************************
-        tempsst = new SpaceshipType("C Attacker","CAtt",SpaceShipSize.SMALL,5,22,SpaceshipRange.SHORT,2,6, 10,10);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("C Attacker","CAtt",SpaceShipSize.SQUADRON,5,22,SpaceshipRange.SHORT,2,6, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(8);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1959,8 +1953,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // Alliance Fighter
-        tempsst = new SpaceshipType("Alliance Fighter","A-F",SpaceShipSize.SMALL,7,20,SpaceshipRange.NONE,1,3, 5,17);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Alliance Fighter","A-F",SpaceShipSize.SQUADRON,7,20,SpaceshipRange.NONE,1,3, 5,17);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBluePrintFirstTurn(15);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.UNCOMMON);
@@ -1969,8 +1962,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Alliance Fighter"));
         
         // Alliance Bomber
-        tempsst = new SpaceshipType("Alliance Bomber","A-B",SpaceShipSize.SMALL,7,15,SpaceshipRange.NONE,1,3, 15,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Alliance Bomber","A-B",SpaceShipSize.SQUADRON,7,15,SpaceshipRange.NONE,1,3, 15,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(22);
         tempsst.setWeaponsMaxSalvoesMedium(1);
@@ -1983,9 +1975,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Alliance Bomber"));
         
         //Alliance Attacker
-        tempsst = new SpaceshipType("Alliance Attacker","A-A",SpaceShipSize.SMALL,7,30,SpaceshipRange.NONE,2,4, 8,11);
+        tempsst = new SpaceshipType("Alliance Attacker","A-A",SpaceShipSize.SQUADRON,7,30,SpaceshipRange.NONE,2,4, 8,11);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(12);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setBluePrintFirstTurn(20);
@@ -1995,8 +1986,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Alliance Attacker"));
         
         //Assault Fighter
-        tempsst = new SpaceshipType("Assault Fighter","AFig",SpaceShipSize.SMALL,12,40,SpaceshipRange.SHORT,2,8, 10,28);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Assault Fighter","AFig",SpaceShipSize.SQUADRON,12,40,SpaceshipRange.SHORT,2,8, 10,28);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setInitSupport(true);
         tempsst.setIncreaseInitiative(2);
@@ -2007,8 +1997,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Assault Fighter"));
         
         //Assault Bomber
-        tempsst = new SpaceshipType("Assault Bomber","ABom",SpaceShipSize.SMALL,5,45,SpaceshipRange.SHORT,3,8, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Assault Bomber","ABom",SpaceShipSize.SQUADRON,5,45,SpaceshipRange.SHORT,3,8, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(16);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -2025,9 +2014,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Assault Bomber"));
         
         //Ace Attacker
-        tempsst = new SpaceshipType("Ace Attacker","AceA",SpaceShipSize.SMALL,10,55,SpaceshipRange.LONG,1,14, 14,27);
+        tempsst = new SpaceshipType("Ace Attacker","AceA",SpaceShipSize.SQUADRON,10,55,SpaceshipRange.LONG,1,14, 14,27);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(18);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setWeaponsStrengthLarge(8);
@@ -2041,9 +2029,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Ace Attacker"));
         
         //Assault Attacker
-        tempsst = new SpaceshipType("Assault Attacker","AAtt",SpaceShipSize.SMALL,10,50,SpaceshipRange.LONG,3,14, 12,24);
+        tempsst = new SpaceshipType("Assault Attacker","AAtt",SpaceShipSize.SQUADRON,10,50,SpaceshipRange.LONG,3,14, 12,24);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(16);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setWeaponsStrengthLarge(7);
@@ -2975,16 +2962,14 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // Interceptor
-        tempsst = new SpaceshipType("Interceptor","Int",SpaceShipSize.SMALL,0,22,SpaceshipRange.NONE,1,2, 5,13);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Interceptor","Int",SpaceShipSize.SQUADRON,0,22,SpaceshipRange.NONE,1,2, 5,13);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("A good and cheap dog fighters, made by AAD.");
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Interceptor"));
         
         // Interceptor II
-        tempsst = new SpaceshipType("Interceptor II","Int2",SpaceShipSize.SMALL,5,25,SpaceshipRange.NONE,1,4, 7,20);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Interceptor II","Int2",SpaceShipSize.SQUADRON,5,25,SpaceshipRange.NONE,1,4, 7,20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("The next generation dog fighter, made by AAD.");
         tempsst.setBlackmarketFirstTurn(6);
@@ -2994,8 +2979,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Interceptor II"));
         
         // B-12
-        tempsst = new SpaceshipType("B-12","B12",SpaceShipSize.SMALL,0,15,SpaceshipRange.NONE,1,2, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("B-12","B12",SpaceShipSize.SQUADRON,0,15,SpaceshipRange.NONE,1,2, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -3006,8 +2990,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("B-12"));
         
         // B-21
-        tempsst = new SpaceshipType("B-21","B21",SpaceShipSize.SMALL,0,25,SpaceshipRange.NONE,1,4, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("B-21","B21",SpaceShipSize.SQUADRON,0,25,SpaceshipRange.NONE,1,4, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -3021,8 +3004,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("B-21"));
         
         // B-55
-        tempsst = new SpaceshipType("B-55","B55",SpaceShipSize.SMALL,0,20,SpaceshipRange.NONE,1,4, 5,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("B-55","B55",SpaceShipSize.SQUADRON,0,20,SpaceshipRange.NONE,1,4, 5,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(15);
         tempsst.setWeaponsMaxSalvoesLarge(2);
@@ -3036,9 +3018,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("B-55"));
         
         // A-2
-        tempsst = new SpaceshipType("A-2","A2",SpaceShipSize.SMALL,0,30,SpaceshipRange.SHORT,2,4, 5,8);
+        tempsst = new SpaceshipType("A-2","A2",SpaceShipSize.SQUADRON,0,30,SpaceshipRange.SHORT,2,4, 5,8);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setDescription("A good all-round support fighter with hyper engine for short range jumps. This fighter is often used to patrol and defending our planets.");
@@ -3046,9 +3027,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("A-2"));
         
         //A-8
-        tempsst = new SpaceshipType("A-8","A8",SpaceShipSize.SMALL,10,30,SpaceshipRange.SHORT,2,6, 10,13);
+        tempsst = new SpaceshipType("A-8","A8",SpaceShipSize.SQUADRON,10,30,SpaceshipRange.SHORT,2,6, 10,13);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(20);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setDescription("The next generation attackers.");
@@ -4201,8 +4181,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // Mustang
-        tempsst = new SpaceshipType("Mustang","Mus",SpaceShipSize.SMALL,0,27,SpaceshipRange.NONE,1,2, 5,14);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Mustang","Mus",SpaceShipSize.SQUADRON,0,27,SpaceshipRange.NONE,1,2, 5,14);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
         tempsst.setDescription("A good and cheep dog fighters that it made by AAD and modified by USA armory.");
@@ -4210,8 +4189,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Mustang"));
         
         // Raptor
-        tempsst = new SpaceshipType("Raptor","Rap",SpaceShipSize.SMALL,5,30,SpaceshipRange.NONE,1,5, 7,22);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Raptor","Rap",SpaceShipSize.SQUADRON,5,30,SpaceshipRange.NONE,1,5, 7,22);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBlackmarketFirstTurn(8);
         tempsst.setBluePrintFirstTurn(10);
@@ -4221,8 +4199,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Raptor"));
         
         // Lancer
-        tempsst = new SpaceshipType("Lancer","Lan",SpaceShipSize.SMALL,0,18,SpaceshipRange.NONE,1,3, 15,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Lancer","Lan",SpaceShipSize.SQUADRON,0,18,SpaceshipRange.NONE,1,3, 15,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(13);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -4234,8 +4211,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Lancer"));
         
         // Spirit
-        tempsst = new SpaceshipType("Spirit","Spi",SpaceShipSize.SMALL,0,23,SpaceshipRange.NONE,1,6, 17,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Spirit","Spi",SpaceShipSize.SQUADRON,0,23,SpaceshipRange.NONE,1,6, 17,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(17);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -4249,8 +4225,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Spirit"));
         
         // Thunderbolt
-        tempsst = new SpaceshipType("Thunderbolt","Thu",SpaceShipSize.SMALL,0,18,SpaceshipRange.NONE,1,6, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Thunderbolt","Thu",SpaceShipSize.SQUADRON,0,18,SpaceshipRange.NONE,1,6, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -4265,8 +4240,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Thunderbolt"));
         
         // Phantom
-        tempsst = new SpaceshipType("Phantom","Pha",SpaceShipSize.SMALL,7,30,SpaceshipRange.SHORT,2,5, 8,8);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Phantom","Pha",SpaceShipSize.SQUADRON,7,30,SpaceshipRange.SHORT,2,5, 8,8);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(12);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -4276,8 +4250,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Phantom"));
         
         // Hornet
-        tempsst = new SpaceshipType("Hornet","Hor",SpaceShipSize.SMALL,10,32,SpaceshipRange.SHORT,2,8, 10,12);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Hornet","Hor",SpaceShipSize.SQUADRON,10,32,SpaceshipRange.SHORT,2,8, 10,12);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -5407,8 +5380,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // MiG-21
-        tempsst = new SpaceshipType("MiG-21","M21",SpaceShipSize.SMALL,0,22,SpaceshipRange.NONE,1,2, 4,12);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("MiG-21","M21",SpaceShipSize.SQUADRON,0,22,SpaceshipRange.NONE,1,2, 4,12);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanAppearOnBlackMarket(false);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
@@ -5417,8 +5389,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("MiG-21"));
         
         // MiG-29
-        tempsst = new SpaceshipType("MiG-29","M29",SpaceShipSize.SMALL,5,22,SpaceshipRange.NONE,1,3, 4,15);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("MiG-29","M29",SpaceShipSize.SQUADRON,5,22,SpaceshipRange.NONE,1,3, 4,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBlackmarketFirstTurn(8);
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
@@ -5428,8 +5399,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("MiG-29"));
         
         // Su-24
-        tempsst = new SpaceshipType("Su-24","S24",SpaceShipSize.SMALL,0,15,SpaceshipRange.NONE,1,2, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Su-24","S24",SpaceShipSize.SQUADRON,0,15,SpaceshipRange.NONE,1,2, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -5442,9 +5412,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Su-24"));
         
         // Su-27
-        tempsst = new SpaceshipType("Su-27","S27",SpaceShipSize.SMALL,0,25,SpaceshipRange.SHORT,2,5, 8,12);
+        tempsst = new SpaceshipType("Su-27","S27",SpaceShipSize.SQUADRON,0,25,SpaceshipRange.SHORT,2,5, 8,12);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(7);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setBlackmarketFirstTurn(8);
@@ -5456,9 +5425,8 @@ public class TheLastGreatWar{
         
         
         // Su-34
-        tempsst = new SpaceshipType("Su-34","S34",SpaceShipSize.SMALL,6,30,SpaceshipRange.SHORT,2,6, 10,2);
+        tempsst = new SpaceshipType("Su-34","S34",SpaceShipSize.SQUADRON,6,30,SpaceshipRange.SHORT,2,6, 10,2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(17);
         tempsst.setWeaponsMaxSalvoesMedium(5);
         tempsst.setWeaponsStrengthLarge(10);
@@ -5470,9 +5438,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Su-34"));
         
         // Su-35
-        tempsst = new SpaceshipType("Su-35","S35",SpaceShipSize.SMALL,7,35,SpaceshipRange.SHORT,2,7, 4,2);
+        tempsst = new SpaceshipType("Su-35","S35",SpaceShipSize.SQUADRON,7,35,SpaceshipRange.SHORT,2,7, 4,2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthLarge(10);
         tempsst.setWeaponsMaxSalvoesLarge(3);
         tempsst.setWeaponsStrengthHuge(25);
@@ -6542,8 +6509,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // Rafale
-        tempsst = new SpaceshipType("Rafale","Raf",SpaceShipSize.SMALL,13,7,SpaceshipRange.NONE,1,3, 5,19);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Rafale","Raf",SpaceShipSize.SQUADRON,13,7,SpaceshipRange.NONE,1,3, 5,19);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("A good and cheap dog fighter.");
         tempsst.setBluePrintFrequency(BlackMarketFrequency.NEVER);
@@ -6551,8 +6517,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Rafale"));
         
         // Typhoon
-        tempsst = new SpaceshipType("Typhoon","Typ",SpaceShipSize.SMALL,20,8,SpaceshipRange.NONE,1,5, 10,24);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Typhoon","Typ",SpaceShipSize.SQUADRON,20,8,SpaceshipRange.NONE,1,5, 10,24);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("Next generation of fighters.");
         tempsst.setBlackmarketFirstTurn(8);
@@ -6562,8 +6527,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Typhoon"));
         
         // Vulcan
-        tempsst = new SpaceshipType("Vulcan","Vul",SpaceShipSize.SMALL,7,7,SpaceshipRange.NONE,1,2, 10,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Vulcan","Vul",SpaceShipSize.SQUADRON,7,7,SpaceshipRange.NONE,1,2, 10,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(12);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -6575,8 +6539,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Vulcan"));
         
         // Marauder
-        tempsst = new SpaceshipType("Marauder","Mar",SpaceShipSize.SMALL,15,8,SpaceshipRange.NONE,2,5, 5,3);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Marauder","Mar",SpaceShipSize.SQUADRON,15,8,SpaceshipRange.NONE,2,5, 5,3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(20);
         tempsst.setWeaponsMaxSalvoesLarge(2);
@@ -6589,9 +6552,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Marauder"));
         
         // Viggen
-        tempsst = new SpaceshipType("Viggen","Vig",SpaceShipSize.SMALL,15,10,SpaceshipRange.LONG,2,6, 10,10);
+        tempsst = new SpaceshipType("Viggen","Vig",SpaceShipSize.SQUADRON,15,10,SpaceshipRange.LONG,2,6, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setDescription("A good all-round support fighter with hyper engine for long range jumps. This fighter is often used to patrol and defending our planets.");
@@ -6599,9 +6561,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Viggen"));
         
         // Gripen
-        tempsst = new SpaceshipType("Gripen","JAS",SpaceShipSize.SMALL,23,10,SpaceshipRange.LONG,2,9, 15,15);
+        tempsst = new SpaceshipType("Gripen","JAS",SpaceShipSize.SQUADRON,23,10,SpaceshipRange.LONG,2,9, 15,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsMaxSalvoesMedium(4);
         tempsst.setAvailableToBuild(false);
@@ -7492,8 +7453,7 @@ public class TheLastGreatWar{
         // Squadrons
         // ---------
         // Observer
-        tempsst = new SpaceshipType("Observer","Obs",SpaceShipSize.SMALL,0,10,SpaceshipRange.NONE,1,2, 1,9);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Observer","Obs",SpaceShipSize.SQUADRON,0,10,SpaceshipRange.NONE,1,2, 1,9);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setPlanetarySurvey(true);
         tempsst.setDescription("This squadron are used to scout out unknown planets.");
@@ -7502,8 +7462,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Observer"));
         
         // Piranha Fighter
-        tempsst = new SpaceshipType("Piranha Fighter","P-F",SpaceShipSize.SMALL,0,30,SpaceshipRange.NONE,1,2, 3,13);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Piranha Fighter","P-F",SpaceShipSize.SQUADRON,0,30,SpaceshipRange.NONE,1,2, 3,13);
         tempsst.setArmorSmall(20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("A good and cheap dog fighter.");
@@ -7511,8 +7470,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Piranha Fighter"));
         
         // Bass Fighter
-        tempsst = new SpaceshipType("Bass Fighter","Bas",SpaceShipSize.SMALL,0,40,SpaceshipRange.NONE,1,4, 6,20);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Bass Fighter","Bas",SpaceShipSize.SQUADRON,0,40,SpaceshipRange.NONE,1,4, 6,20);
         tempsst.setArmorSmall(20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setDescription("Next generation of fighters.");
@@ -7523,8 +7481,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Bass Fighter"));
         
         // Liberty Bomber
-        tempsst = new SpaceshipType("Shark Bomber","S-B",SpaceShipSize.SMALL,0,22,SpaceshipRange.NONE,1,2, 10,2);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Shark Bomber","S-B",SpaceShipSize.SQUADRON,0,22,SpaceshipRange.NONE,1,2, 10,2);
         tempsst.setArmorSmall(10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(8);
@@ -7537,8 +7494,7 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Shark Bomber"));
         
         // Whale Bomber
-        tempsst = new SpaceshipType("Whale Bomber","WB",SpaceShipSize.SMALL,0,30,SpaceshipRange.NONE,1,4, 7,2);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Whale Bomber","WB",SpaceShipSize.SQUADRON,0,30,SpaceshipRange.NONE,1,4, 7,2);
         tempsst.setArmorSmall(10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(8);
@@ -7555,9 +7511,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Whale Bomber"));
         
         // Tiger Attacker
-        tempsst = new SpaceshipType("Tiger Attacker","T-A",SpaceShipSize.SMALL,0,45,SpaceshipRange.SHORT,2,6, 10,12);
+        tempsst = new SpaceshipType("Tiger Attacker","T-A",SpaceShipSize.SQUADRON,0,45,SpaceshipRange.SHORT,2,6, 10,12);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setArmorSmall(10);
         tempsst.setWeaponsStrengthMedium(14);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -7568,9 +7523,8 @@ public class TheLastGreatWar{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Tiger Attacker"));
         
         // Puma Attacker
-        tempsst = new SpaceshipType("Puma Attacker","P-A",SpaceShipSize.SMALL,0,55,SpaceshipRange.SHORT,3,7, 15,18);
+        tempsst = new SpaceshipType("Puma Attacker","P-A",SpaceShipSize.SQUADRON,0,55,SpaceshipRange.SHORT,3,7, 15,18);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
-        tempsst.setSquadron(true);
         tempsst.setArmorSmall(10);
         tempsst.setWeaponsStrengthMedium(22);
         tempsst.setWeaponsMaxSalvoesMedium(2);

@@ -411,7 +411,7 @@ public class MapPureFunctions {
                 }
             }
         }
-        return maxSize != null ? maxSize.getName() : "";
+        return maxSize != null ? maxSize.getDescription() : "";
     }
 
     /**
@@ -438,7 +438,7 @@ public class MapPureFunctions {
                 }
             }
         }
-        shipSize = maxSize != null ? maxSize.getName() : "";
+        shipSize = maxSize != null ? maxSize.getDescription() : "";
         if (civ) {
             shipSize += "+civ";
         }

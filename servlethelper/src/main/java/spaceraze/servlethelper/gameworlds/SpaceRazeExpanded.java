@@ -91,15 +91,13 @@ public class SpaceRazeExpanded{
         // Squadrons
         // ---------
         // Z-95
-        tempsst = new SpaceshipType("Z-95","Z95",SpaceShipSize.SMALL,5,20,SpaceshipRange.NONE,1,2, 10,20);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Z-95","Z95",SpaceShipSize.SQUADRON,5,20,SpaceshipRange.NONE,1,2, 10,20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(1);
         gw.addShipType(tempsst);
         // X-Wing
-        tempsst = new SpaceshipType("X-Wing","X-W",SpaceShipSize.SMALL,10,20,SpaceshipRange.LONG,2,4, 10,30);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("X-Wing","X-W",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.LONG,2,4, 10,30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(1);
@@ -107,8 +105,7 @@ public class SpaceRazeExpanded{
         tempsst.setWeaponsMaxSalvoesLarge(1);
         gw.addShipType(tempsst);
         // Y-Wing
-        tempsst = new SpaceshipType("Y-Wing","Y-W",SpaceShipSize.SMALL,5,20,SpaceshipRange.SHORT,2,3, 10,10);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("Y-Wing","Y-W",SpaceShipSize.SQUADRON,5,20,SpaceshipRange.SHORT,2,3, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -116,15 +113,13 @@ public class SpaceRazeExpanded{
         tempsst.setWeaponsMaxSalvoesLarge(4);
         gw.addShipType(tempsst);
         // A-Wing
-        tempsst = new SpaceshipType("A-Wing","A-W",SpaceShipSize.SMALL,10,20,SpaceshipRange.LONG,2,5, 10,40);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("A-Wing","A-W",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.LONG,2,5, 10,40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(1);
         gw.addShipType(tempsst);
         // B-Wing
-        tempsst = new SpaceshipType("B-Wing","B-W",SpaceShipSize.SMALL,15,25,SpaceshipRange.LONG,2,6, 15,15);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("B-Wing","B-W",SpaceShipSize.SQUADRON,15,25,SpaceshipRange.LONG,2,6, 15,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsMaxSalvoesMedium(3);
@@ -134,18 +129,15 @@ public class SpaceRazeExpanded{
         tempsst.setWeaponsMaxSalvoesHuge(2);
         gw.addShipType(tempsst);
         // TIE-fighter
-        tempsst = new SpaceshipType("TIE-Fighter","T-F",SpaceShipSize.SMALL,0,15,SpaceshipRange.NONE,1,1, 10,25);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("TIE-Fighter","T-F",SpaceShipSize.SQUADRON,0,15,SpaceshipRange.NONE,1,1, 10,25);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         // TIE-interceptor
-        tempsst = new SpaceshipType("TIE-Interceptor","T-I",SpaceShipSize.SMALL,0,20,SpaceshipRange.NONE,1,3, 15,30);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("TIE-Interceptor","T-I",SpaceShipSize.SQUADRON,0,20,SpaceshipRange.NONE,1,3, 15,30);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         // TIE-bomber
-        tempsst = new SpaceshipType("TIE-Bomber","T-B",SpaceShipSize.SMALL,0,20,SpaceshipRange.NONE,1,2, 10,10);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("TIE-Bomber","T-B",SpaceShipSize.SQUADRON,0,20,SpaceshipRange.NONE,1,2, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -153,15 +145,13 @@ public class SpaceRazeExpanded{
         tempsst.setWeaponsMaxSalvoesLarge(2);
         gw.addShipType(tempsst);
         // TIE-advanced
-        tempsst = new SpaceshipType("TIE-Advanced","T-A",SpaceShipSize.SMALL,10,20,SpaceshipRange.NONE,1,5, 10,30);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("TIE-Advanced","T-A",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.NONE,1,5, 10,30);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         // TIE-defender
-        tempsst = new SpaceshipType("TIE-Defender","T-D",SpaceShipSize.SMALL,15,20,SpaceshipRange.LONG,2,8, 10,40);
-        tempsst.setSquadron(true);
+        tempsst = new SpaceshipType("TIE-Defender","T-D",SpaceShipSize.SQUADRON,15,20,SpaceshipRange.LONG,2,8, 10,40);
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsMaxSalvoesMedium(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);

@@ -5,6 +5,7 @@ package spaceraze.servlethelper.comparator;
 
 import java.util.Comparator;
 
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.SpaceshipType;
 
 /**
@@ -19,10 +20,10 @@ public class SpaceshipTypeComparator implements Comparator<SpaceshipType> {
 		int diff = 0;
 		// defence stations first
 		if (diff == 0){
-			if (sst1.isDefenceShip() & !sst2.isDefenceShip()){
+			if (SpaceshipPureFunctions.isDefenceShip(sst1) & !SpaceshipPureFunctions.isDefenceShip(sst2)){
 				diff = -1;
 			}else
-			if (!sst1.isDefenceShip() & sst2.isDefenceShip()){
+			if (!SpaceshipPureFunctions.isDefenceShip(sst1) & SpaceshipPureFunctions.isDefenceShip(sst2)){
 				diff = 1;
 			}
 		}
@@ -32,15 +33,6 @@ public class SpaceshipTypeComparator implements Comparator<SpaceshipType> {
 				diff = -1;
 			}else
 			if (!sst1.isCivilian() & sst2.isCivilian()){
-				diff = 1;
-			}
-		}
-		// else squadrons first
-		if (diff == 0){
-			if (sst1.isSquadron() & !sst2.isSquadron()){
-				diff = -1;
-			}else
-			if (!sst1.isSquadron() & sst2.isSquadron()){
 				diff = 1;
 			}
 		}

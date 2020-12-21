@@ -65,7 +65,7 @@ public class SpaceshipMutator {
 
     public static int getActualDamage(Spaceship spaceship, GameWorld gameWorld, Spaceship targetShip, int multiplier, double shieldsMultiplier) {
         double tmpDamage = 0;
-        if (targetShip.isSquadron()) {
+        if (targetShip.getSize() == SpaceShipSize.SQUADRON) {
             tmpDamage = SpaceshipPureFunctions.getWeaponsStrengthSquadron(spaceship, gameWorld) * (1.0 - targetShip.getArmorSmall());
         } else {
             tmpDamage = SpaceshipPureFunctions.getWeaponsStrengthSmall(spaceship, gameWorld) * (1.0 - targetShip.getArmorSmall());
@@ -151,7 +151,7 @@ public class SpaceshipMutator {
     public static void removeShip(Spaceship ss, Galaxy galaxy) {
         boolean ok;
         ss.setDestroyed();
-        if (SpaceshipPureFunctions.getSpaceshipTypeByKey(ss.getTypeKey(), galaxy.getGameWorld()).isCarrier()) {
+        if (ss.getSquadronCapacity() > 0) {
             removeSquadronsFromCarrier(ss, galaxy);
         }
         ok = galaxy.getSpaceships().remove(ss);
@@ -163,7 +163,7 @@ public class SpaceshipMutator {
     private static void removeSquadronsFromCarrier(Spaceship aCarrier, Galaxy galaxy) {
         for (Iterator<Spaceship> iter = galaxy.getSpaceships().iterator(); iter.hasNext();) {
             Spaceship aShip = iter.next();
-            if (aShip.isSquadron()) {
+            if (aShip.getSize() == SpaceShipSize.SQUADRON) {
                 if (aShip.getCarrierLocation() == aCarrier) {
                     aShip.setCarrierLocation(null);
                 }

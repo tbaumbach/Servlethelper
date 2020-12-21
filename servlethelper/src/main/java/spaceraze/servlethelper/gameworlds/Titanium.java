@@ -1127,18 +1127,16 @@ public class Titanium {
 
         // Orb Fighter
         typeName = "Orb Fighter";
-        tempsst = new SpaceshipType(typeName, "O-F", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 3, sqdBaseSmAtt, sqdBaseFightSqdAtt);
+        tempsst = new SpaceshipType(typeName, "O-F", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 3, sqdBaseSmAtt, sqdBaseFightSqdAtt);
         tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can do very little damage to enemy capital ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
 
         typeName = "Orb Fighter-Bomber";
-        tempsst = new SpaceshipType(typeName, "O-FB", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseFightSqdAtt - 5);
+        tempsst = new SpaceshipType(typeName, "O-FB", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseFightSqdAtt - 5);
         tempsst.setDescription("An all-round pod squadron which can both do some damage against squadrons or capital ships, where its two-shot medium and large torpedo salvoes can hurt larger ships. It cannot move on it's own but has to be attached to a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(25);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -1149,9 +1147,8 @@ public class Titanium {
 
         // Orb Bomber
         typeName = "Orb Bomber";
-        tempsst = new SpaceshipType(typeName, "O-B", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName, "O-B", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseBombSqdAtt);
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -1163,9 +1160,8 @@ public class Titanium {
 
         // Orb Troop carriers
         typeName = "Orb Troop Shuttles";
-        tempsst = new SpaceshipType(typeName, "O-TS", SpaceShipSize.SMALL, 0, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 4, 5, 5);
+        tempsst = new SpaceshipType(typeName, "O-TS", SpaceShipSize.SQUADRON, 0, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 4, 5, 5);
         tempsst.setDescription("A troop carrying pod squadron design. It is almost useless in combat. It cannot move on it's own but has to be attached to a pod carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setTroopCapacity(1);
         tempsst.setScreened(true);
@@ -1175,9 +1171,8 @@ public class Titanium {
 
         // Orb Marine Strike Force
         typeName = "Orb Marine Strike Force";
-        tempsst = new SpaceshipType(typeName, "O-MS", SpaceShipSize.SMALL, sqdBaseSh - 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 4, 1, 5);
+        tempsst = new SpaceshipType(typeName, "O-MS", SpaceShipSize.SQUADRON, sqdBaseSh - 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 4, 1, 5);
         tempsst.setDescription("Squadron carrying a small marine detachment who can besiege planets and lower their resistance. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setPsychWarfare(1);
         tempsst.setScreened(true);
@@ -1200,9 +1195,8 @@ public class Titanium {
 
         // Orb bombardment
         typeName = "Orb Planetary Bombardment";
-        tempsst = new SpaceshipType(typeName, "O-PB", SpaceShipSize.SMALL, sqdBaseSh - 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 6, 1, 5);
+        tempsst = new SpaceshipType(typeName, "O-PB", SpaceShipSize.SQUADRON, sqdBaseSh - 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 6, 1, 5);
         tempsst.setDescription("Air-to-ground attack squadron which can bombard planets. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBombardment(2);
         tempsst.setAvailableToBuild(false);
@@ -1212,9 +1206,8 @@ public class Titanium {
 
         // Orb Scout
         typeName = "Orb Scout";
-        tempsst = new SpaceshipType(typeName, "O-S", SpaceShipSize.SMALL, sqdBaseSh - 5, sqdBaseDC - 10, SpaceshipRange.NONE, 1, 6, 1, 5);
+        tempsst = new SpaceshipType(typeName, "O-S", SpaceShipSize.SQUADRON, sqdBaseSh - 5, sqdBaseDC - 10, SpaceshipRange.NONE, 1, 6, 1, 5);
         tempsst.setDescription("Reconnaissance squadron which can survey planets. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setPlanetarySurvey(true);
         tempsst.setAvailableToBuild(false);
@@ -1224,9 +1217,8 @@ public class Titanium {
 
         // Orb Heavy Bomber
         typeName = "Orb Heavy Bomber";
-        tempsst = new SpaceshipType(typeName, "O-HB", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 7, sqdBaseSmAtt - 5, sqdBaseBombSqdAtt - 5);
+        tempsst = new SpaceshipType(typeName, "O-HB", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 7, sqdBaseSmAtt - 5, sqdBaseBombSqdAtt - 5);
         tempsst.setDescription("Squadron specialized in attacking large and huge capital ships, where its large and huge torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(50);
         tempsst.setWeaponsMaxSalvoesLarge(4);
@@ -1238,9 +1230,8 @@ public class Titanium {
 
         // Orb Advanced Fighter
         typeName = "Orb Advanced Fighter";
-        tempsst = new SpaceshipType(typeName, "O-AF", SpaceShipSize.SMALL, sqdBaseSh + 5, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 8, sqdBaseSmAtt, sqdBaseFightSqdAtt + 5);
+        tempsst = new SpaceshipType(typeName, "O-AF", SpaceShipSize.SQUADRON, sqdBaseSh + 5, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 8, sqdBaseSmAtt, sqdBaseFightSqdAtt + 5);
         tempsst.setDescription("An advanced fighter squadron which can also do some damage against medium-sized capital ships. It cannot move on it's own but has to be attached to a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1726,18 +1717,16 @@ public class Titanium {
 
         // Cyber Fighter
         typeName = "Cyber Fighter";
-        tempsst = new SpaceshipType(typeName, "C-F", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseFightSqdAtt + 10);
+        tempsst = new SpaceshipType(typeName, "C-F", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 5, sqdBaseSmAtt, sqdBaseFightSqdAtt + 10);
         tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can do very little damage to enemy capital ships, but it's cybernetically integrated pilot is superior in dogfighting. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
 
         // Cyber Light Bomber
         typeName = "Cyber Light Bomber";
-        tempsst = new SpaceshipType(typeName, "C-LB", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 6, sqdBaseSmAtt, sqdBaseFightSqdAtt);
+        tempsst = new SpaceshipType(typeName, "C-LB", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 6, sqdBaseSmAtt, sqdBaseFightSqdAtt);
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium torpedo salvoes can can do significant damage, and it's cybernetically integrated pilot is good at dogfighting. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1746,9 +1735,8 @@ public class Titanium {
 
         // Cyber Bomber
         typeName = "Cyber Bomber";
-        tempsst = new SpaceshipType(typeName, "C-B", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 6, sqdBaseSmAtt, sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName, "C-B", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC, SpaceshipRange.NONE, 1, 6, sqdBaseSmAtt, sqdBaseBombSqdAtt);
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than medium where its large and huge torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(50);
         tempsst.setWeaponsMaxSalvoesLarge(4);
@@ -1774,11 +1762,10 @@ public class Titanium {
 */
         // Cyber Advanced Fighter
         typeName = "Cyber Advanced Fighter";
-        tempsst = new SpaceshipType(typeName, "C-AF", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 8, sqdBaseSmAtt + 5, sqdBaseFightSqdAtt + 15);
+        tempsst = new SpaceshipType(typeName, "C-AF", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 8, sqdBaseSmAtt + 5, sqdBaseFightSqdAtt + 15);
         tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can do very little damage to enemy capital ships, but it's cybernetically integrated pilot is superior in dogfighting. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setWeaponsStrengthMedium(25);
         tempsst.setWeaponsMaxSalvoesMedium(2);
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
@@ -2026,9 +2013,8 @@ public class Titanium {
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("VIP Transport"));
 
         typeName = "Ghost Fighter-Bomber";
-        tempsst = new SpaceshipType(typeName, "G-FB", SpaceShipSize.SMALL, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 4, sqdBaseSmAtt, sqdBaseFightSqdAtt - 5);
+        tempsst = new SpaceshipType(typeName, "G-FB", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 4, sqdBaseSmAtt, sqdBaseFightSqdAtt - 5);
         tempsst.setDescription("An all-round squadron which can both do some damage against squadrons and capital ships, where its two-shot medium and large torpedo salvoes can hurt larger ships. It cannot move on it's own but has to be attached to a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(25);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -2293,18 +2279,16 @@ public class Titanium {
 
         // Templar Drone Fighter
         typeName = "Templar Drone Fighter";
-        tempsst = new SpaceshipType(typeName, "T-F", SpaceShipSize.SMALL, sqdBaseSh + 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 2, sqdBaseSmAtt - 5, sqdBaseFightSqdAtt - 5);
+        tempsst = new SpaceshipType(typeName, "T-F", SpaceShipSize.SQUADRON, sqdBaseSh + 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 2, sqdBaseSmAtt - 5, sqdBaseFightSqdAtt - 5);
         tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can do very little damage to enemy capital ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
 
         // Templar Drone Bomber
         typeName = "Templar Drone Bomber";
-        tempsst = new SpaceshipType(typeName, "T-B", SpaceShipSize.SMALL, sqdBaseSh + 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 3, sqdBaseSmAtt - 5, sqdBaseBombSqdAtt - 5);
+        tempsst = new SpaceshipType(typeName, "T-B", SpaceShipSize.SQUADRON, sqdBaseSh + 5, sqdBaseDC - 5, SpaceshipRange.NONE, 1, 3, sqdBaseSmAtt - 5, sqdBaseBombSqdAtt - 5);
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsMaxSalvoesMedium(2);

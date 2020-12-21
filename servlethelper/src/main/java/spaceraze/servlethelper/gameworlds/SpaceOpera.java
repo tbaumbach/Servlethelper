@@ -555,9 +555,8 @@ public class SpaceOpera{
         
         // UTF Fighter
         typeName = "UTF Fighter";
-        tempsst = new SpaceshipType(typeName,"U-F",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,4, sqdBaseSmAtt,sqdBaseFightSqdAtt);
+        tempsst = new SpaceshipType(typeName,"U-F",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,4, sqdBaseSmAtt,sqdBaseFightSqdAtt);
 		tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can also do some minor damage to enemy capital ships and has one torpedo salvoe against medium or larger opponents. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setWeaponsStrengthMedium(25);
         tempsst.setWeaponsMaxSalvoesMedium(1);
@@ -567,9 +566,8 @@ public class SpaceOpera{
 
         // UTF Bomber
         typeName = "UTF Bomber";
-        tempsst = new SpaceshipType(typeName,"U-B",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 10,SpaceshipRange.NONE,1,6, sqdBaseSmAtt,sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName,"U-B",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 10,SpaceshipRange.NONE,1,6, sqdBaseSmAtt,sqdBaseBombSqdAtt);
 		tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -739,9 +737,8 @@ public class SpaceOpera{
 
         // Azuriach Fighter
         typeName = "Azuriach Fighter";
-        tempsst = new SpaceshipType(typeName,"A-F",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt+5);
+        tempsst = new SpaceshipType(typeName,"A-F",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt+5);
 		tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can also do some minor damage to enemy capital ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanBlockPlanet(false);
         gw.addShipType(tempsst);
@@ -749,9 +746,8 @@ public class SpaceOpera{
 
         // Azuriach Bomber
         typeName = "Azuriach Bomber";
-        tempsst = new SpaceshipType(typeName,"A-B",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName,"A-B",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseBombSqdAtt);
 		tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(40);
         tempsst.setWeaponsMaxSalvoesMedium(3);
@@ -957,9 +953,8 @@ public class SpaceOpera{
 
         // IRSOL Fighter
         typeName = "IRSOL Fighter";
-        tempsst = new SpaceshipType(typeName,"I-F",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,4, sqdBaseSmAtt+5,sqdBaseFightSqdAtt);
+        tempsst = new SpaceshipType(typeName,"I-F",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,4, sqdBaseSmAtt+5,sqdBaseFightSqdAtt);
 		tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can also do some damage to enemy capital ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanBlockPlanet(false);
         gw.addShipType(tempsst);
@@ -967,9 +962,8 @@ public class SpaceOpera{
 
         // IRSOL Bomber
         typeName = "IRSOL Bomber";
-        tempsst = new SpaceshipType(typeName,"I-B",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName,"I-B",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseBombSqdAtt);
 		tempsst.setDescription("Squadron specialized in attacking capital ships, especially medium and large where its medium torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1109,9 +1103,8 @@ public class SpaceOpera{
 
         // Transhuman Fighter-Bomber
         typeName = "Transhuman Fighter-Bomber";
-        tempsst = new SpaceshipType(typeName,"T-FB",SpaceShipSize.SMALL,sqdBaseSh+10,sqdBaseDC,SpaceshipRange.SHORT,2,10, sqdBaseSmAtt+10,sqdBaseFightSqdAtt+5);
+        tempsst = new SpaceshipType(typeName,"T-FB",SpaceShipSize.SQUADRON,sqdBaseSh+10,sqdBaseDC,SpaceshipRange.SHORT,2,10, sqdBaseSmAtt+10,sqdBaseFightSqdAtt+5);
 		tempsst.setDescription("An all-round squadron good at attacking squadrons or small and medium capital ships, and can even hurt larger ships. It is equipped with a short-range hyperdrive which allows it to move between starsystems on its own, but can also be carried in a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setCanBlockPlanet(false);
@@ -1325,9 +1318,8 @@ public class SpaceOpera{
 
         // Blarad Bomber
         typeName = "Blarad Bomber";
-        tempsst = new SpaceshipType(typeName,"B-B",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 20,SpaceshipRange.NONE,1,8, sqdBaseSmAtt+5,sqdBaseBombSqdAtt+5);
+        tempsst = new SpaceshipType(typeName,"B-B",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 20,SpaceshipRange.NONE,1,8, sqdBaseSmAtt+5,sqdBaseBombSqdAtt+5);
 		tempsst.setDescription("The Blarad bomber squadron is the most powerful bomber type of all starnations, and its torpedoe attacks are matched by none. It can also take more damage than any other squadron type and can even pack some punch against enemy squadrons. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(60);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1458,9 +1450,8 @@ public class SpaceOpera{
 
         // Hiss'ist Fighter
         typeName = "Hiss'ist Fighter";
-        tempsst = new SpaceshipType(typeName,"H-F",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt+5);
+        tempsst = new SpaceshipType(typeName,"H-F",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt+5);
 		tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can also do some minor damage to enemy capital ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setCanBlockPlanet(false);
         gw.addShipType(tempsst);
@@ -1468,9 +1459,8 @@ public class SpaceOpera{
 
         // Hiss'ist Fighter-Bomber
         typeName = "Hiss'ist Fighter-Bomber";
-        tempsst = new SpaceshipType(typeName,"H-FB",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt-5);
+        tempsst = new SpaceshipType(typeName,"H-FB",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseFightSqdAtt-5);
 		tempsst.setDescription("An all-round squadron which can both do some damage against squadrons or capital ships, where its medium torpedo salvoes can hurt larger ships, especially medium sized ones. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsMaxSalvoesMedium(4);
@@ -1480,9 +1470,8 @@ public class SpaceOpera{
 
         // Hiss'ist Bomber
         typeName = "Hiss'ist Bomber";
-        tempsst = new SpaceshipType(typeName,"H-B",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseBombSqdAtt);
+        tempsst = new SpaceshipType(typeName,"H-B",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,3, sqdBaseSmAtt,sqdBaseBombSqdAtt);
 		tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -1494,9 +1483,8 @@ public class SpaceOpera{
 
         // Hiss'ist Troop Landing Crafts
         typeName = "Hiss'ist Drop Ships";
-        tempsst = new SpaceshipType(typeName,"H-DS",SpaceShipSize.SMALL,sqdBaseSh-5,sqdBaseDC-5,SpaceshipRange.NONE,1,3, 1,5);
+        tempsst = new SpaceshipType(typeName,"H-DS",SpaceShipSize.SQUADRON,sqdBaseSh-5,sqdBaseDC-5,SpaceshipRange.NONE,1,3, 1,5);
 		tempsst.setDescription("Squadron carrying troops which can attack planets. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setPsychWarfare(1);
         tempsst.setScreened(true);
@@ -1505,9 +1493,8 @@ public class SpaceOpera{
 
         // Hiss'ist Ground attack
         typeName = "Hiss'ist Ground Attack";
-        tempsst = new SpaceshipType(typeName,"H-GA",SpaceShipSize.SMALL,sqdBaseSh-5,sqdBaseDC-5,SpaceshipRange.NONE,1,3, 1,5);
+        tempsst = new SpaceshipType(typeName,"H-GA",SpaceShipSize.SQUADRON,sqdBaseSh-5,sqdBaseDC-5,SpaceshipRange.NONE,1,3, 1,5);
 		tempsst.setDescription("Air-to-ground attack shuttles squadron which specializes in attacking (bombarding) planets. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setBombardment(2);
         tempsst.setScreened(true);
@@ -1516,9 +1503,8 @@ public class SpaceOpera{
 
         // Hiss'ist Raider
         typeName = "Hiss'ist Raider";
-        tempsst = new SpaceshipType(typeName,"H-FB",SpaceShipSize.SMALL,sqdBaseSh+5,sqdBaseDC,SpaceshipRange.NONE,1,8, sqdBaseSmAtt+10,sqdBaseFightSqdAtt);
+        tempsst = new SpaceshipType(typeName,"H-FB",SpaceShipSize.SQUADRON,sqdBaseSh+5,sqdBaseDC,SpaceshipRange.NONE,1,8, sqdBaseSmAtt+10,sqdBaseFightSqdAtt);
 		tempsst.setDescription("An advanced all-round squadron which can both do some damage against squadrons and capital ships, where its medium torpedo salvoes can hurt larger ships, especially medium sized ones. It's unique design and speed enables it to quickly break through enemy lines and attack screened ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(60);
         tempsst.setWeaponsMaxSalvoesMedium(1);
@@ -1529,9 +1515,8 @@ public class SpaceOpera{
 
         // Hiss'ist Scout
         typeName = "Hiss'ist Squadron Leader";
-        tempsst = new SpaceshipType(typeName,"H-S",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC-10,SpaceshipRange.NONE,1,8, 5,5);
+        tempsst = new SpaceshipType(typeName,"H-S",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC-10,SpaceshipRange.NONE,1,8, 5,5);
 		tempsst.setDescription("Commumnication, command and reconnaissance squadron. Give initiative bonus and can survey planets. Virtually useless in combat and should probably be screened. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setPlanetarySurvey(true);
         tempsst.setIncreaseInitiative(10);
@@ -1657,9 +1642,8 @@ public class SpaceOpera{
 
         // Ranan Fighter-Bomber
         typeName = "Ranan Fighter-Bomber";
-        tempsst = new SpaceshipType(typeName,"R-FB",SpaceShipSize.SMALL,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseFightSqdAtt-5);
+        tempsst = new SpaceshipType(typeName,"R-FB",SpaceShipSize.SQUADRON,sqdBaseSh,sqdBaseDC + 5,SpaceshipRange.NONE,1,5, sqdBaseSmAtt,sqdBaseFightSqdAtt-5);
 		tempsst.setDescription("An all-round squadron which can both do some damage against squadrons or capital ships, where its two-shot medium and large torpedo salvoes can hurt larger ships. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(25);
         tempsst.setWeaponsMaxSalvoesMedium(2);
@@ -1671,9 +1655,8 @@ public class SpaceOpera{
 
         // Ranan Raider Shuttles
         typeName = "Ranan Raider Shuttles";
-        tempsst = new SpaceshipType(typeName,"R-RS",SpaceShipSize.SMALL,0,sqdBaseDC - 5,SpaceshipRange.NONE,1,6, 5,5);
+        tempsst = new SpaceshipType(typeName,"R-RS",SpaceShipSize.SQUADRON,0,sqdBaseDC - 5,SpaceshipRange.NONE,1,6, 5,5);
 		tempsst.setDescription("A squadron of troop carrying shuttles which also can raid planets. This can bring a good profit on enemy and neutral planets. It is almost useless in combat. It cannot move on it's own but has to be carried inside a carrier.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setIncEnemyClosedBonus(5);
         tempsst.setIncEnemyOpenBonus(5);
@@ -1989,9 +1972,8 @@ public class SpaceOpera{
 
         // Bug Fighter
         typeName = "Bug Fighter";
-        tempsst = new SpaceshipType(typeName,"B-F",SpaceShipSize.SMALL,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 10,25);
+        tempsst = new SpaceshipType(typeName,"B-F",SpaceShipSize.SQUADRON,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 10,25);
         tempsst.setDescription("Cheap and basic fighter squadron. It cannot move on it's own but has to be carried inside a carrier/bug meteorite.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setVisibleOnMap(false);
         tempsst.setCanBlockPlanet(false);
@@ -2000,9 +1982,8 @@ public class SpaceOpera{
 
         // Bug Small attacker
         typeName = "Bug Attacker";
-        tempsst = new SpaceshipType(typeName,"B-A",SpaceShipSize.SMALL,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 30,10);
+        tempsst = new SpaceshipType(typeName,"B-A",SpaceShipSize.SQUADRON,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 30,10);
         tempsst.setDescription("Squadron specialized at attacking small capital ships. It cannot move on it's own but has to be carried inside a carrier/bug meteorite.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setVisibleOnMap(false);
         tempsst.setCanBlockPlanet(false);
@@ -2011,9 +1992,8 @@ public class SpaceOpera{
 
         // Bug Light Bomber
         typeName = "Bug Light Bomber";
-        tempsst = new SpaceshipType(typeName,"B-LB",SpaceShipSize.SMALL,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 5,5);
+        tempsst = new SpaceshipType(typeName,"B-LB",SpaceShipSize.SQUADRON,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 5,5);
         tempsst.setDescription("Bomber squadron specialized aganist medium targets, and to lesser degree large and huge targets, and pretty useless against squadrons or small targets. It cannot move on it's own but has to be carried inside a carrier/bug meteorite.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(100);
         tempsst.setWeaponsMaxSalvoesMedium(1);
@@ -2024,9 +2004,8 @@ public class SpaceOpera{
 
         // Bug Heavy Bomber
         typeName = "Bug Heavy Bomber";
-        tempsst = new SpaceshipType(typeName,"B-HB",SpaceShipSize.SMALL,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 5,5);
+        tempsst = new SpaceshipType(typeName,"B-HB",SpaceShipSize.SQUADRON,0,sqdBugBaseDC,SpaceshipRange.NONE,1,1, 5,5);
         tempsst.setDescription("Bomber squadron specialized aganist large and huge targets, and pretty useless against squadrons or small or megium targets. It cannot move on it's own but has to be carried inside a carrier/bug meteorite.");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(100);
         tempsst.setWeaponsMaxSalvoesLarge(1);

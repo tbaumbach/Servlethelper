@@ -73,7 +73,7 @@ public class SpaceshipPureFunctions {
                     tempShipList.add(tempShip);
                 }
 
-                if (isCarrier(tempShip, aPlayer.getGalaxy().getGameWorld())) {
+                if (isCarrier(tempShip)) {
                     List<ShipToCarrierMovement> SqdToCarrierMovementList = aPlayer.getOrders().getShipToCarrierMoves();
                     for (ShipToCarrierMovement shipToCarrierMovement : SqdToCarrierMovementList) {
                         if (shipToCarrierMovement.getDestinationCarrierId() == tempShip.getKey()) {
@@ -100,10 +100,10 @@ public class SpaceshipPureFunctions {
                 Spaceship tempSpaceship = aPlayer.getGalaxy().findSpaceshipByUniqueId(shipMovement.getSpaceShipID());
                 if (tempSpaceship.getLocation() != null && tempSpaceship.getLocation() == aPlanet) {// removing ships on the planet with move orders
                     tempShipList.remove(tempSpaceship);
-                    if (isCarrier(tempSpaceship, aPlayer.getGalaxy().getGameWorld())) {
+                    if (isCarrier(tempSpaceship)) {
                         List<Spaceship> removeShips = new ArrayList<>();
                         for (Spaceship tempShip : tempShipList) {
-                            if (tempShip.isSquadron()) {
+                            if (tempShip.getSize() == SpaceShipSize.SQUADRON) {
                                 List<ShipToCarrierMovement> SqdToCarrierMovementList = aPlayer.getOrders().getShipToCarrierMoves();
                                 for (ShipToCarrierMovement shipToCarrierMovement : SqdToCarrierMovementList) {
                                     if (shipToCarrierMovement.getDestinationCarrierId() == tempSpaceship.getKey()) {
@@ -230,7 +230,7 @@ public class SpaceshipPureFunctions {
 
     public static int getDamageNoArmor(Spaceship spaceship, GameWorld gameWorld, Spaceship target, int multiplier) {
         double tmpDamage = 0;
-        if (target.isSquadron()) {
+        if (target.getSize() == SpaceShipSize.SQUADRON) {
             tmpDamage = getWeaponsStrengthSquadron(spaceship, gameWorld);
         } else {
             tmpDamage = getWeaponsStrengthSmall(spaceship, gameWorld);
@@ -360,8 +360,8 @@ public class SpaceshipPureFunctions {
         return count;
     }
 
-    public static boolean isCarrier(Spaceship spaceship, GameWorld gameWorld) {
-        return getSpaceshipTypeByKey(spaceship.getTypeKey(), gameWorld).getSquadronCapacity() > 0;
+    public static boolean isCarrier(Spaceship spaceship) {
+        return spaceship.getSquadronCapacity() > 0;
     }
 
     public static SpaceshipRange getRange(Spaceship spaceship, Galaxy galaxy) {
@@ -446,7 +446,7 @@ public class SpaceshipPureFunctions {
      * @return
      */
     public static boolean isCapitalShip(Spaceship spaceship, GameWorld gameWorld){
-        return !getSpaceshipTypeByKey(spaceship.getTypeKey(), gameWorld).isCivilian() & !spaceship.isSquadron() & (spaceship.getRange() != SpaceshipRange.NONE);
+        return !getSpaceshipTypeByKey(spaceship.getTypeKey(), gameWorld).isCivilian() & spaceship.getSize() != SpaceShipSize.SQUADRON & (spaceship.getRange() != SpaceshipRange.NONE);
     }
 
     public static SpaceShipSize getMaxResupplyFromShip(Planet aPlanet, Player aPlayer, Galaxy galaxy) {
@@ -462,6 +462,10 @@ public class SpaceshipPureFunctions {
             }
         }
         return maxSize;
+    }
+
+    public static boolean isDefenceShip(SpaceshipType spaceshipType){
+        return !spaceshipType.isCivilian() & spaceshipType.getSize() != SpaceShipSize.SQUADRON & (spaceshipType.getRange() == SpaceshipRange.NONE);
     }
 
 }

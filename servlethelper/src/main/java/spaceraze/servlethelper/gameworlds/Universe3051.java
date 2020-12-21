@@ -672,19 +672,17 @@ public class Universe3051{
 //###################  SQUADRONS  ##########################################
              
         // F1 Fighter
-        tempsst = new SpaceshipType("Fighter Sqd","Fgt",SpaceShipSize.SMALL,10,50,SpaceshipRange.LONG,2,4, 15,40);
+        tempsst = new SpaceshipType("Fighter Sqd","Fgt",SpaceShipSize.SQUADRON,10,50,SpaceshipRange.LONG,2,4, 15,40);
         tempsst.setArmorSmall(70);
         tempsst.setDescription("Best way of winning Sqadron Superiority is to have the most Fighter Sqds");
-        tempsst.setSquadron(true);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         
         // B1 Bomber
-        tempsst = new SpaceshipType("Bomber Sqd","Bom",SpaceShipSize.SMALL,10,50,SpaceshipRange.LONG,2,4, 20,10);
+        tempsst = new SpaceshipType("Bomber Sqd","Bom",SpaceShipSize.SQUADRON,10,50,SpaceshipRange.LONG,2,4, 20,10);
         tempsst.setArmorSmall(70);
         tempsst.setDescription("A Bomber Squadron can make a big difference against an Small & Medium taskforce");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setWeaponsStrengthMedium(40);
@@ -693,10 +691,9 @@ public class Universe3051{
         gw.addShipType(tempsst);
         
         // T1 Torpedo boat
-        tempsst = new SpaceshipType("Torpedo Boat","Tor",SpaceShipSize.SMALL,10,50,SpaceshipRange.LONG,2,4, 5,5);
+        tempsst = new SpaceshipType("Torpedo Boat","Tor",SpaceShipSize.SQUADRON,10,50,SpaceshipRange.LONG,2,4, 5,5);
         tempsst.setArmorSmall(70);
         tempsst.setDescription("A Torpedo Boat Squadron can make a big difference against an Large & Huge taskforce");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setWeaponsStrengthMedium(10);    
@@ -868,19 +865,17 @@ public class Universe3051{
 //###################  SQUADRONS  ##########################################
              
         // Interceptor
-        tempsst = new SpaceshipType("Interceptor","Intc",SpaceShipSize.SMALL,5,55,SpaceshipRange.LONG,2,4, 15,35);
+        tempsst = new SpaceshipType("Interceptor","Intc",SpaceShipSize.SQUADRON,5,55,SpaceshipRange.LONG,2,4, 15,35);
         tempsst.setDescription("Best way of winning Sqadron Superiority is to have the most Fighter Sqds");
         tempsst.setArmorSmall(70);
-        tempsst.setSquadron(true);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         
         // Gunship
-        tempsst = new SpaceshipType("Gunship","Gun",SpaceShipSize.SMALL,0,70,SpaceshipRange.LONG,2,4, 30,15);
+        tempsst = new SpaceshipType("Gunship","Gun",SpaceShipSize.SQUADRON,0,70,SpaceshipRange.LONG,2,4, 30,15);
         tempsst.setArmorSmall(70);
         tempsst.setDescription("A Bomber Squadron can make a big difference against an Small & Medium taskforce");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(20);
        
@@ -888,10 +883,9 @@ public class Universe3051{
         gw.addShipType(tempsst);
         
         // Hawk Eye
-        tempsst = new SpaceshipType("Hawk Eye","Hwk",SpaceShipSize.SMALL,5,60,SpaceshipRange.LONG,2,4, 5,5);
+        tempsst = new SpaceshipType("Hawk Eye","Hwk",SpaceShipSize.SQUADRON,5,60,SpaceshipRange.LONG,2,4, 5,5);
         tempsst.setArmorSmall(70);
         tempsst.setDescription("A Torpedo Boat Squadron can make a big difference against an Large & Huge taskforce");
-        tempsst.setSquadron(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);    
         tempsst.setWeaponsStrengthLarge(50);   
