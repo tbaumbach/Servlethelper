@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.spaceship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -474,6 +475,31 @@ public class SpaceshipPureFunctions {
     public static int getHullStrength(Spaceship spaceship){
         int hullStrength = (int) Math.round((100.0 * spaceship.getCurrentDc())	/ spaceship.getDamageCapacity());
         return hullStrength;
+    }
+
+    public static boolean isPlayerUniqueBuild(Player aPlayer, SpaceshipType spaceshipType) {
+        return aPlayer.getGalaxy().spaceshipTypeExist(spaceshipType, null, aPlayer);
+    }
+
+    public static boolean isWorldUniqueBuild(Galaxy aGalaxy, SpaceshipType spaceshipType) {
+        return aGalaxy.spaceshipTypeExist(spaceshipType, null, null);
+    }
+
+    public static boolean isFactionUniqueBuild(Player aPlayer, SpaceshipType spaceshipType) {
+        return aPlayer.getGalaxy().spaceshipTypeExist(spaceshipType, aPlayer.getFaction(), null);
+    }
+
+    public static int getBuildCost(SpaceshipType spaceshipType, VIP vipWithBonus){
+        int tempBuildCost = spaceshipType.getBuildCost();
+        if (vipWithBonus != null){
+            int vipBuildbonus = 100 - vipWithBonus.getShipBuildBonus();
+            double tempBuildBonus = vipBuildbonus / 100.0;
+            tempBuildCost = (int) Math.round(tempBuildCost * tempBuildBonus);
+            if (tempBuildCost < 1){
+                tempBuildCost = 1;
+            }
+        }
+        return tempBuildCost;
     }
 
 }

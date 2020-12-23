@@ -1,6 +1,7 @@
 package spaceraze.servlethelper.game.vip;
 
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
+import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
@@ -8,6 +9,7 @@ import spaceraze.world.diplomacy.DiplomacyState;
 import spaceraze.world.orders.Orders;
 import spaceraze.world.orders.VIPMovement;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -62,7 +64,7 @@ public class VipPureFunctions {
         return tempAllVIPs;
     }
 
-    public List<VIP> getAllGovsFromFactionOnPlanet(Planet aPlanet, Faction aFaction, Galaxy galaxy) {
+    public static List<VIP> getAllGovsFromFactionOnPlanet(Planet aPlanet, Faction aFaction, Galaxy galaxy) {
         Logger.finer("called for planet: " + aPlanet.getName() + " and faction: " + aFaction.getName());
         List<VIP> allGovs = new LinkedList<VIP>();
         List<VIP> allVIPsonPlanet = findAllVIPsOnPlanet(aPlanet, galaxy);
@@ -121,7 +123,7 @@ public class VipPureFunctions {
                         inShipAtPlanet = true;
                     }
                 } else { // vip is on troop
-                    if (vip.getTroopLocation().isAtPlanet(aPlanet)) {
+                    if (TroopPureFunctions.isAtPlanet(vip.getTroopLocation(), aPlanet)) {
                         inTroopAtPlanet = true;
                     }
                 }
@@ -352,5 +354,18 @@ public class VipPureFunctions {
             }
         }
         return foundVIP;
+    }
+
+    public static List<VIP> findAllVIPsOnTroop(Troop aTroop, List<VIP> vips) {
+        List<VIP> tempAllVIPs = new ArrayList<>();
+        for (VIP vip : vips) {
+            if (vip.getTroopLocation() != null) {
+                Troop tempTroop = vip.getTroopLocation();
+                if (tempTroop == aTroop) {
+                    tempAllVIPs.add(vip);
+                }
+            }
+        }
+        return tempAllVIPs;
     }
 }

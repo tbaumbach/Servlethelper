@@ -67,25 +67,25 @@ public class SpaceRazeExpanded{
         tempsst = new SpaceshipType("Golan II","GII",SpaceShipSize.MEDIUM,40,90,SpaceshipRange.NONE,1,6, 10,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
+        tempsst.setWeaponsMaxSalvosMedium(30);
         gw.addShipType(tempsst);
         // GIIB
         tempsst = new SpaceshipType("Golan IIB","GIIB",SpaceShipSize.MEDIUM,50,120,SpaceshipRange.NONE,1,7, 10,20);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         gw.addShipType(tempsst);
         // Golan III
         tempsst = new SpaceshipType("Golan III","GIII",SpaceShipSize.LARGE,60,140,SpaceshipRange.NONE,2,9, 10,30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
+        tempsst.setWeaponsMaxSalvosMedium(30);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
+        tempsst.setWeaponsMaxSalvosLarge(30);
         tempsst.setWeaponsStrengthHuge(10);
-        tempsst.setWeaponsMaxSalvoesHuge(30);
+        tempsst.setWeaponsMaxSalvosHuge(30);
         gw.addShipType(tempsst);
         
         // Squadrons
@@ -94,39 +94,39 @@ public class SpaceRazeExpanded{
         tempsst = new SpaceshipType("Z-95","Z95",SpaceShipSize.SQUADRON,5,20,SpaceshipRange.NONE,1,2, 10,20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         gw.addShipType(tempsst);
         // X-Wing
         tempsst = new SpaceshipType("X-Wing","X-W",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.LONG,2,4, 10,30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(1);
+        tempsst.setWeaponsMaxSalvosLarge(1);
         gw.addShipType(tempsst);
         // Y-Wing
         tempsst = new SpaceshipType("Y-Wing","Y-W",SpaceShipSize.SQUADRON,5,20,SpaceshipRange.SHORT,2,3, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         gw.addShipType(tempsst);
         // A-Wing
         tempsst = new SpaceshipType("A-Wing","A-W",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.LONG,2,5, 10,40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         gw.addShipType(tempsst);
         // B-Wing
         tempsst = new SpaceshipType("B-Wing","B-W",SpaceShipSize.SQUADRON,15,25,SpaceshipRange.LONG,2,6, 15,15);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(3);
+        tempsst.setWeaponsMaxSalvosMedium(3);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setWeaponsStrengthHuge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(2);
+        tempsst.setWeaponsMaxSalvosHuge(2);
         gw.addShipType(tempsst);
         // TIE-fighter
         tempsst = new SpaceshipType("TIE-Fighter","T-F",SpaceShipSize.SQUADRON,0,15,SpaceshipRange.NONE,1,1, 10,25);
@@ -140,20 +140,20 @@ public class SpaceRazeExpanded{
         tempsst = new SpaceshipType("TIE-Bomber","T-B",SpaceShipSize.SQUADRON,0,20,SpaceshipRange.NONE,1,2, 10,10);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         gw.addShipType(tempsst);
         // TIE-advanced
         tempsst = new SpaceshipType("TIE-Advanced","T-A",SpaceShipSize.SQUADRON,10,20,SpaceshipRange.NONE,1,5, 10,30);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
         // TIE-defender
         tempsst = new SpaceshipType("TIE-Defender","T-D",SpaceShipSize.SQUADRON,15,20,SpaceshipRange.LONG,2,8, 10,40);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -214,21 +214,21 @@ public class SpaceRazeExpanded{
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         gw.addShipType(tempsst);
         // Pirate Raider
         tempsst = new SpaceshipType("Pirate Raider","PR",SpaceShipSize.MEDIUM,40,80,SpaceshipRange.LONG,4,16, 20,10);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(2);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         gw.addShipType(tempsst);
         // Victory Star Destroyer
         tempsst = new SpaceshipType("Victory Star Destroyer","VSD",SpaceShipSize.LARGE,70,180,SpaceshipRange.SHORT,5,18, 20,10);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(10);
+        tempsst.setWeaponsMaxSalvosLarge(10);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(5);
@@ -237,9 +237,9 @@ public class SpaceRazeExpanded{
         // Mon Calamari Cruiser
         tempsst = new SpaceshipType("Mon Calamari Cruiser","MCC",SpaceShipSize.LARGE,80,200,SpaceshipRange.SHORT,6,20, 20,10);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(12);
+        tempsst.setWeaponsMaxSalvosMedium(12);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesLarge(8);
+        tempsst.setWeaponsMaxSalvosLarge(8);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(10);
@@ -248,9 +248,9 @@ public class SpaceRazeExpanded{
         // Imperial Star Destroyer
         tempsst = new SpaceshipType("Imperial Star Destroyer","ISD",SpaceShipSize.LARGE,100,250,SpaceshipRange.SHORT,8,24, 20,10);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(15);
+        tempsst.setWeaponsMaxSalvosMedium(15);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(10);
+        tempsst.setWeaponsMaxSalvosLarge(10);
         tempsst.setBombardment(2);
         tempsst.setPsychWarfare(1);
 //        tempsst.setSiegeBonus(1);
@@ -260,9 +260,9 @@ public class SpaceRazeExpanded{
         // Super Star Destroyer
         tempsst = new SpaceshipType("Super Star Destroyer","SSD",SpaceShipSize.HUGE,120,350,SpaceshipRange.SHORT,12,40, 25,10);
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(15);
+        tempsst.setWeaponsMaxSalvosMedium(15);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(15);
+        tempsst.setWeaponsMaxSalvosLarge(15);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(2);
         tempsst.setIncreaseInitiative(15);

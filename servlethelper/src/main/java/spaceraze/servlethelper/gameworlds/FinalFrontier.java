@@ -461,7 +461,7 @@ public class FinalFrontier {
         tempsst = new SpaceshipType("Corvette", "Crv", SpaceShipSize.SMALL, 20, 100, SpaceshipRange.LONG, 2, 6, 15, 10);
         tempsst.setDescription("A raider and small VIP transport");
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         gw.addShipType(tempsst);
 
 //###################  MEDIUM  ##########################################
@@ -482,8 +482,8 @@ public class FinalFrontier {
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsStrengthLarge(50);
         tempsst.setWeaponsStrengthHuge(50);
-        tempsst.setWeaponsMaxSalvoesLarge(1);
-        tempsst.setWeaponsMaxSalvoesHuge(1);
+        tempsst.setWeaponsMaxSalvosLarge(1);
+        tempsst.setWeaponsMaxSalvosHuge(1);
         gw.addShipType(tempsst);
 
 //###################  LARGE  ##########################################
@@ -507,7 +507,7 @@ public class FinalFrontier {
         tempsst.setWeaponsStrengthLarge(60);
         tempsst.setWeaponsStrengthHuge(50);
 
-        tempsst.setWeaponsMaxSalvoesHuge(2);
+        tempsst.setWeaponsMaxSalvosHuge(2);
 
 
         tempsst.setArmorMedium(25);
@@ -547,8 +547,8 @@ public class FinalFrontier {
         tempsst.setWeaponsStrengthLarge(70);
         tempsst.setWeaponsStrengthHuge(100);
 
-        tempsst.setWeaponsMaxSalvoesLarge(2);
-        tempsst.setWeaponsMaxSalvoesHuge(3);
+        tempsst.setWeaponsMaxSalvosLarge(2);
+        tempsst.setWeaponsMaxSalvosHuge(3);
 
         gw.addShipType(tempsst);
 
@@ -568,7 +568,7 @@ public class FinalFrontier {
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setWeaponsStrengthMedium(40);
-        tempsst.setWeaponsMaxSalvoesMedium(8);
+        tempsst.setWeaponsMaxSalvosMedium(8);
 
         gw.addShipType(tempsst);
 
@@ -581,8 +581,8 @@ public class FinalFrontier {
         tempsst.setWeaponsStrengthLarge(60);
         tempsst.setWeaponsStrengthHuge(60);
 
-        tempsst.setWeaponsMaxSalvoesLarge(3);
-        tempsst.setWeaponsMaxSalvoesHuge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
+        tempsst.setWeaponsMaxSalvosHuge(3);
 
         gw.addShipType(tempsst);
 

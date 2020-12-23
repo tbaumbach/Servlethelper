@@ -54,25 +54,25 @@ public class SpaceRazeClassic{
         // Golan II
         tempsst = new SpaceshipType("Golan II","GII",SpaceShipSize.MEDIUM,40,90,SpaceshipRange.NONE,1,6, 10);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
+        tempsst.setWeaponsMaxSalvosMedium(30);
         tempsst.setArmorSmall(0);
         gw.addShipType(tempsst);
         // Golan IIB
         tempsst = new SpaceshipType("Golan IIB","GIIB",SpaceShipSize.MEDIUM,50,120,SpaceshipRange.NONE,1,7, 10);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setArmorSmall(0);
         gw.addShipType(tempsst);
         // Golan III
         tempsst = new SpaceshipType("Golan III","GIII",SpaceShipSize.LARGE,60,140,SpaceshipRange.NONE,2,9, 10);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
+        tempsst.setWeaponsMaxSalvosMedium(30);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
+        tempsst.setWeaponsMaxSalvosLarge(30);
         tempsst.setWeaponsStrengthHuge(10);
-        tempsst.setWeaponsMaxSalvoesHuge(30);
+        tempsst.setWeaponsMaxSalvosHuge(30);
         tempsst.setIncreaseInitiative(10);
         tempsst.setInitSupport(true);
         tempsst.setArmorSmall(0);
@@ -88,9 +88,9 @@ public class SpaceRazeClassic{
         // SfS
         tempsst = new SpaceshipType("Starfighter Squadron","SfS",SpaceShipSize.SMALL,0,30,SpaceshipRange.LONG,3,4, 10);
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setInitSupport(true);
         tempsst.setIncreaseInitiative(10);
         gw.addShipType(tempsst);
@@ -130,15 +130,15 @@ public class SpaceRazeClassic{
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setArmorSmall(0);
         gw.addShipType(tempsst);
         // Victory Star Destroyer
         tempsst = new SpaceshipType("Victory Star Destroyer","VSD",SpaceShipSize.LARGE,70,180,SpaceshipRange.SHORT,5,18, 20);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(10);
+        tempsst.setWeaponsMaxSalvosLarge(10);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(10);
@@ -148,9 +148,9 @@ public class SpaceRazeClassic{
         // Mon Calamari Cruiser
         tempsst = new SpaceshipType("Mon Calamari Cruiser","MCC",SpaceShipSize.LARGE,80,200,SpaceshipRange.SHORT,6,20, 20);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(15);
+        tempsst.setWeaponsMaxSalvosMedium(15);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesLarge(15);
+        tempsst.setWeaponsMaxSalvosLarge(15);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(20);
@@ -160,9 +160,9 @@ public class SpaceRazeClassic{
         // Imperial Star Destroyer
         tempsst = new SpaceshipType("Imperial Star Destroyer","ISD",SpaceShipSize.LARGE,100,250,SpaceshipRange.SHORT,8,24, 20);
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setBombardment(2);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(30);
@@ -172,9 +172,9 @@ public class SpaceRazeClassic{
         // Super Star Destroyer
         tempsst = new SpaceshipType("Super Star Destroyer","SSD",SpaceShipSize.HUGE,120,350,SpaceshipRange.SHORT,12,40, 25);
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(25);
+        tempsst.setWeaponsMaxSalvosMedium(25);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(25);
+        tempsst.setWeaponsMaxSalvosLarge(25);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(40);

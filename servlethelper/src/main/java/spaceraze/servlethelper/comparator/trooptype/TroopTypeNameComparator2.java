@@ -17,7 +17,7 @@ public class TroopTypeNameComparator2 implements Comparator<TroopType> {
 
 	public int compare(TroopType tt1, TroopType tt2) {
 		// sort on name
-		int diff = tt1.getUniqueName().compareTo(tt2.getUniqueName());
+		int diff = tt1.getName().compareTo(tt2.getName());
 		return diff;
 	}
 

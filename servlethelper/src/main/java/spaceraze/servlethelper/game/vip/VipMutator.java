@@ -1,9 +1,6 @@
 package spaceraze.servlethelper.game.vip;
 
-import spaceraze.world.Galaxy;
-import spaceraze.world.Player;
-import spaceraze.world.Spaceship;
-import spaceraze.world.VIP;
+import spaceraze.world.*;
 import spaceraze.world.enums.HighlightType;
 
 import java.util.List;
@@ -65,6 +62,40 @@ public class VipMutator {
                                 + aShip.getName() + " was selfdestructed at " + aShip.getLocation().getName() + ".");
                         aPlayer.addToHighlights(tempVIP.getName(), HighlightType.TYPE_OWN_VIP_KILLED);
                     }
+            }
+        }
+    }
+
+    public static void checkVIPsInDestroyedTroop(Troop aTroop, Galaxy galaxy) {
+        List<VIP> allVIPsOnTroop = VipPureFunctions.findAllVIPsOnTroop(aTroop, galaxy.getAllVIPs());
+        Player aPlayer = aTroop.getOwner();
+        for (VIP vip : allVIPsOnTroop) {
+            // if VIP is hard to kill he moves to the nearby planet
+            if (vip.isHardToKill()) {
+                if (aTroop.getPlanetLocation() != null) {
+                    vip.setLocation(aTroop.getPlanetLocation());
+                    aPlayer.addToVIPReport("Your " + vip.getName() + " travelling in " + aTroop.getName()
+                            + " have moved to the planet " + aTroop.getPlanetLocation().getName()
+                            + " when the ship was destroyed.");
+                } else { // VIP is on troop on a ship
+                    vip.setLocation(aTroop.getShipLocation().getLocation());
+                    aPlayer.addToVIPReport("Your " + vip.getName() + " travelling in " + aTroop.getName()
+                            + " have moved to the planet " + aTroop.getShipLocation().getLocation().getName()
+                            + " when the ship carrying the troop was destroyed.");
+                }
+            } else { // annars d�r VIPen
+                galaxy.getAllVIPs().remove(vip);
+                if (aTroop.getPlanetLocation() != null) {
+                    aPlayer.addToVIPReport(
+                            "Your " + vip.getName() + " has been killed when your troop " + aTroop.getName()
+                                    + " was destroyed at " + aTroop.getPlanetLocation().getName() + ".");
+                } else {
+                    aPlayer.addToVIPReport(
+                            "Your " + vip.getName() + " has been killed when your troop " + aTroop.getName()
+                                    + " was destroyed at " + aTroop.getShipLocation().getLocation().getName()
+                                    + " when the ship carrying the troop was destroyed.");
+                }
+                aPlayer.addToHighlights(vip.getName(), HighlightType.TYPE_OWN_VIP_KILLED);
             }
         }
     }

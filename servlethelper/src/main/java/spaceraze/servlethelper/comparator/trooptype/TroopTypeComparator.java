@@ -5,11 +5,10 @@ package spaceraze.servlethelper.comparator.trooptype;
 
 import java.util.Comparator;
 
+import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.world.TroopType;
 
 /**
- * @author WMPABOD
- *
  * Compares two spaceships, biggest/most expensive first
  */
 public class TroopTypeComparator implements Comparator<TroopType> {
@@ -19,7 +18,7 @@ public class TroopTypeComparator implements Comparator<TroopType> {
 		int diff = 0;
 		// lowest build cost first
 		if (diff == 0){
-			diff = tt2.getCostBuild(null) - tt1.getCostBuild(null);
+			diff = TroopPureFunctions.getCostBuild(tt2,null) - TroopPureFunctions.getCostBuild(tt1,null);
 		}
 		// else lowest support cost first
 		if (diff == 0){
@@ -27,7 +26,7 @@ public class TroopTypeComparator implements Comparator<TroopType> {
 		}
 		// else sort on name
 		if (diff == 0){
-			diff = tt2.getUniqueName().compareTo(tt1.getUniqueName());
+			diff = tt2.getName().compareTo(tt1.getName());
 		}
 		return diff;
 	}

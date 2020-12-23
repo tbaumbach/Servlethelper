@@ -42,7 +42,7 @@ public class SpaceshipTypeComparator implements Comparator<SpaceshipType> {
 		}
 		// else lowest build cost first
 		if (diff == 0){
-			diff = sst1.getBuildCost(null) - sst2.getBuildCost(null);
+			diff = SpaceshipPureFunctions.getBuildCost(sst1, null) - SpaceshipPureFunctions.getBuildCost(sst2, null);
 		}
 		// else lowest support cost first
 		if (diff == 0){

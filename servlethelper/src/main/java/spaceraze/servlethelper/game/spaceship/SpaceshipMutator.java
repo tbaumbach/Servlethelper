@@ -177,4 +177,32 @@ public class SpaceshipMutator {
             spaceship.getOwner().addToGeneral("Your ship " + spaceship.getName() + " at "	+ spaceship.getLocation().getName() + " has been repaired up to full damage capacity.");
         }
     }
+
+    public static void setArmor(SpaceshipType spaceshipType, int... armorValues){
+        spaceshipType.setArmorSmall(armorValues[0]);
+        if (armorValues.length > 1){
+            spaceshipType.setArmorMedium(armorValues[1]);
+            if (armorValues.length > 2){
+                spaceshipType.setArmorLarge(armorValues[2]);
+                if (armorValues.length > 3){
+                    spaceshipType.setArmorHuge(armorValues[3]);
+                }
+            }
+        }
+    }
+
+    public static void setStandardArmorLevels(SpaceshipType spaceshipType){
+        if (spaceshipType.getSize() == SpaceShipSize.MEDIUM){
+            spaceshipType.setArmorSmall(25);
+        }else
+        if (spaceshipType.getSize() == SpaceShipSize.LARGE){
+            spaceshipType.setArmorSmall(50);
+            spaceshipType.setArmorMedium(25);
+        }else
+        if (spaceshipType.getSize() == SpaceShipSize.HUGE){
+            spaceshipType.setArmorSmall(75);
+            spaceshipType.setArmorMedium(50);
+            spaceshipType.setArmorLarge(25);
+        }
+    }
 }

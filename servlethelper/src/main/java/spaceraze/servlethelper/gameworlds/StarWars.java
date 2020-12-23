@@ -135,9 +135,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setWeaponsStrengthLarge(35);
         tempsst.setWeaponsStrengthHuge(30);
 
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
 
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -157,9 +157,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorSmall(95);
         tempsst.setWeaponsStrengthLarge(120);
         tempsst.setWeaponsStrengthHuge(70);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
 
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -185,7 +185,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Meteor", "Met", SpaceShipSize.MEDIUM, 50, 200, SpaceshipRange.LONG, 5, 10, 10, 10);
         tempsst.setDescription("Galactic Republic, Bombardment Cruiser. Against medium ships");
         tempsst.setWeaponsStrengthLarge(120);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setArmorSmall(50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
@@ -212,7 +212,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Protector I", "PI", SpaceShipSize.MEDIUM, 100, 400, SpaceshipRange.LONG, 5, 11, 10, 15);
         tempsst.setDescription("Galactic Republic, Against medium ships");
         tempsst.setWeaponsStrengthMedium(50);
-        tempsst.setWeaponsMaxSalvoesMedium(3);
+        tempsst.setWeaponsMaxSalvosMedium(3);
         tempsst.setArmorSmall(50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -222,9 +222,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setDescription("Galactic Republic, Second Generation Cruiser");
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setSquadronCapacity(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -236,7 +236,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Sulanko Frigate", "Suk", SpaceShipSize.SMALL, 50, 50, SpaceshipRange.LONG, 1, 3, 20, 20);
         tempsst.setDescription("Galactic Republic, Small allround Frigate");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
 
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setPlanetarySurvey(true);
@@ -262,9 +262,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("B5-Bomber", "B5", SpaceShipSize.SQUADRON, 10, 60, SpaceshipRange.LONG, 3, 4, 25, 10);
         tempsst.setDescription("Galactic Republic, First Generation bomber");
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(3);
+        tempsst.setWeaponsMaxSalvosMedium(3);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
 
@@ -272,9 +272,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("B1-Bomber", "B1", SpaceShipSize.SQUADRON, 10, 40, SpaceshipRange.NONE, 2, 2, 25, 15);
         tempsst.setDescription("Trade Federation Second genration bomber");
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(3);
+        tempsst.setWeaponsMaxSalvosMedium(3);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
 
@@ -297,9 +297,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("DB-y44", "B44", SpaceShipSize.SQUADRON, 15, 60, SpaceshipRange.LONG, 2, 4, 25, 10);
         tempsst.setDescription("Trade Federation First Generation bomber");
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setIncreaseInitiative(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -308,9 +308,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("DB-y27", "B27", SpaceShipSize.SQUADRON, 15, 20, SpaceshipRange.NONE, 2, 3, 25, 10);
         tempsst.setDescription("Trade Federation Second genration bomber");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
 
@@ -325,9 +325,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(25);
         tempsst.setWeaponsStrengthHuge(20);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
 
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -344,9 +344,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(35);
         tempsst.setWeaponsStrengthHuge(30);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
 
         tempsst.setSquadronCapacity(3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
@@ -363,9 +363,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorSmall(95);
         tempsst.setWeaponsStrengthLarge(120);
         tempsst.setWeaponsStrengthHuge(150);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
 
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -391,8 +391,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setDescription("Trade Federation, Bombardment Cruiser. Against medium ships");
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
 
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setArmorSmall(50);
@@ -404,7 +404,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Acclamator cruiser", "Acc", SpaceShipSize.MEDIUM, 100, 400, SpaceshipRange.LONG, 8, 15, 40, 40);
         tempsst.setDescription("Trade Federation, Anti-air Defence cruiser");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
         tempsst.setArmorSmall(50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
@@ -414,8 +414,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setDescription("Trade Federation, Troopship and Cruiser. Against larger ships");
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsStrengthLarge(30);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setArmorSmall(50);
         tempsst.setPsychWarfare(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
@@ -427,8 +427,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setWeaponsStrengthMedium(15);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setIncreaseInitiative(1);
         tempsst.setSquadronCapacity(2);
         tempsst.setPlanetarySurvey(true);
@@ -451,7 +451,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Sullustan Frigate", "Suf", SpaceShipSize.SMALL, 50, 100, SpaceshipRange.LONG, 3, 9, 20, 15);
         tempsst.setDescription("Trade Federation, Small allround Frigate");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
         tempsst.setSquadronCapacity(1);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
@@ -493,7 +493,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Nebulon-B Frigate", "NebB", SpaceShipSize.MEDIUM, 100, 400, SpaceshipRange.LONG, 6, 12, 20, 30);
         tempsst.setDescription("Rebel, Medium Anti-air Cruiser, with carrier capabilities");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
+        tempsst.setWeaponsMaxSalvosMedium(40);
         tempsst.setArmorSmall(50);
         tempsst.setSquadronCapacity(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
@@ -504,8 +504,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setDescription("Rebel, Planet Besiege ship. Troops and specialised equipment takes down 2 resistance per turn");
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsStrengthLarge(30);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setArmorSmall(50);
         tempsst.setPsychWarfare(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
@@ -515,7 +515,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Liberator Cruiser", "Lib", SpaceShipSize.MEDIUM, 150, 500, SpaceshipRange.LONG, 8, 16, 15, 15);
         tempsst.setDescription("Rebel, Carrier specialised against medium ships an planet survey");
         tempsst.setWeaponsStrengthMedium(30);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
 
         tempsst.setArmorSmall(50);
         tempsst.setIncreaseInitiative(1);
@@ -532,9 +532,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(30);
         tempsst.setWeaponsStrengthHuge(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(10);
 
         tempsst.setBombardment(2);
         tempsst.setPsychWarfare(1);
@@ -552,9 +552,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(30);
         tempsst.setWeaponsStrengthHuge(35);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosMedium(30);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(10);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(5);
@@ -571,9 +571,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setWeaponsStrengthMedium(30);
         tempsst.setWeaponsStrengthLarge(30);
         tempsst.setWeaponsStrengthHuge(50);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosMedium(30);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(10);
         tempsst.setBombardment(4);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(10);
@@ -603,8 +603,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setDescription("Imperial, Small allround ship that can bombardment");
         tempsst.setWeaponsStrengthMedium(10);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
-        tempsst.setWeaponsMaxSalvoesLarge(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
+        tempsst.setWeaponsMaxSalvosLarge(10);
         tempsst.setBombardment(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -616,9 +616,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorSmall(50);
         tempsst.setWeaponsStrengthLarge(10);
         tempsst.setWeaponsStrengthHuge(10);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(10);
         tempsst.setSquadronCapacity(1);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
@@ -631,8 +631,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorSmall(50);
         tempsst.setWeaponsStrengthLarge(10);
         tempsst.setPsychWarfare(1);
-        tempsst.setWeaponsMaxSalvoesMedium(20);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(20);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setNoRetreat(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
@@ -645,8 +645,8 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorSmall(85);
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(15);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
+        tempsst.setWeaponsMaxSalvosMedium(30);
+        tempsst.setWeaponsMaxSalvosLarge(20);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(1);
@@ -663,9 +663,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(35);
         tempsst.setWeaponsStrengthHuge(10);
-        tempsst.setWeaponsMaxSalvoesMedium(30);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosMedium(30);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(10);
 
         tempsst.setBombardment(2);
         tempsst.setPsychWarfare(1);
@@ -684,9 +684,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(35);
         tempsst.setWeaponsStrengthHuge(40);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
         tempsst.setCanAppearOnBlackMarket(false);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -704,9 +704,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setArmorMedium(50);
         tempsst.setWeaponsStrengthLarge(50);
         tempsst.setWeaponsStrengthHuge(70);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(5);
@@ -724,9 +724,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setWeaponsStrengthLarge(100);
         tempsst.setCanAppearOnBlackMarket(false);
         tempsst.setWeaponsStrengthHuge(90);
-        tempsst.setWeaponsMaxSalvoesMedium(40);
-        tempsst.setWeaponsMaxSalvoesLarge(30);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(40);
+        tempsst.setWeaponsMaxSalvosLarge(30);
+        tempsst.setWeaponsMaxSalvosHuge(20);
         tempsst.setBombardment(4);
         tempsst.setPsychWarfare(1);
         tempsst.setIncreaseInitiative(15);
@@ -740,9 +740,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst.setWeaponsStrengthMedium(50);
         tempsst.setWeaponsStrengthLarge(5000);
         tempsst.setWeaponsStrengthHuge(5000);
-        tempsst.setWeaponsMaxSalvoesMedium(100);
-        tempsst.setWeaponsMaxSalvoesLarge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(20);
+        tempsst.setWeaponsMaxSalvosMedium(100);
+        tempsst.setWeaponsMaxSalvosLarge(20);
+        tempsst.setWeaponsMaxSalvosHuge(20);
         tempsst.setBombardment(30);
         tempsst.setArmorSmall(0);
         tempsst.setPsychWarfare(1);
@@ -758,7 +758,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Z-95", "Z95", SpaceShipSize.SQUADRON, 0, 40, SpaceshipRange.NONE, 1, 1, 10, 15);
         tempsst.setDescription("Cheap Efficent Fighter");
         tempsst.setWeaponsStrengthMedium(5);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -766,7 +766,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("X-Wing", "X-w", SpaceShipSize.SQUADRON, 20, 40, SpaceshipRange.LONG, 2, 3, 15, 25);
         tempsst.setDescription("Rebels, Second generation fighter");
         tempsst.setWeaponsStrengthMedium(5);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -774,7 +774,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("E-Wing", "E-w", SpaceShipSize.SQUADRON, 20, 50, SpaceshipRange.LONG, 2, 4, 15, 30);
         tempsst.setDescription("Rebels, Third generation fighter");
         tempsst.setWeaponsStrengthMedium(5);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -788,9 +788,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("B-Wing", "B-w", SpaceShipSize.SQUADRON, 15, 50, SpaceshipRange.LONG, 3, 5, 25, 15);
         tempsst.setDescription("Rebels, Heavy Fighter-Bomber, Best allround Sqaudron");
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(8);
+        tempsst.setWeaponsMaxSalvosMedium(8);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setIncreaseInitiative(1);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -799,9 +799,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Y-Wing", "Y-w", SpaceShipSize.SQUADRON, 15, 20, SpaceshipRange.LONG, 2, 3, 20, 7);
         tempsst.setDescription("Rebels, First Generation Bomber");
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
 
@@ -824,9 +824,9 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("TIE-Bomber", "TieB", SpaceShipSize.SQUADRON, 0, 40, SpaceshipRange.NONE, 2, 3, 25, 7);
         tempsst.setDescription("Empire, Heavy Bomber");
         tempsst.setWeaponsStrengthMedium(15);
-        tempsst.setWeaponsMaxSalvoesMedium(8);
+        tempsst.setWeaponsMaxSalvosMedium(8);
         tempsst.setWeaponsStrengthLarge(10);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
 
@@ -834,7 +834,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("TIE-Advanced", "TieA", SpaceShipSize.SQUADRON, 15, 30, SpaceshipRange.NONE, 2, 3, 15, 30);
         tempsst.setDescription("Empire, Third generation Tie-fighter");
         tempsst.setWeaponsStrengthMedium(5);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -842,7 +842,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("TIE-Defender", "TieD", SpaceShipSize.SQUADRON, 20, 35, SpaceshipRange.LONG, 2, 4, 20, 35);
         tempsst.setDescription("Empire, Only Empire Fighter/bomber with an hyperdrive.");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(3);
+        tempsst.setWeaponsMaxSalvosMedium(3);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
 
@@ -852,7 +852,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Old Rebublic Cruiser", "RCr", SpaceShipSize.MEDIUM, 0, 300, SpaceshipRange.LONG, 1, 10, 20, 5);
         tempsst.setDescription("Starting ship");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         gw.addShipType(tempsst);
@@ -870,7 +870,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Old Rebublic Fighter", "ORF", SpaceShipSize.SQUADRON, 0, 30, SpaceshipRange.NONE, 1, 10, 10, 15);
         tempsst.setDescription("Starting Bomber");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(1);
+        tempsst.setWeaponsMaxSalvosMedium(1);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
@@ -879,7 +879,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Old Rebublic Bomber", "ORB", SpaceShipSize.SQUADRON, 0, 40, SpaceshipRange.NONE, 1, 10, 15, 5);
         tempsst.setDescription("Starting Fighter");
         tempsst.setWeaponsStrengthMedium(10);
-        tempsst.setWeaponsMaxSalvoesMedium(7);
+        tempsst.setWeaponsMaxSalvosMedium(7);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         gw.addShipType(tempsst);
@@ -946,11 +946,11 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Torpedo Ship", "Tor", SpaceShipSize.SQUADRON, 10, 60, SpaceshipRange.NONE, 3, 4, 5, 5);
         tempsst.setDescription("Weak against most, but great against Large and Huge");
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(5);
+        tempsst.setWeaponsMaxSalvosMedium(5);
         tempsst.setWeaponsStrengthLarge(20);
-        tempsst.setWeaponsMaxSalvoesLarge(10);
+        tempsst.setWeaponsMaxSalvosLarge(10);
         tempsst.setWeaponsStrengthHuge(20);
-        tempsst.setWeaponsMaxSalvoesHuge(5);
+        tempsst.setWeaponsMaxSalvosHuge(5);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);
@@ -959,7 +959,7 @@ Sulanko Frigate			Poor Hull Small
         tempsst = new SpaceshipType("Missile Boat", "Mis", SpaceShipSize.SQUADRON, 10, 60, SpaceshipRange.NONE, 3, 4, 20, 5);
         tempsst.setDescription("Weak against most, but great against Medium and Small");
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(10);
+        tempsst.setWeaponsMaxSalvosMedium(10);
         tempsst.setCanAppearOnBlackMarket(true);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         gw.addShipType(tempsst);

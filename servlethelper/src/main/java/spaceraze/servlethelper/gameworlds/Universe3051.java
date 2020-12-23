@@ -525,7 +525,7 @@ public class Universe3051{
         tempsst.setAdvantages("Long range, Good vs Medium ships, Cheap");
         tempsst.setDisadvantages("Poor vs most capital ships");
         tempsst.setWeaponsStrengthMedium(20);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         gw.addShipType(tempsst);
         
         // Frigate
@@ -551,8 +551,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(40);    
         tempsst.setWeaponsStrengthLarge(20);   
         tempsst.setWeaponsStrengthHuge(50);    
-		tempsst.setWeaponsMaxSalvoesLarge(1);
-		tempsst.setWeaponsMaxSalvoesHuge(1);
+		tempsst.setWeaponsMaxSalvosLarge(1);
+		tempsst.setWeaponsMaxSalvosHuge(1);
         gw.addShipType(tempsst);
 
 //      Submarine
@@ -562,8 +562,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(10);    
         tempsst.setWeaponsStrengthLarge(300);   
         tempsst.setWeaponsStrengthHuge(300);    
-		tempsst.setWeaponsMaxSalvoesLarge(8);
-		tempsst.setWeaponsMaxSalvoesHuge(8);
+		tempsst.setWeaponsMaxSalvosLarge(8);
+		tempsst.setWeaponsMaxSalvosHuge(8);
 		tempsst.setInitDefence(20);
 		tempsst.setVisibleOnMap(false);
 		tempsst.setCanAttackScreenedShips(true);
@@ -577,8 +577,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(15);    
         tempsst.setWeaponsStrengthLarge(20);   
         tempsst.setWeaponsStrengthHuge(20);    
-		tempsst.setWeaponsMaxSalvoesLarge(1);
-		tempsst.setWeaponsMaxSalvoesHuge(1);
+		tempsst.setWeaponsMaxSalvosLarge(1);
+		tempsst.setWeaponsMaxSalvosHuge(1);
 		tempsst.setPsychWarfare(1);
         tempsst.setNoRetreat(true);
         gw.addShipType(tempsst);
@@ -606,8 +606,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthLarge(30);   
         tempsst.setWeaponsStrengthHuge(25);
 	    
-        tempsst.setWeaponsMaxSalvoesLarge(2);
-        tempsst.setWeaponsMaxSalvoesHuge(3);
+        tempsst.setWeaponsMaxSalvosLarge(2);
+        tempsst.setWeaponsMaxSalvosHuge(3);
 
         gw.addShipType(tempsst);
    
@@ -621,8 +621,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(90);    
         tempsst.setWeaponsStrengthLarge(60);   
         tempsst.setWeaponsStrengthHuge(60);    
-        tempsst.setWeaponsMaxSalvoesLarge(6);
-        tempsst.setWeaponsMaxSalvoesHuge(6);
+        tempsst.setWeaponsMaxSalvosLarge(6);
+        tempsst.setWeaponsMaxSalvosHuge(6);
 
         
         tempsst.setArmorMedium(25);
@@ -686,7 +686,7 @@ public class Universe3051{
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setWeaponsStrengthMedium(40);
-        tempsst.setWeaponsMaxSalvoesMedium(8);
+        tempsst.setWeaponsMaxSalvosMedium(8);
         
         gw.addShipType(tempsst);
         
@@ -700,8 +700,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthLarge(60);   
         tempsst.setWeaponsStrengthHuge(60);
 	    
-        tempsst.setWeaponsMaxSalvoesLarge(3);
-        tempsst.setWeaponsMaxSalvoesHuge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
+        tempsst.setWeaponsMaxSalvosHuge(3);
         
         gw.addShipType(tempsst);
         
@@ -726,7 +726,7 @@ public class Universe3051{
         tempsst.setArmorSmall(40);
         tempsst.setDescription("A raider and small VIP transport");
         tempsst.setWeaponsStrengthMedium(40);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         gw.addShipType(tempsst);
         
         // Carrack
@@ -759,8 +759,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(10);    
         tempsst.setWeaponsStrengthLarge(300);   
         tempsst.setWeaponsStrengthHuge(250);    
-        tempsst.setWeaponsMaxSalvoesLarge(16);
-        tempsst.setWeaponsMaxSalvoesHuge(8);
+        tempsst.setWeaponsMaxSalvosLarge(16);
+        tempsst.setWeaponsMaxSalvosHuge(8);
         tempsst.setCanAttackScreenedShips(true);
         tempsst.setInitDefence(20);
 		tempsst.setVisibleOnMap(false);
@@ -774,8 +774,8 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(15);    
         tempsst.setWeaponsStrengthLarge(50);   
         tempsst.setWeaponsStrengthHuge(50);    
-		tempsst.setWeaponsMaxSalvoesLarge(1);
-		tempsst.setWeaponsMaxSalvoesHuge(1);
+		tempsst.setWeaponsMaxSalvosLarge(1);
+		tempsst.setWeaponsMaxSalvosHuge(1);
 		tempsst.setPsychWarfare(2);
 		tempsst.setInitDefence(10);		
 		tempsst.setNoRetreat(true);
@@ -816,9 +816,9 @@ public class Universe3051{
         tempsst.setWeaponsStrengthMedium(80);   
         
         tempsst.setWeaponsStrengthLarge(120);
-        tempsst.setWeaponsMaxSalvoesLarge(3);
+        tempsst.setWeaponsMaxSalvosLarge(3);
         tempsst.setWeaponsStrengthHuge(120);    
-        tempsst.setWeaponsMaxSalvoesHuge(3);
+        tempsst.setWeaponsMaxSalvosHuge(3);
 
         
         tempsst.setArmorMedium(25);
@@ -894,8 +894,8 @@ public class Universe3051{
         tempsst.setIncreaseInitiative(5);
         tempsst.setInitDefence(10);
 	    
-        tempsst.setWeaponsMaxSalvoesLarge(1);
-        tempsst.setWeaponsMaxSalvoesHuge(1);
+        tempsst.setWeaponsMaxSalvosLarge(1);
+        tempsst.setWeaponsMaxSalvosHuge(1);
         
         gw.addShipType(tempsst);
         

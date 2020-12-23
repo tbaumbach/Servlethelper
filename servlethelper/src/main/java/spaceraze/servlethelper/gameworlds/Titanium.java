@@ -5,6 +5,7 @@ import java.util.List;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
 import spaceraze.servlethelper.game.GameWorldCreator;
+import spaceraze.servlethelper.game.spaceship.SpaceshipMutator;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.Alignment;
@@ -772,26 +773,26 @@ public class Titanium {
         // Planetary defence destroyer
         tempsst = new SpaceshipType("PD Destroyer", "PDD", SpaceShipSize.MEDIUM, 30, 100, SpaceshipRange.NONE, 1, 7, 30, 10);
         tempsst.setDescription("Medium planetary defence (PB) ship. It can't move outside the starsystem it is built in. It is about as powerful as a normal Destroyer, but cheaper.");
-        tempsst.setArmor(40);
+        SpaceshipMutator.setArmor(tempsst, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         gw.addShipType(tempsst);
 
         // Home fleet destroyer
         tempsst = new SpaceshipType("HF Destroyer", "HFD", SpaceShipSize.MEDIUM, 30, 100, SpaceshipRange.NONE, 0, 7, 30, 10);
         tempsst.setDescription("Medium planetary defence (PB) ship. The home fleet destroyer is identical to the PD destroyer, except that it is financed by the industrial base on faction home planets. It can't move outside the starsystem it is built in. It is about as powerful as a normal Destroyer, but cheaper.");
-        tempsst.setArmor(40);
+        SpaceshipMutator.setArmor(tempsst, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
 
         // Planetary defence Cruiser
         tempsst = new SpaceshipType("PD Cruiser", "PDC", SpaceShipSize.LARGE, 80, 300, SpaceshipRange.NONE, 2, 10, 50, 10);
         tempsst.setDescription("Large planetary defence (PB) ship. It can't move outside the starsystem it is built in. It is about as powerful as a normal Cruiser, but cheaper.");
-        tempsst.setArmor(60, 30);
+        SpaceshipMutator.setArmor(tempsst, 60, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(120);
         tempsst.setWeaponsStrengthLarge(40);
@@ -800,7 +801,7 @@ public class Titanium {
 
         tempsst = new SpaceshipType("PD Battleship", "PDB", SpaceShipSize.HUGE, 200, 700, SpaceshipRange.NONE, 4, 20, 50, 15);
         tempsst.setDescription("Huge planetary defence (PB) ship. It can't move outside the starsystem it is built in. It is almost as powerful as a normal battleship, and much cheaper.");
-        tempsst.setArmor(80, 60, 40);
+        SpaceshipMutator.setArmor(tempsst, 80, 60, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(120);
         tempsst.setWeaponsStrengthLarge(240);
@@ -1139,9 +1140,9 @@ public class Titanium {
         tempsst.setDescription("An all-round pod squadron which can both do some damage against squadrons or capital ships, where its two-shot medium and large torpedo salvoes can hurt larger ships. It cannot move on it's own but has to be attached to a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(25);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(tempsst);
 
@@ -1151,9 +1152,9 @@ public class Titanium {
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(50);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
@@ -1221,9 +1222,9 @@ public class Titanium {
         tempsst.setDescription("Squadron specialized in attacking large and huge capital ships, where its large and huge torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(50);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setWeaponsStrengthHuge(50);
-        tempsst.setWeaponsMaxSalvoesHuge(4);
+        tempsst.setWeaponsMaxSalvosHuge(4);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
@@ -1234,7 +1235,7 @@ public class Titanium {
         tempsst.setDescription("An advanced fighter squadron which can also do some damage against medium-sized capital ships. It cannot move on it's own but has to be attached to a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(30);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(tempsst);
@@ -1444,10 +1445,10 @@ public class Titanium {
         typeName = "Lancer Destroyer";
         tempsst = new SpaceshipType(typeName, "LDe", SpaceShipSize.MEDIUM, 50, 150, SpaceshipRange.LONG, 5, 15, 35, 10);
         tempsst.setDescription("Medium-sized long range military ship. It is most useful when attacking small or medium opponents or as support against less powerful large ships. It is too weak to do any significant damage against huge opponents.");
-        tempsst.setArmor(40);
+        SpaceshipMutator.setArmor(tempsst, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(35);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(tempsst);
 
@@ -1455,11 +1456,11 @@ public class Titanium {
         typeName = "Lancer Cruiser";
         tempsst = new SpaceshipType(typeName, "LCr", SpaceShipSize.LARGE, 120, 400, SpaceshipRange.SHORT, 10, 30, 40, 10);
         tempsst.setDescription("Large-sized short-range capital ship. It is very good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a marine detachment, bombardment and can carry one squadron.");
-        tempsst.setArmor(60, 40);
+        SpaceshipMutator.setArmor(tempsst, 60, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(130);
         tempsst.setWeaponsStrengthLarge(80);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setAvailableToBuild(false);
@@ -1470,11 +1471,11 @@ public class Titanium {
         typeName = "Lancer Q-ship Cruiser";
         tempsst = new SpaceshipType("Lancer Q-ship Cruiser", "LQCr", SpaceShipSize.LARGE, 100, 350, SpaceshipRange.SHORT, 10, 35, 40, 10);
         tempsst.setDescription("Large-sized short-range disguised capital ship. The Lancer Q-ship lokks like a civilian right until it enters battle with enemy military ships. It is good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a marine detachment onboard.");
-        tempsst.setArmor(50, 30);
+        SpaceshipMutator.setArmor(tempsst, 50, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(100);
         tempsst.setWeaponsStrengthLarge(60);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
 //        tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setLookAsCivilian(true);
@@ -1486,12 +1487,12 @@ public class Titanium {
         typeName = "Lancer Battleship";
         tempsst = new SpaceshipType(typeName, "LBs", SpaceShipSize.HUGE, 300, 1000, SpaceshipRange.SHORT, 25, 80, 60, 30);
         tempsst.setDescription("Huge-sized short range capital ship. Have a powerful array of weapons that make massive damage to ships of all sizes, and have very powerful armor. It has planetary bombardment, It can carry up to two troops, have a marine detachment, can carry up to four squadrons and have an advanced tactical center to increase combat efficiency.");
-        tempsst.setArmor(90, 70, 50);
+        SpaceshipMutator.setArmor(tempsst, 90, 70, 50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(120);
         tempsst.setWeaponsStrengthLarge(200);
         tempsst.setWeaponsStrengthHuge(200);
-        tempsst.setWeaponsMaxSalvoesHuge(4);
+        tempsst.setWeaponsMaxSalvosHuge(4);
 //        tempsst.setSquadronCapacity(4);
         tempsst.setTroopCapacity(2);
         //      tempsst.setTroopLaunchCapacity(1);
@@ -1506,12 +1507,12 @@ public class Titanium {
         typeName = "Lancer Leviathan";
         tempsst = new SpaceshipType(typeName, "LL", SpaceShipSize.HUGE, 400, 1500, SpaceshipRange.SHORT, 40, 150, 60, 30);
         tempsst.setDescription("This huge-sized short range capital ship is the most powerful capital ship in known space. It has a powerful array of weapons that make massive damage to ships of all sizes, and have very powerful armor. It can carry up to four troops, have an elite marine detachment, have powerful bombardment, carry up to four squadrons and have an advanced tactical center to increase combat efficiency.");
-        tempsst.setArmor(90, 75, 60);
+        SpaceshipMutator.setArmor(tempsst, 90, 75, 60);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(300);
         tempsst.setWeaponsStrengthLarge(300);
         tempsst.setWeaponsStrengthHuge(300);
-        tempsst.setWeaponsMaxSalvoesHuge(10);
+        tempsst.setWeaponsMaxSalvosHuge(10);
 //        tempsst.setSquadronCapacity(4);'
         tempsst.setTroopCapacity(4);
         //       tempsst.setTroopLaunchCapacity(2);
@@ -1729,7 +1730,7 @@ public class Titanium {
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium torpedo salvoes can can do significant damage, and it's cybernetically integrated pilot is good at dogfighting. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(50);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
 
@@ -1739,9 +1740,9 @@ public class Titanium {
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than medium where its large and huge torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthLarge(50);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setWeaponsStrengthHuge(50);
-        tempsst.setWeaponsMaxSalvoesHuge(2);
+        tempsst.setWeaponsMaxSalvosHuge(2);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
@@ -1765,7 +1766,7 @@ public class Titanium {
         tempsst = new SpaceshipType(typeName, "C-AF", SpaceShipSize.SQUADRON, sqdBaseSh, sqdBaseDC + 5, SpaceshipRange.NONE, 1, 8, sqdBaseSmAtt + 5, sqdBaseFightSqdAtt + 15);
         tempsst.setDescription("A fighter squadron specialized in attacking enemy squadrons. It can do very little damage to enemy capital ships, but it's cybernetically integrated pilot is superior in dogfighting. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIAIR);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
@@ -1795,7 +1796,7 @@ public class Titanium {
         typeName = "Cyber Troop Light Carrier";
         tempsst = new SpaceshipType(typeName, "CTLC", SpaceShipSize.MEDIUM, 20, 120, SpaceshipRange.LONG, 4, 12, 5, 5);
         tempsst.setDescription("Medium-sized long range military troop transport ship. It can carry 3 troops and launch one troop each turn. It also carries a small marine detachment. It is too weak to do any significant damage against anything but small opponents.");
-        tempsst.setArmor(20);
+        SpaceshipMutator.setArmor(tempsst, 20);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setPsychWarfare(1);
         tempsst.setSquadronCapacity(2);
@@ -1809,7 +1810,7 @@ public class Titanium {
         typeName = "Cyber Troop Advanced Carrier";
         tempsst = new SpaceshipType(typeName, "CTLC", SpaceShipSize.MEDIUM, 10, 100, SpaceshipRange.LONG, 5, 15, 5, 5);
         tempsst.setDescription("Medium-sized long range military troop transport ship. It can carry 3 troops and launch 3 troop each turn. It also carries a small marine detachment. It is too weak to do any significant damage against anything but small opponents.");
-        tempsst.setArmor(10);
+        SpaceshipMutator.setArmor(tempsst, 10);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setPsychWarfare(1);
         tempsst.setSquadronCapacity(3);
@@ -1824,11 +1825,11 @@ public class Titanium {
         typeName = "Cyber Cruiser";
         tempsst = new SpaceshipType(typeName, "CCr", SpaceShipSize.LARGE, 120, 400, SpaceshipRange.SHORT, 10, 30, 40, 10);
         tempsst.setDescription("Large-sized short-range capital ship. It is very good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a small marine detachment, bombardment and can carry two squadron.");
-        tempsst.setArmor(60, 40);
+        SpaceshipMutator.setArmor(tempsst, 60, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(150);
         tempsst.setWeaponsStrengthLarge(100);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         tempsst.setAvailableToBuild(false);
@@ -1839,7 +1840,7 @@ public class Titanium {
         typeName = "Cyber Troop Carrier";
         tempsst = new SpaceshipType(typeName, "CTC", SpaceShipSize.LARGE, 50, 300, SpaceshipRange.SHORT, 8, 25, 10, 10);
         tempsst.setDescription("Large-sized long-range capital ship. It is good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It can carry up to 6 troops, has a small marine detachment, bombardment and can carry one squadron.");
-        tempsst.setArmor(40, 20);
+        SpaceshipMutator.setArmor(tempsst, 40, 20);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setSquadronCapacity(6);
         tempsst.setBombardment(1);
@@ -1855,12 +1856,12 @@ public class Titanium {
         typeName = "Cyber Battleship";
         tempsst = new SpaceshipType(typeName, "CBs", SpaceShipSize.HUGE, 300, 1000, SpaceshipRange.SHORT, 25, 80, 60, 30);
         tempsst.setDescription("Huge-sized short range capital ship. Have a powerful array of weapons that make massive damage to ships of all sizes, and have very powerful armor. It has planetary bombardment, a small marine detachment, can carry up to four squadrons and have an advanced tactical center to increase combat efficiency.");
-        tempsst.setArmor(90, 70, 50);
+        SpaceshipMutator.setArmor(tempsst, 90, 70, 50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(120);
         tempsst.setWeaponsStrengthLarge(200);
         tempsst.setWeaponsStrengthHuge(200);
-        tempsst.setWeaponsMaxSalvoesHuge(4);
+        tempsst.setWeaponsMaxSalvosHuge(4);
         tempsst.setSquadronCapacity(4);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -2017,9 +2018,9 @@ public class Titanium {
         tempsst.setDescription("An all-round squadron which can both do some damage against squadrons and capital ships, where its two-shot medium and large torpedo salvoes can hurt larger ships. It cannot move on it's own but has to be attached to a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(25);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setVisibleOnMap(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(tempsst);
@@ -2062,10 +2063,10 @@ public class Titanium {
         typeName = "Ghost Destroyer";
         tempsst = new SpaceshipType(typeName, "GDe", SpaceShipSize.MEDIUM, 50, 150, SpaceshipRange.LONG, 5, 15, 35, 10);
         tempsst.setDescription("Medium-sized long range military ship. It is most useful when attacking small or medium opponents or as support against less powerful large ships. It is too weak to do any significant damage against huge opponents.");
-        tempsst.setArmor(40);
+        SpaceshipMutator.setArmor(tempsst, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(35);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setVisibleOnMap(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
@@ -2074,7 +2075,7 @@ public class Titanium {
         typeName = "Ghost Troop Transport";
         tempsst = new SpaceshipType(typeName, "GTT", SpaceShipSize.MEDIUM, 20, 120, SpaceshipRange.LONG, 3, 10, 10, 5);
         tempsst.setDescription("Medium-sized long range military troop transport ship. It can carry 3 troops and launch one troop each turn. It is too weak to do any significant damage against anything but small opponents.");
-        tempsst.setArmor(20);
+        SpaceshipMutator.setArmor(tempsst, 20);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setTroopCapacity(3);
         tempsst.setScreened(true);
@@ -2087,11 +2088,11 @@ public class Titanium {
         typeName = "Ghost Cruiser";
         tempsst = new SpaceshipType(typeName, "GCr", SpaceShipSize.LARGE, 120, 400, SpaceshipRange.SHORT, 10, 30, 40, 10);
         tempsst.setDescription("Large-sized short-range capital ship. It is very good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a small marine detachment, bombardment and can carry two squadron.");
-        tempsst.setArmor(60, 40);
+        SpaceshipMutator.setArmor(tempsst, 60, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(130);
         tempsst.setWeaponsStrengthLarge(80);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setSquadronCapacity(2);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
@@ -2104,11 +2105,11 @@ public class Titanium {
         typeName = "Ghost Light Cruiser";
         tempsst = new SpaceshipType(typeName, "GLCr", SpaceShipSize.LARGE, 80, 300, SpaceshipRange.SHORT, 8, 25, 40, 10);
         tempsst.setDescription("Large-sized long-range capital ship. It is good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a small marine detachment, bombardment and can carry one squadron.");
-        tempsst.setArmor(50, 30);
+        SpaceshipMutator.setArmor(tempsst, 50, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(100);
         tempsst.setWeaponsStrengthLarge(50);
-        tempsst.setWeaponsMaxSalvoesLarge(4);
+        tempsst.setWeaponsMaxSalvosLarge(4);
         tempsst.setSquadronCapacity(1);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
@@ -2121,12 +2122,12 @@ public class Titanium {
         typeName = "Ghost Battleship";
         tempsst = new SpaceshipType(typeName, "GBs", SpaceShipSize.HUGE, 300, 1000, SpaceshipRange.SHORT, 25, 80, 60, 30);
         tempsst.setDescription("Huge-sized short range capital ship. Have a powerful array of weapons that make massive damage to ships of all sizes, and have very powerful armor. It has planetary bombardment, a small marine detachment, can carry up to four squadrons and have an advanced tactical center to increase combat efficiency.");
-        tempsst.setArmor(90, 70, 50);
+        SpaceshipMutator.setArmor(tempsst, 90, 70, 50);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(120);
         tempsst.setWeaponsStrengthLarge(200);
         tempsst.setWeaponsStrengthHuge(200);
-        tempsst.setWeaponsMaxSalvoesHuge(4);
+        tempsst.setWeaponsMaxSalvosHuge(4);
         tempsst.setSquadronCapacity(4);
         tempsst.setBombardment(3);
         tempsst.setPsychWarfare(1);
@@ -2291,9 +2292,9 @@ public class Titanium {
         tempsst.setDescription("Squadron specialized in attacking capital ships, especially ships larger than small where its medium and large torpedo salvoes can can do significant damage. It cannot move on it's own but has to be carried inside a carrier.");
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(30);
-        tempsst.setWeaponsMaxSalvoesMedium(2);
+        tempsst.setWeaponsMaxSalvosMedium(2);
         tempsst.setWeaponsStrengthLarge(30);
-        tempsst.setWeaponsMaxSalvoesLarge(2);
+        tempsst.setWeaponsMaxSalvosLarge(2);
         tempsst.setAvailableToBuild(false);
         gw.addShipType(tempsst);
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName(typeName));
@@ -2332,10 +2333,10 @@ public class Titanium {
         typeName = "Templar Destroyer";
         tempsst = new SpaceshipType(typeName, "TDe", SpaceShipSize.MEDIUM, 50, 100, SpaceshipRange.LONG, 5, 12, 25, 10);
         tempsst.setDescription("Medium-sized long range military ship. It is most useful when attacking small or medium opponents or as support against less powerful large ships. It is too weak to do any significant damage against huge opponents. It carries a small marine detachment which lowers the resistance of besieged planets.");
-        tempsst.setArmor(30);
+        SpaceshipMutator.setArmor(tempsst, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(25);
-        tempsst.setWeaponsMaxSalvoesMedium(4);
+        tempsst.setWeaponsMaxSalvosMedium(4);
         tempsst.setBombardment(1);
         tempsst.setPsychWarfare(1);
         gw.addShipType(tempsst);
@@ -2345,7 +2346,7 @@ public class Titanium {
         typeName = "Templar Carrier";
         tempsst = new SpaceshipType(typeName, "Cru", SpaceShipSize.LARGE, 100, 250, SpaceshipRange.SHORT, 8, 25, 10, 10);
         tempsst.setDescription("Large-sized short-range capital carrier ship. It can carry a large number of squadrons. It is too weak to to do very much damage to nay opponents except small ones.");
-        tempsst.setArmor(40);
+        SpaceshipMutator.setArmor(tempsst, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setSquadronCapacity(12);
         tempsst.setAvailableToBuild(false);
@@ -2357,7 +2358,7 @@ public class Titanium {
         typeName = "Templar Light Cruiser";
         tempsst = new SpaceshipType(typeName, "TLC", SpaceShipSize.LARGE, 200, 200, SpaceshipRange.LONG, 8, 25, 30, 15);
         tempsst.setDescription("Large-sized long-range capital ship. It is very good against small or medium opponents and pretty good against large ones. It is too weak to to do very much damage to huge opponents. It has a small marine detachment, bombardment and can carry one squadron.");
-        tempsst.setArmor(40, 20);
+        SpaceshipMutator.setArmor(tempsst, 40, 20);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(80);
         tempsst.setBombardment(1);
@@ -2371,7 +2372,7 @@ public class Titanium {
         typeName = "Templar Battleship";
         tempsst = new SpaceshipType(typeName, "TBs", SpaceShipSize.HUGE, 500, 500, SpaceshipRange.SHORT, 20, 60, 40, 20);
         tempsst.setDescription("Huge-sized short range capital ship. Have a powerful array of weapons that make massive damage to ships of all sizes, and have very powerful armor. It has planetary bombardment, a small marine detachment, can carry up to four squadrons and have an advanced tactical center to increase combat efficiency.");
-        tempsst.setArmor(80, 60, 40);
+        SpaceshipMutator.setArmor(tempsst, 80, 60, 40);
         tempsst.setTargetingType(SpaceshipTargetingType.ANTIMBU);
         tempsst.setWeaponsStrengthMedium(100);
         tempsst.setWeaponsStrengthLarge(150);
@@ -2389,7 +2390,7 @@ public class Titanium {
         typeName = "Templar PD Destroyer";
         tempsst = new SpaceshipType(typeName, "TPDD", SpaceShipSize.MEDIUM, 70, 70, SpaceshipRange.NONE, 1, 10, 20, 15);
         tempsst.setDescription("Medium planetary defence (PB) ship. It can't move outside the starsystem it is built in. It is about as powerful as a normal Destroyer, but cheaper.");
-        tempsst.setArmor(30);
+        SpaceshipMutator.setArmor(tempsst, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(20);
         tempsst.setWeaponsStrengthLarge(50);
@@ -2401,7 +2402,7 @@ public class Titanium {
         typeName = "Templar HF Destroyer";
         tempsst = new SpaceshipType(typeName, "THFD", SpaceShipSize.MEDIUM, 70, 70, SpaceshipRange.NONE, 0, 10, 20, 15);
         tempsst.setDescription("Medium planetary defence (PB) ship. The home fleet destroyer is identical to the PD destroyer, except that it is financed by the industrial base on faction home planets. It can't move outside the starsystem it is built in. It is about as powerful as a normal Destroyer, but cheaper.");
-        tempsst.setArmor(30);
+        SpaceshipMutator.setArmor(tempsst, 30);
         tempsst.setTargetingType(SpaceshipTargetingType.ALLROUND);
         tempsst.setWeaponsStrengthMedium(20);
         tempsst.setWeaponsStrengthLarge(50);

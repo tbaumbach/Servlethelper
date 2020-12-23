@@ -2,6 +2,8 @@ package spaceraze.servlethelper.game.expenses;
 
 import spaceraze.servlethelper.game.BlackMarketPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -47,14 +49,14 @@ public class ExpensePureFunction {
         if (type.equalsIgnoreCase("buildship")){
             // kollar f�rst om det finns en engineer vid planeten
             VIP tempEngineer = VipPureFunctions.findVIPShipBuildBonus(planet, player, o, aGalaxy);
-            cost = PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeName(),  player, aGalaxy).getBuildCost(tempEngineer);
+            cost = SpaceshipPureFunctions.getBuildCost(PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeName(),  player, aGalaxy), tempEngineer);
         }
         else
         if (type.equalsIgnoreCase("buildtroop")){
             // first check if there is an engineer at the planet
             VIP tempVIP = VipPureFunctions.findVIPTroopBuildBonus(planet, player , o, aGalaxy);
             TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeName(), player, aGalaxy);
-            cost = troopType.getCostBuild(tempVIP);
+            cost = TroopPureFunctions.getCostBuild(troopType, tempVIP);
 
         }else
         if (type.equalsIgnoreCase("buildVIP")){
@@ -102,7 +104,7 @@ public class ExpensePureFunction {
         }else
         if (expense.getType().equalsIgnoreCase("buildtroop")){
             TroopType troopType = aGalaxy.findTroopType(expense.getTroopTypeName());
-            returnString = "Build new " + troopType.getUniqueName() + " at " + expense.getPlanetName() + ".";
+            returnString = "Build new " + troopType.getName() + " at " + expense.getPlanetName() + ".";
         }else
         if (expense.getType().equalsIgnoreCase("buildVIP")){
             returnString = "Build new " + expense.getVIPType() + " at " + expense.getPlanetName() + ".";
