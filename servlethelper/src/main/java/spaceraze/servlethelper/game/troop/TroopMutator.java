@@ -14,24 +14,22 @@ public class TroopMutator {
 
     private TroopMutator(){}
 
-    public static Troop createTroop(Player player, TroopType type, VIP vipWithTechBonus, int factionTechBonus, int buildingTechBonus, int uniqueId){
+    public static Troop createTroop(Player player, TroopType type, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int uniqueId, GameWorld gameWorld){
         PlayerTroopImprovement troopImprovement = player != null ?  PlayerPureFunctions.findTroopImprovement(type.getName(), player) : null;
         TroopType troopType = troopImprovement != null ? new TroopType(type, troopImprovement) : type;
         int nrProduced = troopImprovement != null ? troopImprovement.updateNrProduced() : uniqueId;
         nrProduced++;
         int totalTechBonus = 0;
-        if (vipWithTechBonus != null){
-            totalTechBonus = vipWithTechBonus.getTechBonus();
-        }
         totalTechBonus += factionTechBonus;
         totalTechBonus += buildingTechBonus;
+        totalTechBonus += vipTechBonus;
         Troop tmpTroop = new Troop(troopType, nrProduced, totalTechBonus, uniqueId);
         return tmpTroop;
     }
 
     public static Troop createTroop(TroopType type, Galaxy galaxy){
 
-        return createTroop(null, type, null, 0, 0, UniqueIdHandler.getUniqueIdCounter(galaxy, CounterType.TROOP).getUniqueId());
+        return createTroop(null, type, 0, 0, 0, UniqueIdHandler.getUniqueIdCounter(galaxy, CounterType.TROOP).getUniqueId(), galaxy.getGameWorld());
     }
 
     public static void addToLatestTroopsLostInSpace(Troop aTroop, TurnInfo turnInfo, GameWorld gameWorld) {

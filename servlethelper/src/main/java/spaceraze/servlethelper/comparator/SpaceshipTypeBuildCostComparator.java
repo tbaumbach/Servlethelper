@@ -21,7 +21,7 @@ public class SpaceshipTypeBuildCostComparator implements Comparator<SpaceshipTyp
     static final long serialVersionUID = 1L;
 
 	public int compare(SpaceshipType sst1, SpaceshipType sst2) {
-		int diff = SpaceshipPureFunctions.getBuildCost(sst2, null) - SpaceshipPureFunctions.getBuildCost(sst1, null);
+		int diff = SpaceshipPureFunctions.getBuildCost(sst2, 0) - SpaceshipPureFunctions.getBuildCost(sst1, 0);
 		if (diff == 0){
 			diff = sst1.getName().compareTo(sst2.getName());
 		}

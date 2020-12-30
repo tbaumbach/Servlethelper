@@ -53,7 +53,7 @@ public class MapPureFunctions {
                 if (tmpVips.size() > 0) {
                     for (Iterator<VIP> iter = tmpVips.iterator(); iter.hasNext(); ) {
                         VIP aVIP = iter.next();
-                        tmpShipStr = tmpShipStr + aVIP.getShortName();
+                        tmpShipStr = tmpShipStr + VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld()).getShortName();
                         if (iter.hasNext()) {
                             tmpShipStr = tmpShipStr + ",";
                         }
@@ -181,10 +181,10 @@ public class MapPureFunctions {
         MapPlanetInfo mapPlanetInfo = new MapPlanetInfo();
         Logger.finer("MapPlanetInfo creator, planet: " + planet.getName() + ", player: " + player.getGovernorName() + ", turn: " + turn);
         mapPlanetInfo.setPlanetName(planet.getName());
-        boolean spy = (galaxy.findVIPSpy(planet, player) != null);
+        boolean spy = VipPureFunctions.findVIPSpy(planet, player, galaxy) != null;
         boolean shipInSystem = (galaxy.playerHasShipsInSystem(player, planet));
         boolean surveyShip = (SpaceshipPureFunctions.findSurveyShip(planet, player, galaxy.getSpaceships(), galaxy.getGameWorld()) != null);
-        boolean surveyVIP = (galaxy.findSurveyVIPonShip(planet, player) != null);
+        boolean surveyVIP = VipPureFunctions.findSurveyVIPonShip(planet, player, galaxy) != null;
         boolean survey = surveyShip | surveyVIP;
         boolean openPlanet = planet.isOpen();
         boolean neutralPlanet = (planet.getPlayerInControl() == null);
@@ -475,7 +475,7 @@ public class MapPureFunctions {
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() == player){ // leta efter vippar som tillhör spelaren
                 if (aVIP.getPlanetLocation() == planet){
-                    vipsData.addVipShortName(aVIP.getShortName());
+                    vipsData.addVipShortName(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld()).getShortName());
                 }
             }
         }
@@ -489,9 +489,10 @@ public class MapPureFunctions {
         VIPData vipsData = new VIPData();
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() != player){ // leta efter vippar som inte tillhör spelaren
+                VIPType vipType =VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld());
                 if (aVIP.getPlanetLocation() == planet){
-                    if (aVIP.getShowOnOpenPlanet()){
-                        vipsData.addVipShortName(aVIP.getShortName());
+                    if (vipType.getShowOnOpenPlanet()){
+                        vipsData.addVipShortName(vipType.getShortName());
                         vipsData.setPlayerName(aVIP.getBoss().getName()); // förutsätter att alla andra vippar tillhör samma spelare
                     }
                 }

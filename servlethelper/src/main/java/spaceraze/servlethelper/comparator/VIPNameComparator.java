@@ -5,6 +5,8 @@ package spaceraze.servlethelper.comparator;
 
 import java.util.Comparator;
 
+import spaceraze.servlethelper.game.vip.VipPureFunctions;
+import spaceraze.world.GameWorld;
 import spaceraze.world.VIP;
 
 /**
@@ -15,11 +17,14 @@ import spaceraze.world.VIP;
 public class VIPNameComparator<T extends VIP> implements Comparator<T> {
     static final long serialVersionUID = 1L;
 
+    private GameWorld gameWorld;
+
+    public VIPNameComparator(GameWorld gameWorld){
+    	this.gameWorld = gameWorld;
+	}
+
 	public int compare(T vip1, T vip2) {
-//		VIP v1 = (VIP)arg0;
-//		VIP v2 = (VIP)arg1;
-//		return v1.getName().compareToIgnoreCase(v2.getName());
-		return vip1.getName().compareToIgnoreCase(vip2.getName());
+		return VipPureFunctions.getVipTypeByKey(vip1.getTypeKey(), gameWorld).getName().compareToIgnoreCase(VipPureFunctions.getVipTypeByKey(vip2.getTypeKey(), gameWorld).getName());
 	}
 
 }

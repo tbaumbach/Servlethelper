@@ -2,6 +2,9 @@ package spaceraze.servlethelper.game.troop;
 
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
+import spaceraze.world.orders.Orders;
+import spaceraze.world.orders.TroopToCarrierMovement;
+import spaceraze.world.orders.TroopToPlanetMovement;
 
 import java.util.*;
 
@@ -72,7 +75,7 @@ public class TroopPureFunctions {
             if (aTroop.getShipLocation() == aCarrier) {
                 // check if sstemp has a move order
                 if (aPlayer != null) {
-                    boolean moveOrder = aPlayer.checkTroopMove(aTroop);
+                    boolean moveOrder = TroopPureFunctions.checkTroopMove(aTroop, aPlayer.getOrders());
                     // if not, inc counter
                     if (!moveOrder) {
                         count++;
@@ -91,10 +94,10 @@ public class TroopPureFunctions {
         return gameWorld.getTroopTypes().stream().filter(troopType -> troopType.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
     }
 
-    public static int getCostBuild(TroopType troopType, VIP vipWithBonus) {
+    public static int getCostBuild(TroopType troopType, int vipBuildBonus) {
         int tempBuildCost = troopType.getCostBuild();
-        if (vipWithBonus != null){
-            int vipBuildbonus = 100 - vipWithBonus.getTroopBuildBonus();
+        if (vipBuildBonus > 0){
+            int vipBuildbonus = 100 - vipBuildBonus;
             double tempBuildBonus = vipBuildbonus / 100.0;
             tempBuildCost = (int) Math.round(tempBuildCost * tempBuildBonus);
             if (tempBuildCost < 1){
@@ -283,5 +286,69 @@ public class TroopPureFunctions {
         return troop.getCurrentDamageCapacity() <= 0;
     }
 
+    public static Troop findTroop(String key, Galaxy galaxy) {
+        return galaxy.getTroops().stream().filter(troop -> troop.getKey().equalsIgnoreCase(key)).findAny().orElseThrow();
+    }
+
+
+    // check if there exist a carrier move order for this troop
+    public static boolean checkTroopToCarrierMove(Troop aTroop, Orders orders) {
+        boolean found = false;
+        int i = 0;
+        while ((found == false) & (i < orders.getTroopToCarrierMoves().size())) {
+            TroopToCarrierMovement tempMove = orders.getTroopToCarrierMoves().get(i);
+            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        return found;
+    }
+
+    // check if there exist a carrier move order for this troop to aCarrier
+    public static boolean checkTroopToCarrierMove(Troop aTroop, Spaceship aCarrier, Orders orders) {
+        boolean found = false;
+        boolean moveToCarrier = false;
+        int i = 0;
+        while ((found == false) & (i < orders.getTroopToCarrierMoves().size())) {
+            TroopToCarrierMovement tempMove = orders.getTroopToCarrierMoves().get(i);
+            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+                found = true;
+                if (tempMove.getDestinationCarrierKey().equals(aCarrier.getKey())) {
+                    moveToCarrier = true;
+                }
+            } else {
+                i++;
+            }
+        }
+        return moveToCarrier;
+    }
+
+    // check if there exist a planet move order for this troop
+    public static boolean checkTroopToPlanetMove(Troop aTroop, Orders orders) {
+        boolean found = false;
+        int i = 0;
+        while ((found == false) & (i < orders.getTroopToPlanetMoves().size())) {
+            TroopToPlanetMovement tempMove = orders.getTroopToPlanetMoves().get(i);
+            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        return found;
+    }
+
+    public static boolean checkTroopMove(Troop aTroop, Orders orders){
+        boolean moving = false;
+        if (checkTroopToCarrierMove(aTroop, orders)){
+            moving = true;
+        }else
+        if (checkTroopToPlanetMove(aTroop, orders)){
+            moving = true;
+        }
+        return moving;
+    }
 
 }

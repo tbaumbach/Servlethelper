@@ -43,27 +43,27 @@ public class ExpensePureFunction {
             Logger.finer("planet: " + planet.getName());
             Logger.finer("planet.getPlayerInControl(): " + player);
             VIP tempVIP = VipPureFunctions.findVIPBuildingBuildBonus(planet, player, o, aGalaxy);
+            int vipBuildBonus = tempVIP == null ? 0 : VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), player.getGalaxy().getGameWorld()).getBuildingBuildBonus();
             BuildingType aBuildingType = PlayerPureFunctions.findOwnBuildingType(expense.getBuildingTypeName(), player);
-            cost =  aBuildingType.getBuildCost(tempVIP);
+            cost =  aBuildingType.getBuildCost(vipBuildBonus);
         }else
         if (type.equalsIgnoreCase("buildship")){
             // kollar f�rst om det finns en engineer vid planeten
             VIP tempEngineer = VipPureFunctions.findVIPShipBuildBonus(planet, player, o, aGalaxy);
-            cost = SpaceshipPureFunctions.getBuildCost(PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeName(),  player, aGalaxy), tempEngineer);
+            int vipBuildBonus = tempEngineer == null ? 0 : VipPureFunctions.getVipTypeByKey(tempEngineer.getTypeKey(), aGalaxy.getGameWorld()).getShipBuildBonus();
+            cost = SpaceshipPureFunctions.getBuildCost(PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeName(),  player, aGalaxy), vipBuildBonus);
         }
         else
         if (type.equalsIgnoreCase("buildtroop")){
             // first check if there is an engineer at the planet
             VIP tempVIP = VipPureFunctions.findVIPTroopBuildBonus(planet, player , o, aGalaxy);
             TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeName(), player, aGalaxy);
-            cost = TroopPureFunctions.getCostBuild(troopType, tempVIP);
+            int vipBuildBonus = tempVIP == null ? 0 : VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), player.getGalaxy().getGameWorld()).getTroopBuildBonus();
+            cost = TroopPureFunctions.getCostBuild(troopType, vipBuildBonus);
 
         }else
         if (type.equalsIgnoreCase("buildVIP")){
-            VIPType tempVIPType = aGalaxy.getGameWorld().getVIPTypeByName(expense.getVipTypeName());
-            if(tempVIPType == null){
-                tempVIPType = aGalaxy.getGameWorld().getVIPTypeByName(expense.getVipTypeName());
-            }
+            VIPType tempVIPType = VipPureFunctions.getVipTypeByKey(expense.getTypeVIPKey(), aGalaxy.getGameWorld());
             cost = tempVIPType.getBuildCost();
         }else
         if (type.equalsIgnoreCase("transaction")){
@@ -107,7 +107,7 @@ public class ExpensePureFunction {
             returnString = "Build new " + troopType.getName() + " at " + expense.getPlanetName() + ".";
         }else
         if (expense.getType().equalsIgnoreCase("buildVIP")){
-            returnString = "Build new " + expense.getVIPType() + " at " + expense.getPlanetName() + ".";
+            returnString = "Build new " + expense.getTypeVIPName() + " at " + expense.getPlanetName() + ".";
         }else
         if (expense.getType().equalsIgnoreCase("transaction")){
             returnString = "Transfer " + expense.getSum() + " money to Govenor " + aGalaxy.getPlayer(expense.getPlayerName()).getGovernorName();

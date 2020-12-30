@@ -41,7 +41,7 @@ public class TroopTypeAndBuildCostComparator implements Comparator<Troop> {
 		if (TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).isArmor() & !TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).isArmor()){
 			diff = -1;
 		}else if (diff == 0){
-			diff = TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld),null) - TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld),null);
+			diff = TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld),0) - TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld),0);
 		}else if (diff == 0){
 			diff = t2.getUpkeep() - t1.getUpkeep();
 		}else if (diff == 0){

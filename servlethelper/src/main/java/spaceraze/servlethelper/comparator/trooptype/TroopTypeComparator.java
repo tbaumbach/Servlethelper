@@ -18,7 +18,7 @@ public class TroopTypeComparator implements Comparator<TroopType> {
 		int diff = 0;
 		// lowest build cost first
 		if (diff == 0){
-			diff = TroopPureFunctions.getCostBuild(tt2,null) - TroopPureFunctions.getCostBuild(tt1,null);
+			diff = TroopPureFunctions.getCostBuild(tt2,0) - TroopPureFunctions.getCostBuild(tt1,0);
 		}
 		// else lowest support cost first
 		if (diff == 0){

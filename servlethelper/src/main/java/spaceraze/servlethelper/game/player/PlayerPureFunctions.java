@@ -36,7 +36,7 @@ public class PlayerPureFunctions {
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
         return player.getSpaceshipImprovements().stream()
-                .filter(improvement -> SpaceshipPureFunctions.isConstructable(galaxy, player, galaxy.getShipType(improvement.getTypeId()), improvement))
+                .filter(improvement -> SpaceshipPureFunctions.isConstructable(galaxy, player, galaxy.getGameWorld().getSpaceshipTypeByName(improvement.getTypeId()), improvement))
                 .collect(Collectors.toList());
     }
 

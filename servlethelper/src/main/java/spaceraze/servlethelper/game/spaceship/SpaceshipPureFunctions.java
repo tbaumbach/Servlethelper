@@ -1,11 +1,11 @@
 package spaceraze.servlethelper.game.spaceship;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.enums.SpaceshipRange;
+import spaceraze.world.orders.Orders;
 import spaceraze.world.orders.ShipMovement;
 import spaceraze.world.orders.ShipToCarrierMovement;
 
@@ -69,7 +69,7 @@ public class SpaceshipPureFunctions {
         List<ShipMovement> shipMovemants = aPlayer.getOrders().getShipMoves();
         for (ShipMovement shipMovement : shipMovemants) {
             if (shipMovement.getDestinationName().equalsIgnoreCase(aPlanet.getName())) {// adding ships with travel ordes against the planet.
-                Spaceship tempShip = aPlayer.getGalaxy().findSpaceshipByUniqueId(shipMovement.getSpaceShipID());
+                Spaceship tempShip = aPlayer.getGalaxy().findSpaceshipByUniqueId(shipMovement.getSpaceshipKey());
                 if (!tempShipList.contains(tempShip)) {
                     tempShipList.add(tempShip);
                 }
@@ -77,8 +77,8 @@ public class SpaceshipPureFunctions {
                 if (isCarrier(tempShip)) {
                     List<ShipToCarrierMovement> SqdToCarrierMovementList = aPlayer.getOrders().getShipToCarrierMoves();
                     for (ShipToCarrierMovement shipToCarrierMovement : SqdToCarrierMovementList) {
-                        if (shipToCarrierMovement.getDestinationCarrierId() == tempShip.getKey()) {
-                            tempShipList.add(aPlayer.getGalaxy().findSpaceshipByUniqueId(shipToCarrierMovement.getSpaceshipId()));
+                        if (tempShip.getKey().equalsIgnoreCase(shipToCarrierMovement.getDestinationCarrierKey())) {
+                            tempShipList.add(aPlayer.getGalaxy().findSpaceshipByUniqueId(shipToCarrierMovement.getSpaceShipKey()));
                         }
                     }
                     List<Spaceship> shipListAtCarrierPlanet = getPlayersSpaceshipsOnPlanet(aPlayer, tempShip.getLocation(), aPlayer.getGalaxy().getSpaceships());
@@ -86,7 +86,7 @@ public class SpaceshipPureFunctions {
                         if (spaceship.getCarrierLocation() == tempShip) {
                             boolean add = true;
                             for (ShipMovement shipMove : shipMovemants) {
-                                if (shipMove.getSpaceShipID().equals(spaceship.getKey())) {
+                                if (shipMove.getSpaceshipKey().equals(spaceship.getKey())) {
                                     add = false;
                                 }
                             }
@@ -98,7 +98,7 @@ public class SpaceshipPureFunctions {
                 }
 
             } else {
-                Spaceship tempSpaceship = aPlayer.getGalaxy().findSpaceshipByUniqueId(shipMovement.getSpaceShipID());
+                Spaceship tempSpaceship = aPlayer.getGalaxy().findSpaceshipByUniqueId(shipMovement.getSpaceshipKey());
                 if (tempSpaceship.getLocation() != null && tempSpaceship.getLocation() == aPlanet) {// removing ships on the planet with move orders
                     tempShipList.remove(tempSpaceship);
                     if (isCarrier(tempSpaceship)) {
@@ -107,14 +107,14 @@ public class SpaceshipPureFunctions {
                             if (tempShip.getSize() == SpaceShipSize.SQUADRON) {
                                 List<ShipToCarrierMovement> SqdToCarrierMovementList = aPlayer.getOrders().getShipToCarrierMoves();
                                 for (ShipToCarrierMovement shipToCarrierMovement : SqdToCarrierMovementList) {
-                                    if (shipToCarrierMovement.getDestinationCarrierId() == tempSpaceship.getKey()) {
+                                    if (tempSpaceship.getKey().equalsIgnoreCase(shipToCarrierMovement.getDestinationCarrierKey())) {
                                         removeShips.add(tempShip);
                                     }
                                 }
                                 if (tempShip.getCarrierLocation() == tempSpaceship) {
                                     boolean add = true;
                                     for (ShipMovement shipMove : shipMovemants) {
-                                        if (shipMove.getSpaceShipID().equals(tempShip.getKey())) {
+                                        if (shipMove.getSpaceshipKey().equals(tempShip.getKey())) {
                                             add = false;
                                         }
                                     }
@@ -269,12 +269,12 @@ public class SpaceshipPureFunctions {
         return needSupplies;
     }
 
-    public static String getAllBattleSimVipsOnShip(Spaceship aShip, List<VIP> vips) {
+    public static String getAllBattleSimVipsOnShip(Spaceship aShip, List<VIP> vips, GameWorld gameWorld) {
         StringBuffer sb = new StringBuffer();
         List<VIP> vipsOnShip = VipPureFunctions.findAllVIPsOnShip(aShip, vips);
         List<VIP> battleVips = new LinkedList<VIP>();
         for (VIP aVIP : vipsOnShip) {
-            if (aVIP.isBattleVip()) {
+            if (VipPureFunctions.isSpaceBattleVip(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld))) {
                 battleVips.add(aVIP);
             }
         }
@@ -282,7 +282,7 @@ public class SpaceshipPureFunctions {
             if (sb.length() > 0) {
                 sb.append(",");
             }
-            sb.append(aVIP.getShortName());
+            sb.append(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getShortName());
         }
         return sb.toString();
     }
@@ -292,7 +292,7 @@ public class SpaceshipPureFunctions {
         List<Spaceship> shipsAtPlanet = getPlayersSpaceshipsOnPlanet(aPlayer, aPlanet, galaxy.getSpaceships());
         for (Spaceship aShip : shipsAtPlanet) {
             if (aShip.getName().equals(shipTypeName)) {
-                if (!aPlayer.getOrders().checkShipMove(aShip)) { // if there are no order already for this ship
+                if (!checkShipMove(aShip, aPlayer.getOrders())) { // if there are no order already for this ship
                     if (VipPureFunctions.findAllVIPsOnShip(aShip, galaxy.getAllVIPs()).size() == 0) { // check that ship is empty (no carried VIPs)
                         foundShip = aShip;
                     }
@@ -347,8 +347,8 @@ public class SpaceshipPureFunctions {
             if (aSpaceship.getCarrierLocation() == aCarrier) {
                 // check if sstemp has a move order
                 if (aPlayer != null) {
-                    boolean moveToPlanetOrder = aPlayer.checkShipMove(aSpaceship);
-                    boolean moveToCarrierOrder = aPlayer.checkShipToCarrierMove(aSpaceship);
+                    boolean moveToPlanetOrder = checkShipMove(aSpaceship, aPlayer.getOrders());
+                    boolean moveToCarrierOrder = checkShipToCarrierMove(aSpaceship, aPlayer.getOrders());
                     // if not, inc counter
                     if (!(moveToCarrierOrder | moveToPlanetOrder)) {
                         count++;
@@ -360,6 +360,18 @@ public class SpaceshipPureFunctions {
         }
         return count;
     }
+
+    // kolla om det finns en gammal order för detta skepp
+    public static boolean checkShipToCarrierMove(Spaceship spaceship, Orders orders) {
+        return orders.getShipToCarrierMoves().stream().anyMatch(move -> spaceship.getKey().equalsIgnoreCase(move.getSpaceShipKey()));
+    }
+
+    // kolla om det finns en gammal order för detta skepp
+    public static boolean checkShipMove(Spaceship spaceship, Orders orders) {
+        return orders.getShipMoves().stream().anyMatch(move -> spaceship.getKey().equalsIgnoreCase(move.getSpaceshipKey()));
+    }
+
+
 
     public static boolean isCarrier(Spaceship spaceship) {
         return spaceship.getSquadronCapacity() > 0;
@@ -489,10 +501,10 @@ public class SpaceshipPureFunctions {
         return aPlayer.getGalaxy().spaceshipTypeExist(spaceshipType, aPlayer.getFaction(), null);
     }
 
-    public static int getBuildCost(SpaceshipType spaceshipType, VIP vipWithBonus){
+    public static int getBuildCost(SpaceshipType spaceshipType, int vipBuildBonus){
         int tempBuildCost = spaceshipType.getBuildCost();
-        if (vipWithBonus != null){
-            int vipBuildbonus = 100 - vipWithBonus.getShipBuildBonus();
+        if (vipBuildBonus > 0){
+            int vipBuildbonus = 100 - vipBuildBonus;
             double tempBuildBonus = vipBuildbonus / 100.0;
             tempBuildCost = (int) Math.round(tempBuildCost * tempBuildBonus);
             if (tempBuildCost < 1){
@@ -500,6 +512,14 @@ public class SpaceshipPureFunctions {
             }
         }
         return tempBuildCost;
+    }
+
+    public static Spaceship findSpaceship(String key, Galaxy galaxy) {
+        return galaxy.getSpaceships().stream().filter(ship -> ship.getKey().equalsIgnoreCase(key)).findAny().orElseThrow();
+    }
+
+    public static Spaceship findSpaceship(String name, Player owner, Galaxy galaxy) {
+        return galaxy.getSpaceships().stream().filter(ship -> ship.getName().equalsIgnoreCase(name)).filter(ship -> ship.getOwner() == owner).findAny().orElseThrow();
     }
 
 }

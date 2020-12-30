@@ -3,6 +3,7 @@ package spaceraze.servlethelper.game.player;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
@@ -26,7 +27,7 @@ public class IncomePureFunctions {
             if (planet.getPlayerInControl() == aPlayer) {
                 int tmpInc = planet.getIncomeAlien(aPlayer.getFaction().getOpenPlanetBonus(),
                         aPlayer.getFaction().getClosedPlanetBonus(), playerTurnInfo)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs());
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld());
                 Logger.finer("alien base income: " + tmpInc);
                 totIncome += tmpInc;
                 // add income bonus for buildings.
@@ -114,7 +115,7 @@ public class IncomePureFunctions {
                 Logger.finest("tempPlanet " + planet.getName());
                 int tmpInc = planet.getIncome(aPlayer.getFaction().getOpenPlanetBonus(),
                         aPlayer.getFaction().getClosedPlanetBonus(), playerTurnInfo)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs());
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld());
                 Logger.finest("tmpInc " + tmpInc);
                 totIncome = totIncome + tmpInc;
                 Logger.finest("totIncome1 " + totIncome);
@@ -131,41 +132,43 @@ public class IncomePureFunctions {
         return totIncome;
     }
 
-    private static int getVIPIncomeBonus(Player aPlayer, Planet aPlanet, TurnInfo playerTurnInfo, List<VIP> vips) {
+    private static int getVIPIncomeBonus(Player aPlayer, Planet aPlanet, TurnInfo playerTurnInfo, List<VIP> vips, GameWorld gameWorld) {
         int incomeBonus = 0;
         if (!aPlanet.isBesieged()) {
-            VIP tempVIP = findVIPEconomicBonus(aPlanet, aPlayer, vips);
+            VIP tempVIP = findVIPEconomicBonus(aPlanet, aPlayer, vips, gameWorld);
             if (tempVIP != null) {
+                VIPType vipType = VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), gameWorld);
                 if (aPlanet.isOpen()) {
-                    incomeBonus = tempVIP.getOpenIncBonus();
+                    incomeBonus = vipType.getOpenIncBonus();
                     if (playerTurnInfo != null)
-                        playerTurnInfo.addToLatestIncomeReport(IncomeType.VIP, tempVIP.getName() + " open planet bonus",
+                        playerTurnInfo.addToLatestIncomeReport(IncomeType.VIP, vipType.getName() + " open planet bonus",
                                 aPlanet.getName(), incomeBonus);
                 } else {
-                    incomeBonus = tempVIP.getClosedIncBonus();
+                    incomeBonus = vipType.getClosedIncBonus();
                     if (playerTurnInfo != null)
                         playerTurnInfo.addToLatestIncomeReport(IncomeType.VIP,
-                                tempVIP.getName() + " closed planet bonus", aPlanet.getName(), incomeBonus);
+                                vipType.getName() + " closed planet bonus", aPlanet.getName(), incomeBonus);
                 }
             }
         }
         return incomeBonus;
     }
 
-    public static VIP findVIPEconomicBonus(Planet aPlanet, Player aPlayer, List<VIP> vips) {
+    public static VIP findVIPEconomicBonus(Planet aPlanet, Player aPlayer, List<VIP> vips, GameWorld gameWorld) {
         VIP foundVIP = null;
         int bonus = 0;
         for (VIP vip : vips) {
+            VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), gameWorld);
             if (vip.getBoss() == aPlayer && vip.getPlanetLocation() == aPlanet) {
                 if (aPlanet.isOpen()) {
-                    if (vip.getOpenIncBonus() > bonus) {
+                    if (vipType.getOpenIncBonus() > bonus) {
                         foundVIP = vip;
-                        bonus = vip.getOpenIncBonus();
+                        bonus = vipType.getOpenIncBonus();
                     }
                 } else {
-                    if (vip.getClosedIncBonus() > bonus) {
+                    if (vipType.getClosedIncBonus() > bonus) {
                         foundVIP = vip;
-                        bonus = vip.getClosedIncBonus();
+                        bonus = vipType.getClosedIncBonus();
                     }
                 }
             }

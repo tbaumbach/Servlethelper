@@ -3,6 +3,7 @@ package spaceraze.servlethelper.game.planet;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.util.move.FindPlanetCriterion;
 import spaceraze.world.*;
@@ -328,7 +329,7 @@ public class PlanetPureFunctions {
         boolean foundSpy = false;
         int i = 0;
         while (!foundSpy && allies.size() > i) {
-            if (galaxy.findSurveyVIPonShip(planet, allies.get(i)) != null) {
+            if (VipPureFunctions.findSurveyVIPonShip(planet, allies.get(i), galaxy) != null) {
                 foundSpy = true;
             }
             i++;
@@ -341,7 +342,7 @@ public class PlanetPureFunctions {
         boolean foundSpy = false;
         int i = 0;
         while (!foundSpy && allies.size() < i) {
-            if (galaxy.findVIPSpy(planet, allies.get(i)) != null) {
+            if (VipPureFunctions.findVIPSpy(planet, allies.get(i), galaxy) != null) {
                 foundSpy = true;
             }
             i++;
@@ -351,5 +352,21 @@ public class PlanetPureFunctions {
 
     private static boolean containsPlanet(List<Planet> planets, Planet planet) {
         return planets.stream().anyMatch(planetInList -> planetInList == planet);
+    }
+
+    public static Planet getPlanet(String planetName, Galaxy galaxy) {
+        Logger.finer("getPlanet(String planetName) planetName : " + planetName);
+        Planet aPlanet = null;
+        for (Planet tempPlanet : galaxy.getPlanets()) {
+            if (tempPlanet.getName().equalsIgnoreCase(planetName)) {
+                aPlanet = tempPlanet;
+                break;
+            }
+        }
+        return aPlanet;
+    }
+
+    public static boolean checkSurrender(Planet planet, Galaxy galaxy){
+        return (planet.getResistance() + VipPureFunctions.findHighestVIPResistanceBonus(planet, planet.getPlayerInControl(), galaxy)) < 1;
     }
 }

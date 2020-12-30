@@ -11,17 +11,17 @@ public class SpaceshipMutator {
 
     private SpaceshipMutator(){}
 
-    public static Spaceship createSpaceShip(Player player, SpaceshipType type, VIP vipWithBonus, int factionTechBonus, int buildingBonus){
+    public static Spaceship createSpaceShip(Player player, SpaceshipType type, int vipTechBonus, int factionTechBonus, int buildingBonus){
         PlayerSpaceshipImprovement playerSpaceshipImprovement = PlayerPureFunctions.findSpaceshipImprovement(type.getName(), player);
         SpaceshipType spaceshipType = playerSpaceshipImprovement != null ? new SpaceshipType(type, playerSpaceshipImprovement) : type;
         int nrProduced = playerSpaceshipImprovement != null ? playerSpaceshipImprovement.updateNrProduced() : 0;
 
-         return new Spaceship(spaceshipType, null, nrProduced, vipWithBonus,factionTechBonus,buildingBonus);
+         return new Spaceship(spaceshipType, null, nrProduced, vipTechBonus, factionTechBonus, buildingBonus);
     }
 
     public static Spaceship createSpaceShip(SpaceshipType type){
 
-        return new Spaceship(type, null, 0, null,0,0);
+        return new Spaceship(type, null, 0, 0,0,0);
     }
 
     public static int getMediumSalvo(Spaceship spaceship, GameWorld gameWorld, boolean fireASalvo) {
@@ -130,7 +130,7 @@ public class SpaceshipMutator {
         } else {
             Logger.finer( "runningTo != null: " + spaceship.getRunningTo().getName());
             spaceship.setOldLocation(spaceship.getLocation());
-            spaceship.setRunningTo(spaceship.getLocation());
+            spaceship.setRunningFrom(spaceship.getLocation());
             spaceship.setLocation(null);
             spaceship.setRetreating(true);
             restoreShields(spaceship, gameWorld);
