@@ -27,6 +27,16 @@ public class TroopMutator {
         return tmpTroop;
     }
 
+    public static Troop createTroopForSimulation(TroopType  troopType, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int uniqueId){
+        int totalTechBonus = 0;
+        totalTechBonus += factionTechBonus;
+        totalTechBonus += buildingTechBonus;
+        totalTechBonus += vipTechBonus;
+        Troop tmpTroop = new Troop(troopType, 0, totalTechBonus, uniqueId);
+        return tmpTroop;
+    }
+
+
     public static Troop createTroop(TroopType type, Galaxy galaxy){
 
         return createTroop(null, type, 0, 0, 0, UniqueIdHandler.getUniqueIdCounter(galaxy, CounterType.TROOP).getUniqueId(), galaxy.getGameWorld());

@@ -4,15 +4,20 @@
 package spaceraze.servlethelper.handlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import spaceraze.util.general.Logger;
+import spaceraze.world.Faction;
+import spaceraze.world.Galaxy;
 import spaceraze.world.GameWorld;
 import spaceraze.servlethelper.gameworlds.SpaceOpera;
 import spaceraze.servlethelper.gameworlds.SpaceRazeExpanded;
 import spaceraze.servlethelper.gameworlds.TheLastGreatWar;
 import spaceraze.servlethelper.gameworlds.Titanium;
 import spaceraze.servlethelper.gameworlds.Universe3051;
+import spaceraze.world.Planet;
 
 
 /**
@@ -190,6 +195,91 @@ public class GameWorldHandler{
     		}
     	}
     	return found;
-    }    
+    }
 
+	public static Faction getFactionByName(String name, GameWorld gameWorld){
+		return gameWorld.getFactions().stream().filter(faction -> faction.getName().equalsIgnoreCase(name)).findAny().orElseThrow();
+	}
+
+	public static Faction getFactionByKey(String key, GameWorld gameWorld){
+		return gameWorld.getFactions().stream().filter(faction -> faction.getKey().equalsIgnoreCase(key)).findAny().orElseThrow();
+	}
+
+	// check if 1 faction has at least factionVictory(65) % of the total pop of all
+	// planets in the game
+	public static Faction checkWinningFaction(Galaxy galaxy, int factionVictoryLimit) {
+
+		Map<String, Integer> factionPoints = new HashMap<>();
+		String winner = null;
+		for (Faction faction : galaxy.getGameWorld().getFactions()) {
+			factionPoints.put(faction.getKey(), 0);
+		}
+		int neutralPop = 0; // räkna popen på alla neutrala planeter
+		// räkna popen på alla factioner
+		for (int j = 0; j < galaxy.getPlanets().size(); j++) {
+			Planet tempPlanet = galaxy.getPlanets().get(j);
+			if (tempPlanet.getPlayerInControl() != null) {
+				if (GameWorldHandler.getFactionByKey(tempPlanet.getPlayerInControl().getFactionKey(), galaxy.getGameWorld()).isAlien()) {
+					factionPoints.replace(tempPlanet.getPlayerInControl().getFactionKey(), factionPoints.get(tempPlanet.getPlayerInControl().getFactionKey()) + tempPlanet.getResistance());
+				} else {
+					factionPoints.replace(tempPlanet.getPlayerInControl().getFactionKey(), factionPoints.get(tempPlanet.getPlayerInControl().getFactionKey()) + tempPlanet.getPopulation());
+				}
+			} else {
+				neutralPop = neutralPop + tempPlanet.getPopulation();
+			}
+		}
+		// summera all pop i sectorn
+		int totalPop = neutralPop;
+		for(Map.Entry<String, Integer> entry : factionPoints.entrySet()){
+			totalPop = totalPop + entry.getValue();
+		}
+
+		for(Map.Entry<String, Integer> entry : factionPoints.entrySet()){
+			if (winner == null) {
+				if (((entry.getValue() * 1.0) / totalPop * 1.0) > (factionVictoryLimit / 100.0)) {
+					winner = entry.getKey();
+				}
+			}
+		}
+
+		return winner != null ? GameWorldHandler.getFactionByKey(winner, galaxy.getGameWorld()) : null;
+
+	}
+
+	public static List<Faction> getGreatestFactions(Galaxy galaxy) {
+
+		Map<String, Integer> factionPoints = new HashMap<>();
+		int winnerPoint = 0;
+		List<Faction> winners = new ArrayList<>();
+		for (Faction faction : galaxy.getGameWorld().getFactions()) {
+			factionPoints.put(faction.getKey(), 0);
+		}
+		// räkna popen på alla factioner
+		for (int j = 0; j < galaxy.getPlanets().size(); j++) {
+			Planet tempPlanet = galaxy.getPlanets().get(j);
+			if (tempPlanet.getPlayerInControl() != null) {
+				if (GameWorldHandler.getFactionByKey(tempPlanet.getPlayerInControl().getFactionKey(), galaxy.getGameWorld()).isAlien()) {
+					factionPoints.replace(tempPlanet.getPlayerInControl().getFactionKey(), factionPoints.get(tempPlanet.getPlayerInControl().getFactionKey()) + tempPlanet.getResistance());
+				} else {
+					factionPoints.replace(tempPlanet.getPlayerInControl().getFactionKey(), factionPoints.get(tempPlanet.getPlayerInControl().getFactionKey()) + tempPlanet.getPopulation());
+				}
+			}
+		}
+
+		for(Map.Entry<String, Integer> entry : factionPoints.entrySet()){
+			if (winnerPoint == 0) {
+				winnerPoint = entry.getValue();
+			}else if(winnerPoint < entry.getValue()){
+				winnerPoint = entry.getValue();
+			}
+		}
+
+		for(Map.Entry<String, Integer> entry : factionPoints.entrySet()){
+			if(entry.getValue() == winnerPoint){
+				winners.add(GameWorldHandler.getFactionByKey(entry.getKey(), galaxy.getGameWorld()));
+			}
+		}
+
+		return winners;
+	}
 }

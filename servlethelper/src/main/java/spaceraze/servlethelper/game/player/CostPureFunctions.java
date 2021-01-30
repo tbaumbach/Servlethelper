@@ -7,11 +7,11 @@ import java.util.List;
 
 public class CostPureFunctions {
 
-    public static int getPlayerUpkeepShips(Player aPlayer, List<Planet> planets, List<Spaceship> spaceships) {
+    public static int getPlayerUpkeepShips(Player aPlayer, List<Planet> planets, List<Spaceship> spaceships, GameWorld gameWorld) {
         int totUpkeepCost = 0;
         int totUpkeepIncome = 0;
         int totUpkeep;
-        totUpkeepIncome = getPlayerFreeUpkeep(aPlayer, planets);
+        totUpkeepIncome = getPlayerFreeUpkeep(aPlayer, planets, gameWorld);
         totUpkeepCost = getPlayerUpkeepCost(aPlayer, spaceships);
         totUpkeep = totUpkeepCost - totUpkeepIncome;
         if (totUpkeep < 0) {
@@ -20,18 +20,18 @@ public class CostPureFunctions {
         return totUpkeep;
     }
 
-    private static int getPlayerFreeUpkeep(Player aPlayer, List<Planet> planets) {
-        int totUpkeepIncome = getPlayerFreeUpkeepWithoutCorruption(aPlayer, planets);
+    private static int getPlayerFreeUpkeep(Player aPlayer, List<Planet> planets, GameWorld gameWorld) {
+        int totUpkeepIncome = getPlayerFreeUpkeepWithoutCorruption(aPlayer, planets, gameWorld);
         totUpkeepIncome = IncomePureFunctions.getIncomeAfterCorruption(totUpkeepIncome, aPlayer.getCorruptionPoint());
         return totUpkeepIncome;
     }
 
-    public static int getPlayerFreeUpkeepWithoutCorruption(Player aPlayer, List<Planet> planets) {
+    public static int getPlayerFreeUpkeepWithoutCorruption(Player aPlayer, List<Planet> planets, GameWorld gameWorld) {
         int totUpkeepIncome = 0;
         for (int i = 0; i < planets.size(); i++) {
             Planet tempPlanet = planets.get(i);
             if (tempPlanet.getPlayerInControl() == aPlayer) {
-                totUpkeepIncome = totUpkeepIncome + tempPlanet.getUpkeep();
+                totUpkeepIncome = totUpkeepIncome + IncomePureFunctions.getUpkeep(tempPlanet, gameWorld);
             }
         }
         return totUpkeepIncome;
@@ -82,7 +82,7 @@ public class CostPureFunctions {
     }
 
     public static boolean isBroke(Player player, Galaxy galaxy){
-        return (getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships())
+        return (getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld())
                 + getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()))
                 + getPlayerUpkeepVIPs(player, galaxy.getAllVIPs())> (player.getTreasury()
                 + IncomePureFunctions.getPlayerIncome(player,false));

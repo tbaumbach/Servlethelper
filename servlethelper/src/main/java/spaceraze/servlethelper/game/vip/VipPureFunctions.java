@@ -2,6 +2,7 @@ package spaceraze.servlethelper.game.vip;
 
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -23,16 +24,16 @@ public class VipPureFunctions {
     public static boolean isConstructable(Player aPlayer, Galaxy galaxy, VIPType vipType){
         boolean constructible =  true;
 
-        if((vipType.isWorldUnique() && vipTypeExist(vipType, null, null, galaxy)) || (vipType.isFactionUnique() && vipTypeExist(vipType, aPlayer.getFaction(), null, galaxy)) || (vipType.isPlayerUnique() && vipTypeExist(vipType, null, aPlayer, galaxy))){
+        if((vipType.isWorldUnique() && vipTypeExist(vipType, null, null, galaxy)) || (vipType.isFactionUnique() && vipTypeExist(vipType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy)) || (vipType.isPlayerUnique() && vipTypeExist(vipType, null, aPlayer, galaxy))){
             constructible = false;
-        }else if(!aPlayer.getFaction().getAlignment().canHaveVip(vipType.getAlignment().getName())){
+        }else if(!GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())){
             constructible = false;
         }else if(vipType.isWorldUnique() || vipType.isFactionUnique() || vipType.isPlayerUnique()){
             // check if a build order already exist
             if(aPlayer.getOrders().haveVIPTypeBuildOrder(vipType)){
                 constructible = false;
             }
-            for (BlackMarketOffer aBlackMarketOffer : aPlayer.getGalaxy().getCurrentOffers()) {
+            for (BlackMarketOffer aBlackMarketOffer : galaxy.getCurrentOffers()) {
                 if(aBlackMarketOffer.isVIP() && aBlackMarketOffer.getVipType().getName().equals(vipType.getName())){
                     constructible = false;
                 }
@@ -77,8 +78,8 @@ public class VipPureFunctions {
             Logger.finest("VIP found: " + vipType.getName());
             if (vipType.isGovernor()) {
                 Logger.finest("VIP is governor!");
-                Logger.finest(tempVIP.getBoss().getFaction().getName() + " equals " + aFaction.getName() + " ?");
-                if (tempVIP.getBoss().getFaction().equals(aFaction)) {
+                Logger.finest(GameWorldHandler.getFactionByKey(tempVIP.getBoss().getFactionKey(), galaxy.getGameWorld()).getName() + " equals " + aFaction.getName() + " ?");
+                if (tempVIP.getBoss().getFactionKey().equals(aFaction.getKey())) {
                     Logger.finest("Remove VIP!");
                     allGovs.add(tempVIP);
                 }
@@ -463,7 +464,7 @@ public class VipPureFunctions {
     }
 
     public static boolean isFactionUniqueBuild(VIPType vipType, Player aPlayer, Galaxy galaxy) {
-        return vipTypeExist(vipType, aPlayer.getFaction(), null, galaxy);
+        return vipTypeExist(vipType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy);
     }
 
     public static boolean isPlayerUniqueBuild(VIPType vipType,Player aPlayer, Galaxy galaxy) {
@@ -482,7 +483,7 @@ public class VipPureFunctions {
         } else if (aFaction != null) {// factionUnique
             vipsToCheck = new ArrayList<VIP>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (tempPlayer.getFaction().getName().equals(aFaction.getName())) {
+                if (tempPlayer.getFactionKey().equals(aFaction.getKey())) {
                     vipsToCheck.addAll(getPlayersVips(tempPlayer, galaxy));
                 }
             }

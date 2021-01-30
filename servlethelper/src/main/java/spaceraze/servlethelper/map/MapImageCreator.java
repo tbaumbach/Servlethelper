@@ -26,6 +26,7 @@ import spaceraze.util.general.StyleGuide;
 import spaceraze.util.properties.PropertiesHandler;
 import spaceraze.world.BasePlanet;
 import spaceraze.world.Map;
+import spaceraze.world.MapPlanetConnection;
 import spaceraze.world.PlanetConnection;
 
 /**
@@ -182,9 +183,9 @@ public class MapImageCreator {
 		movePlanets(aMap,-5,-30,0);
 		
 		// draw all connections
-		List<PlanetConnection> allConnections = aMap.getConnections();
+		List<MapPlanetConnection> allConnections = aMap.getConnections();
 		// long range
-		for (PlanetConnection aConnection : allConnections) {
+		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
 				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
 				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
@@ -198,7 +199,7 @@ public class MapImageCreator {
 			}
 		}
 		// short range
-		for (PlanetConnection aConnection : allConnections) {
+		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
 				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
 				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
@@ -213,8 +214,7 @@ public class MapImageCreator {
 		}
 
 		// draw all planets
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			int tmpY = (int)Math.round(aPlanet.getY());
 			int tmpZ = (int)Math.round(aPlanet.getZ());
@@ -341,9 +341,9 @@ public class MapImageCreator {
 		movePlanets(aMap,-20,-20,0);
 		
 		// draw all connections
-		List<PlanetConnection> allConnections = aMap.getConnections();
+		List<MapPlanetConnection> allConnections = aMap.getConnections();
 		// long range
-		for (PlanetConnection aConnection : allConnections) {
+		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
 				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
 				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
@@ -357,7 +357,7 @@ public class MapImageCreator {
 			}
 		}
 		// short range
-		for (PlanetConnection aConnection : allConnections) {
+		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
 				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
 				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
@@ -372,11 +372,10 @@ public class MapImageCreator {
 		}
 
 		// draw all planets
-		List<BasePlanet> allPlanets = aMap.getPlanets();
 		// compute planet size on map
-		int size = (int)Math.round(7 - Math.sqrt(allPlanets.size())/4.0);
+		int size = (int)Math.round(7 - Math.sqrt(aMap.getPlanets().size())/4.0);
 //		Logger.fine("size (" + aMap.getNameFull() + "): " + size);
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			int tmpY = (int)Math.round(aPlanet.getY());
 //			int tmpZ = (int)Math.round(aPlanet.getZcoor());
@@ -413,8 +412,7 @@ public class MapImageCreator {
 	 * Moves all planets so that upper and leftmost planets are 0 in x and y
 	 */
 	private void movePlanets(Map aMap, int xOffset, int yOffset, int zOffset){
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			aPlanet.setX(aPlanet.getX() - xOffset);
 			aPlanet.setY(aPlanet.getY() - yOffset);
 			aPlanet.setZ(aPlanet.getZ() - zOffset);
@@ -422,16 +420,14 @@ public class MapImageCreator {
 	}
 
 	private void scalePlanets(Map aMap, double scaleMod){
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			aPlanet.changeScale(scaleMod);
 		}
 	}
 
 	private int computeSmallestX(Map aMap){
 		int smallest = Integer.MAX_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			if (tmpX < smallest){
 				smallest = tmpX;
@@ -442,8 +438,7 @@ public class MapImageCreator {
 
 	private int computeSmallestY(Map aMap){
 		int smallest = Integer.MAX_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpY = (int)Math.round(aPlanet.getY());
 			if (tmpY < smallest){
 				smallest = tmpY;
@@ -454,8 +449,7 @@ public class MapImageCreator {
 
 	private int computeSmallestZ(Map aMap){
 		int smallest = Integer.MAX_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpZ = (int)Math.round(aPlanet.getZ());
 			if (tmpZ < smallest){
 				smallest = tmpZ;
@@ -466,8 +460,7 @@ public class MapImageCreator {
 
 	private int computeLargestX(Map aMap){
 		int largest = Integer.MIN_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			if (tmpX > largest){
 				largest = tmpX;
@@ -478,8 +471,7 @@ public class MapImageCreator {
 
 	private int computeLargestY(Map aMap){
 		int largest = Integer.MIN_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpY = (int)Math.round(aPlanet.getY());
 			if (tmpY > largest){
 				largest = tmpY;
@@ -490,8 +482,7 @@ public class MapImageCreator {
 
 	private int computeLargestZ(Map aMap){
 		int largest = Integer.MIN_VALUE;
-		List<BasePlanet> allPlanets = aMap.getPlanets();
-		for (BasePlanet aPlanet : allPlanets) {
+		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpZ = (int)Math.round(aPlanet.getZ());
 			if (tmpZ > largest){
 				largest = tmpZ;

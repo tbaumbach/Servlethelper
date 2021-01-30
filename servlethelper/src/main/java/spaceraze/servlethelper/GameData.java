@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Player;
 
 /**
@@ -172,7 +173,7 @@ public class GameData implements Serializable {
 				statusChar = "s";
 			}
 			players[i][2] = statusChar;
-			players[i][3] = aPlayer.getFaction().getColorValues();
+			players[i][3] = GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), aPlayer.getGalaxy().getGameWorld()).getColorValues();
 			i++;
 		}
 	}

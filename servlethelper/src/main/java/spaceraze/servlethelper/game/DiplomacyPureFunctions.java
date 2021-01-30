@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game;
 
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.Galaxy;
 import spaceraze.world.Planet;
@@ -45,7 +46,7 @@ public class DiplomacyPureFunctions {
         boolean hostile = false;
         if (player1 != player2){
             DiplomacyState state = getDiplomacyState(player1, player2, diplomacyStates);
-            if (planet.isPlanetOwner(player1) | planet.isPlanetOwner(player2)){
+            if (PlanetPureFunctions.isPlanetOwner(planet, player1) || PlanetPureFunctions.isPlanetOwner(planet, player2)){
                 if (state.getCurrentLevel().isLowerOrEqual(DiplomacyLevel.CEASE_FIRE)){ // ewar, war, cease fire
                     hostile = true;
                 }
@@ -128,7 +129,7 @@ public class DiplomacyPureFunctions {
 
     public static boolean hostileInfestator(Player infPlayer, Planet planet, Galaxy galaxy){
         boolean hostile = false;
-        if (!planet.isPlayerPlanet()){ // neutral planet
+        if (planet.getPlayerInControl() == null){ // neutral planet
             hostile = true;
         }else{
             if (infPlayer != planet.getPlayerInControl()){

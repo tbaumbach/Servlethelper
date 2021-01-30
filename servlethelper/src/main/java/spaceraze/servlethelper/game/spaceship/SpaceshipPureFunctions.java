@@ -1,6 +1,7 @@
 package spaceraze.servlethelper.game.spaceship;
 
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.SpaceShipSize;
@@ -26,9 +27,9 @@ public class SpaceshipPureFunctions {
         boolean isConstructable =  true;
         if((playerSpaceshipImprovement != null && !playerSpaceshipImprovement.isAvailableToBuild()) || (playerSpaceshipImprovement == null && !spaceshipType.isAvailableToBuild())){
             isConstructable = false;
-        }else if((spaceshipType.isWorldUnique() && galaxy.spaceshipTypeExist(spaceshipType, null, null))
-                || (spaceshipType.isFactionUnique() && galaxy.spaceshipTypeExist(spaceshipType, player.getFaction(), null))
-                || (spaceshipType.isPlayerUnique() && galaxy.spaceshipTypeExist(spaceshipType, null, player))){
+        }else if((spaceshipType.isWorldUnique() && spaceshipTypeExist(spaceshipType, null, null, galaxy))
+                || (spaceshipType.isFactionUnique() && spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByKey(player.getFactionKey(), galaxy.getGameWorld()), null, galaxy))
+                || (spaceshipType.isPlayerUnique() && spaceshipTypeExist(spaceshipType, null, player, galaxy))){
             isConstructable = false;
         }else if(spaceshipType.isWorldUnique() || spaceshipType.isFactionUnique() || spaceshipType.isPlayerUnique()){
             //TODO 2020-04-18 This is more client side, but need something to check if build orders is valid trying to save them from client to server.
@@ -44,6 +45,42 @@ public class SpaceshipPureFunctions {
             }
         }
         return isConstructable;
+    }
+
+    public static List<Spaceship> getPlayersSpaceships(Player aPlayer, Galaxy galaxy) {
+        List<Spaceship> playersss = new ArrayList<Spaceship>();
+        for (Spaceship spaceship : galaxy.getSpaceships()) {
+            if (spaceship.getOwner() == aPlayer) {
+                playersss.add(spaceship);
+            }
+        }
+        return playersss;
+    }
+
+    private static boolean spaceshipTypeExist(SpaceshipType aSpaceshipType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
+        List<Spaceship> spaceshipsToCheck;
+        if (aPlayer != null) {// playerUnique
+            Logger.fine("spaceshipTypeExist: Player check");
+            spaceshipsToCheck = getPlayersSpaceships(aPlayer, galaxy);
+        } else if (aFaction != null) {// factionUnique
+            spaceshipsToCheck = new ArrayList<Spaceship>();
+            for (Player tempPlayer : galaxy.getPlayers()) {
+                if (GameWorldHandler.getFactionByKey(tempPlayer.getFactionKey(), galaxy.getGameWorld()).getName().equals(aFaction.getName())) {
+                    spaceshipsToCheck.addAll(getPlayersSpaceships(tempPlayer, galaxy));
+                }
+            }
+        } else {// worldUnique
+            spaceshipsToCheck = galaxy.getSpaceships();
+        }
+
+        for (Spaceship spaceship : spaceshipsToCheck) {
+            if (spaceship.getTypeKey().equals(aSpaceshipType.getKey())) {
+                Logger.fine("Shio exist: " + aSpaceshipType.getName());
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static List<Spaceship> getPlayersSpaceshipsOnPlanet(Player aPlayer, Planet aPlanet, List<Spaceship> spaceships) {
@@ -143,7 +180,7 @@ public class SpaceshipPureFunctions {
             CanBeLostInSpace aLis = iter.next();
             if (!lostShips) { // ta alla skepp som ej är från aFaction
                 if (aLis.getOwner() != null) {
-                    if (!galaxy.getPlayerByGovenorName(aLis.getOwner()).getFaction().getName().equalsIgnoreCase(aFactionName)) {
+                    if (!GameWorldHandler.getFactionByKey(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionKey(), galaxy.getGameWorld()).getName().equalsIgnoreCase(aFactionName)) {
                         lisList.add(aLis);
                     }
                 } else { // neutralt = lägg till
@@ -151,7 +188,7 @@ public class SpaceshipPureFunctions {
                 }
             } else { // ta endast skepp från aFaction
                 if (aLis.getOwner() != null) {
-                    if (galaxy.getPlayerByGovenorName(aLis.getOwner()).getFaction().getName().equalsIgnoreCase(aFactionName)) {
+                    if (GameWorldHandler.getFactionByKey(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionKey(), galaxy.getGameWorld()).getName().equalsIgnoreCase(aFactionName)) {
                         lisList.add(aLis);
                     }
                 }
@@ -489,16 +526,16 @@ public class SpaceshipPureFunctions {
         return hullStrength;
     }
 
-    public static boolean isPlayerUniqueBuild(Player aPlayer, SpaceshipType spaceshipType) {
-        return aPlayer.getGalaxy().spaceshipTypeExist(spaceshipType, null, aPlayer);
+    public static boolean isPlayerUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy) {
+        return spaceshipTypeExist(spaceshipType, null, aPlayer, galaxy);
     }
 
     public static boolean isWorldUniqueBuild(Galaxy aGalaxy, SpaceshipType spaceshipType) {
-        return aGalaxy.spaceshipTypeExist(spaceshipType, null, null);
+        return spaceshipTypeExist(spaceshipType, null, null, aGalaxy);
     }
 
-    public static boolean isFactionUniqueBuild(Player aPlayer, SpaceshipType spaceshipType) {
-        return aPlayer.getGalaxy().spaceshipTypeExist(spaceshipType, aPlayer.getFaction(), null);
+    public static boolean isFactionUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy) {
+        return spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), aPlayer.getGalaxy().getGameWorld()), null, galaxy);
     }
 
     public static int getBuildCost(SpaceshipType spaceshipType, int vipBuildBonus){

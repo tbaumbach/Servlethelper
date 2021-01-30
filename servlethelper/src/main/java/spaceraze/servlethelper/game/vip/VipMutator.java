@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -122,7 +123,7 @@ public class VipMutator {
      * @return a VIP compatible with the players faction
      */
     public static VIP createPlayerVIP(Player aPlayer, Galaxy galaxy) {
-        Logger.finer("createPlayerVIP: " + aPlayer.getName() + ", alignment=" + aPlayer.getFaction().getAlignment());
+        Logger.finer("createPlayerVIP: " + aPlayer.getName() + ", alignment=" + GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).getAlignment());
         VIP aVIP = null;
         boolean ok = false;
         while (!ok) { // loopa tills det blir en vip som spelaren kan ha
@@ -130,8 +131,8 @@ public class VipMutator {
             aVIP = createRandomVIP(galaxy);
             VIPType vipType = VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), galaxy.getGameWorld());
             Logger.finer(vipType.getName() + ", alignment=" + vipType.getAlignment() + ", canHaveVip="
-                    + aPlayer.getFaction().getAlignment().canHaveVip(vipType.getAlignment().getName()));
-            if (!aPlayer.getFaction().getAlignment().canHaveVip(vipType.getAlignment().getName())) {
+                    + GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName()));
+            if (!GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())) {
                 ok = false;
             }
         }

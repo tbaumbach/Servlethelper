@@ -1,10 +1,14 @@
 package spaceraze.servlethelper.game.planet;
 
+import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.vip.VipMutator;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
+import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.HighlightType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +36,7 @@ public class PlanetMutator {
         attacker.addToHighlights(planet.getName(), HighlightType.TYPE_PLANET_INFESTATED);
         attacker.addToGeneral("You have infected the planet " + planet.getName());
         planet.setProd(0);
-        planet.setResistance(1 + attacker.getFaction().getResistanceBonus());
+        planet.setResistance(1 + GameWorldHandler.getFactionByKey(attacker.getFactionKey(), gameWorld).getResistanceBonus());
         planet.setPlayerInControl(attacker);
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
@@ -49,7 +53,7 @@ public class PlanetMutator {
 
     public static  void joinsVisitingInfector(Planet planet, VIP tempInf, GameWorld gameWorld){
         planet.setPopulation(0);
-        planet.setResistance(planet.getResistance() + tempInf.getBoss().getFaction().getResistanceBonus());
+        planet.setResistance(planet.getResistance() + GameWorldHandler.getFactionByKey(tempInf.getBoss().getFactionKey(), gameWorld).getResistanceBonus());
         // destroy all buildings, when an alien conquers a planet it is always razed in the process
         planet.getBuildings().clear();
         // spaceStation = null;
@@ -73,7 +77,7 @@ public class PlanetMutator {
     }
 
     public static void joinsVisitingDiplomat(Planet planet, VIP tempVIP, boolean addInfoToPlayer, GameWorld gameWorld){
-        planet.setResistance(planet.getResistance() + tempVIP.getBoss().getFaction().getResistanceBonus());  // olika typer av spelare får olika res på ny erövrade planeter?
+        planet.setResistance(planet.getResistance() + tempVIP.getBoss().getResistanceBonus());  // olika typer av spelare får olika res på ny erövrade planeter?
         if(addInfoToPlayer){
             tempVIP.getBoss().addToGeneral("The neutral planet " + planet.getName() + " has been convinced by your " + VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), gameWorld).getName() + " to join your forces!");
             tempVIP.getBoss().addToHighlights(planet.getName(),HighlightType.TYPE_PLANET_JOINS);
@@ -92,5 +96,47 @@ public class PlanetMutator {
         }
         planet.setPlayerInControl(tempVIP.getBoss());
     }
+
+    public static void reverseVisibility(Planet planet){
+        planet.setOpen(!planet.isOpen());
+        if (planet.isOpen()){
+            planet.setLastKnownPlayerInControl(planet.getPlayerInControl());
+        }
+    }
+    public static void setRazed(Planet planet){
+        planet.setProd(0);
+        planet.setResistance(0);
+        if (planet.isOpen()){
+            reverseVisibility(planet);
+        }
+        planet.setBuildings(new ArrayList<Building>());
+        planet.setPlayerInControl(null);
+    }
+
+    public static void removeBuilding(Planet planet, String  key) {
+        planet.getBuildings().removeIf(building -> building.getKey().equalsIgnoreCase(key));
+    }
+
+    /**
+     *
+     * @param conqueringPlayer if no conquering player (null) do not create any messages
+     */
+    public static void destroyBuildingsThatCanNotBeOverTaken(Planet planet, Player conqueringPlayer, GameWorld gameWorld){
+        int i=0;
+        while(i< planet.getBuildings().size()){
+            BuildingType buildingType = BuildingPureFunctions.getBuildingType(planet.getBuildings().get(i).getTypeKey(), gameWorld);
+            if(buildingType.isAutoDestructWhenConquered()){
+                if (conqueringPlayer != null){
+                    conqueringPlayer.addToGeneral("The " + buildingType.getName() + " on the planet " + planet.getName() + " has been destroyed.");
+                    planet.getPlayerInControl().addToGeneral("Your " + buildingType.getName() + " on the planet " + planet.getName() + " has been destroyed.");
+                }
+                planet.getBuildings().remove(i);
+            }else{
+                i++;
+            }
+        }
+    }
+
+
 
 }

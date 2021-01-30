@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.troop;
 
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.orders.Orders;
@@ -16,7 +17,7 @@ public class TroopPureFunctions {
         boolean constructible =  true;
         if((playerTroopImprovement != null && !playerTroopImprovement.isAvailableToBuild()) || (playerTroopImprovement == null && troopType.isCanBuild())){
             constructible = false;
-        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy)) || (troopType.isFactionUnique() && troopTypeExist(troopType, aPlayer.getFaction(), null, galaxy)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy))){
+        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy)) || (troopType.isFactionUnique() && troopTypeExist(troopType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy))){
             constructible = false;
         }else if(troopType.isWorldUnique() || troopType.isFactionUnique() || troopType.isPlayerUnique()){
             // check if a build order already exist
@@ -177,7 +178,7 @@ public class TroopPureFunctions {
     }
 
     public static boolean isFactionUniqueBuild(Player aPlayer, TroopType troopType) {
-        return troopTypeExist(troopType, aPlayer.getFaction(), null, aPlayer.getGalaxy());
+        return troopTypeExist(troopType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), aPlayer.getGalaxy().getGameWorld()), null, aPlayer.getGalaxy());
     }
 
     public static boolean troopTypeExist(TroopType aTroopType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
@@ -188,7 +189,7 @@ public class TroopPureFunctions {
         } else if (aFaction != null) {// factionUnique
             troopsToCheck = new ArrayList<Troop>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (tempPlayer.getFaction().getName().equals(aFaction.getName())) {
+                if (tempPlayer.getFactionKey().equals(aFaction.getKey())) {
                     troopsToCheck.addAll(getPlayersTroops(tempPlayer, galaxy));
                 }
             }

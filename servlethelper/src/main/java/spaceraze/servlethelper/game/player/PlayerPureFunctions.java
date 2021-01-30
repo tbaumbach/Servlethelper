@@ -5,12 +5,14 @@ import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
 import spaceraze.world.diplomacy.DiplomacyState;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +103,7 @@ public class PlayerPureFunctions {
      * If the player researched/upgraded a BuildingType that type will be returned instead of original one from the galaxy
      */
     public static BuildingType findBuildingType(String findName, Player player){
-        return findOwnBuildingType(findName, player) != null ? findOwnBuildingType(findName, player) : player.getFaction().getBuildingTypeByName(findName);
+        return findOwnBuildingType(findName, player) != null ? findOwnBuildingType(findName, player) : GameWorldHandler.getFactionByKey(player.getFactionKey(), player.getGalaxy().getGameWorld()).getBuildingTypeByName(findName);
     }
 
     public static List<BuildingType> getBuildingTypes(Player player){
@@ -110,15 +112,15 @@ public class PlayerPureFunctions {
         return player.getBuildingImprovements().stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
     }
 
-    public static List<BuildingType> getAvailableBuildingTypes(Galaxy galaxy, Player player, Planet planet, int buildingId){
+    public static List<BuildingType> getAvailableBuildingTypes(Galaxy galaxy, Player player, Planet planet, String buildingKey){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return getAvailableBuildingImprovements(galaxy, player, planet, buildingId).stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
+        return getAvailableBuildingImprovements(galaxy, player, planet, buildingKey).stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
     }
 
-    public static List<PlayerBuildingImprovement> getAvailableBuildingImprovements(Galaxy galaxy, Player player, Planet planet, int buildingId){
+    public static List<PlayerBuildingImprovement> getAvailableBuildingImprovements(Galaxy galaxy, Player player, Planet planet, String buildingKey){
         return player.getBuildingImprovements().stream()
-                .filter(improvement -> BuildingPureFunctions.isConstructable(galaxy, player, planet, galaxy.getGameWorld().getBuildingTypeByName(improvement.getName()), buildingId, improvement))
+                .filter(improvement -> BuildingPureFunctions.isConstructable(galaxy, player, planet, galaxy.getGameWorld().getBuildingTypeByName(improvement.getName()), buildingKey, improvement))
                 .collect(Collectors.toList());
     }
 
@@ -128,7 +130,7 @@ public class PlayerPureFunctions {
     public static BuildingType findOwnBuildingType(String findName, Player player){
         PlayerBuildingImprovement improvement = findBuildingImprovement(findName, player);
 
-        return improvement != null ? new BuildingType(player.getFaction().getBuildingTypeByName(findName), improvement) : null;
+        return improvement != null ? new BuildingType(GameWorldHandler.getFactionByKey(player.getFactionKey(), player.getGalaxy().getGameWorld()).getBuildingTypeByName(findName), improvement) : null;
     }
 
     public static PlayerBuildingImprovement findBuildingImprovement(String findName, Player player){
@@ -140,13 +142,13 @@ public class PlayerPureFunctions {
      * Only used by client.
      */
     public static int getTreasuryAfterCosts(Player player, Galaxy galaxy){
-        Logger.finer("upkeepShips();" + CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships()));
+        Logger.finer("upkeepShips();" + CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld()));
         Logger.finer("upkeepTroops();" + CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()));
         Logger.finer("upkeepVIPs();" + CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()));
         Logger.finer("income();" + IncomePureFunctions.getPlayerIncome(player, false));
         Logger.finer("orders.getExpensesCost();" + ExpensePureFunction.getExpensesCost(galaxy, player));
         Logger.finer("treasury;" + player.getTreasury());
-        int tmpIncome = player.getTreasury() - CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships()) - CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()) -  CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()) + IncomePureFunctions.getPlayerIncome(player, false);
+        int tmpIncome = player.getTreasury() - CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld()) - CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()) -  CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()) + IncomePureFunctions.getPlayerIncome(player, false);
         tmpIncome -= ExpensePureFunction.getExpensesCost(galaxy, player);
         return tmpIncome;
     }
@@ -164,5 +166,30 @@ public class PlayerPureFunctions {
             }
         }
         return allies;
+    }
+
+    public static boolean playerHasShipsInSystem(Player aPlayer, Planet aPlanet, Galaxy galaxy) {
+        boolean hasShipsInSystem = false;
+        int i = 0;
+        List<Spaceship> playerShips = SpaceshipPureFunctions.getPlayersSpaceships(aPlayer, galaxy);
+        while ((i < playerShips.size()) & !hasShipsInSystem) {
+            Spaceship tempss = playerShips.get(i);
+            if (tempss.getLocation() == aPlanet) {
+                hasShipsInSystem = true;
+            } else {
+                i++;
+            }
+        }
+        return hasShipsInSystem;
+    }
+
+    public static List<Player> getActivePlayers(Galaxy galaxy) {
+        List<Player> tmpPlayers = new LinkedList<>();
+        for (Player aPlayer : galaxy.getPlayers()) {
+            if (!aPlayer.isDefeated()) {
+                tmpPlayers.add(aPlayer);
+            }
+        }
+        return tmpPlayers;
     }
 }

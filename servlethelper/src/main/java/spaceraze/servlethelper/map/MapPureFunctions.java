@@ -1,7 +1,9 @@
 package spaceraze.servlethelper.map;
 
+import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
+import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
@@ -95,7 +97,7 @@ public class MapPureFunctions {
         Planet p2 = g.getPlanet(planetConnection.getPlanetTwo().getName());
         // check if starport make this connection short range
         if ((p1.getPlayerInControl() != null) & (p2.getPlayerInControl() != null)) { // none of the planets are neutral
-            if ((p1.hasSpacePort()) & (p2.hasSpacePort())) { // both have a spacestation
+            if (PlanetPureFunctions.hasSpacePort(p1) && PlanetPureFunctions.hasSpacePort(p2)) { // both have a spacestation
                 if (DiplomacyPureFunctions.friendlySpaceports(p1.getPlayerInControl(), p2.getPlayerInControl(), g.getDiplomacyStates())) {
                     if (DiplomacyPureFunctions.friendlySpaceports(player, p1.getPlayerInControl(), g.getDiplomacyStates())) {
                         if (DiplomacyPureFunctions.friendlySpaceports(player, p2.getPlayerInControl(), g.getDiplomacyStates())) {
@@ -113,7 +115,7 @@ public class MapPureFunctions {
         Logger.finer("getAllDestinationsStrings, location: " + location + " longRange: " + longRange);
         // first find if there is a spaceport on the planet
         boolean hasSpacePort = false;
-        hasSpacePort = location.hasSpacePort();
+        hasSpacePort = PlanetPureFunctions.hasSpacePort(location);
         List<String> alldest = new LinkedList<String>();
         for (PlanetConnection planetConnection : galaxy.getPlanetConnections()) {
             Logger.finer("PC: " + planetConnection);
@@ -143,7 +145,7 @@ public class MapPureFunctions {
                     }
                     // then check if there is a spaceport on the other planet
                     if (friendlyPlayer) {
-                        if (planetOtherEnd.hasSpacePort()) {
+                        if (PlanetPureFunctions.hasSpacePort(planetOtherEnd)) {
                             Logger.finer("ss2 is spaceport");
                             bothHaveValidSpacePorts = true;
                         }
@@ -182,7 +184,7 @@ public class MapPureFunctions {
         Logger.finer("MapPlanetInfo creator, planet: " + planet.getName() + ", player: " + player.getGovernorName() + ", turn: " + turn);
         mapPlanetInfo.setPlanetName(planet.getName());
         boolean spy = VipPureFunctions.findVIPSpy(planet, player, galaxy) != null;
-        boolean shipInSystem = (galaxy.playerHasShipsInSystem(player, planet));
+        boolean shipInSystem = PlayerPureFunctions.playerHasShipsInSystem(player, planet, galaxy);
         boolean surveyShip = (SpaceshipPureFunctions.findSurveyShip(planet, player, galaxy.getSpaceships(), galaxy.getGameWorld()) != null);
         boolean surveyVIP = VipPureFunctions.findSurveyVIPonShip(planet, player, galaxy) != null;
         boolean survey = surveyShip | surveyVIP;
@@ -205,7 +207,7 @@ public class MapPureFunctions {
 //			Logger.info("shipInSystem: " + shipInSystem);
             if (neutralPlanet) {
 //				Logger.info("neutralPlanet: " + neutralPlanet);
-                if (planet.isRazed()) {
+                if (PlanetPureFunctions.isRazed(planet)) {
 //					Logger.info("planet.isRazed(): " + planet.isRazed());
                     mapPlanetInfo.setOwner(null);
                     mapPlanetInfo.setRazed(true);
@@ -282,12 +284,12 @@ public class MapPureFunctions {
         // buildingsOrbit, buildingsSurface, lastKnownBuildingsInOrbit, lastKnownBuildingsOnSurface
         if (openPlanet | shipInSystem | spy | ownsPlanet | survey) {
 //			buildingsOrbit = getBuildingsList(planet.getBuildingsInOrbit());
-            mapPlanetInfo.setBuildingsVisible(getBuildingsList(planet.getBuildingsByVisibility(true)));
+            mapPlanetInfo.setBuildingsVisible(getBuildingsList(getBuildingsByVisibility(planet, true), galaxy.getGameWorld()));
             mapPlanetInfo.setLastKnownBuildingsInOrbit(null);
 //			if (openPlanet | spy | survey | ownsPlanet){
             if (spy | survey | ownsPlanet) {
 //				buildingsSurface = getBuildingsList(planet.getBuildingsOnSurface());
-                mapPlanetInfo.setBuildingsHidden(getBuildingsList(planet.getBuildingsByVisibility(false)));
+                mapPlanetInfo.setBuildingsHidden(getBuildingsList(getBuildingsByVisibility(planet, false), galaxy.getGameWorld()));
                 mapPlanetInfo.setLastKnownBuildingsOnSurface(null);
             }
         } else {
@@ -302,9 +304,9 @@ public class MapPureFunctions {
             }
         }
         if (openPlanet | spy | survey | ownsPlanet) {
-            if (planet.isRazed()) {
+            if (PlanetPureFunctions.isRazed(planet)) {
                 mapPlanetInfo.setProd("-");
-                if (planet.isRazedAndUninfected()) {
+                if (PlanetPureFunctions.isRazedAndUninfected(planet)) {
                     mapPlanetInfo.setRes("-");
                 } else {
                     // alien player
@@ -331,6 +333,16 @@ public class MapPureFunctions {
 
 
         return mapPlanetInfo;
+    }
+
+    public static List<Building> getBuildingsByVisibility(Planet planet, boolean visible) {
+        List<Building> buildingsList = new ArrayList<>();
+        for (Building aBuilding : planet.getBuildings()) {
+            if(visible == aBuilding.isVisibleOnMap()){
+                buildingsList.add(aBuilding);
+            }
+        }
+        return buildingsList;
     }
 
     private static String getLastKnownLargetsSizeShipOnPlanet(MapPlanetInfo lastKnownMapPlanetInfo){
@@ -504,12 +516,12 @@ public class MapPureFunctions {
         return vipsData;
     }
 
-    private static List<String> getBuildingsList(List<Building> buildings){
+    private static List<String> getBuildingsList(List<Building> buildings, GameWorld gameWorld){
         List<String> buildingsList = null;
         if (buildings.size() > 0){
             buildingsList = new LinkedList<String>();
             for (Building building : buildings) {
-                buildingsList.add(building.getBuildingType().getShortName());
+                buildingsList.add(BuildingPureFunctions.getBuildingType(building.getTypeKey(), gameWorld).getShortName());
             }
         }
         return buildingsList;

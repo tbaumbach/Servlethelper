@@ -150,7 +150,7 @@ public class SpaceshipMutator {
 
     public static void removeShip(Spaceship ss, Galaxy galaxy) {
         boolean ok;
-        ss.setDestroyed();
+        ss.setCurrentDc(0);
         if (ss.getSquadronCapacity() > 0) {
             removeSquadronsFromCarrier(ss, galaxy);
         }

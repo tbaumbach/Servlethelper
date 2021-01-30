@@ -1,9 +1,11 @@
 package spaceraze.servlethelper.game.planet;
 
+import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.util.move.FindPlanetCriterion;
 import spaceraze.world.*;
@@ -316,7 +318,7 @@ public class PlanetPureFunctions {
         boolean haveAllied = false;
         int i = 0;
         while (!haveAllied && allies.size() > i) {
-            if (galaxy.playerHasShipsInSystem(allies.get(i), planet)) {
+            if (PlayerPureFunctions.playerHasShipsInSystem(allies.get(i), planet, galaxy)) {
                 haveAllied = true;
             }
             i++;
@@ -369,4 +371,89 @@ public class PlanetPureFunctions {
     public static boolean checkSurrender(Planet planet, Galaxy galaxy){
         return (planet.getResistance() + VipPureFunctions.findHighestVIPResistanceBonus(planet, planet.getPlayerInControl(), galaxy)) < 1;
     }
+
+    public static List<Building> getBuildings(Planet planet, boolean orbitOnly, GameWorld gameWorld) {
+        List<Building> buildingsInOrbit = new ArrayList<>();
+        for (Building aBuilding : planet.getBuildings()) {
+            if(orbitOnly == BuildingPureFunctions.getBuildingType(aBuilding.getTypeKey(), gameWorld).isInOrbit()){
+                buildingsInOrbit.add(aBuilding);
+            }
+        }
+        return buildingsInOrbit;
+    }
+
+    public static List<Planet> getPlayersPlanets(Player aPlayer, Galaxy galaxy) {
+        List<Planet> playersPlanets = new ArrayList<Planet>();
+        for (int i = 0; i < galaxy.getPlanets().size(); i++) {
+            Planet tempPlanet = galaxy.getPlanets().get(i);
+            if (tempPlanet.getPlayerInControl() == aPlayer) {
+                playersPlanets.add(tempPlanet);
+            }
+        }
+        return playersPlanets;
+    }
+
+    public static int getShield(Planet planet){
+        int biggestShield=0;
+        for(int i=0; i < planet.getBuildings().size(); i++){
+            if(planet.getBuildings().get(i).getShieldCapacity() > biggestShield){
+                biggestShield = planet.getBuildings().get(i).getShieldCapacity();
+            }
+        }
+        return biggestShield;
+    }
+
+    public static boolean getInfectedByAlien(Planet planet, Galaxy galaxy){
+        boolean infectedByAlien = false;
+        if (planet.getPlayerInControl() != null){
+            if (GameWorldHandler.getFactionByKey(planet.getPlayerInControl().getFactionKey(), galaxy.getGameWorld()).isAlien()){
+                infectedByAlien = true;
+            }
+        }
+        return infectedByAlien;
+    }
+
+    public static boolean isRazedAndUninfected(Planet planet){
+        boolean empty = false;
+        if (planet.getPopulation() == 0){
+            if (planet.getPlayerInControl() == null){
+                empty = true;
+            }
+        }
+        return empty;
+    }
+
+    public static int getBuildingTechBonus(Planet planet, GameWorld gameWorld){
+        int bonus=0;
+        for(int i=0; i< planet.getBuildings().size();i++){
+            if(planet.getBuildings().get(i).getTechBonus() > bonus){
+                if(!BuildingPureFunctions.getBuildingType(planet.getBuildings().get(i).getTypeKey(), gameWorld).isInOrbit() || !planet.isBesieged()){
+                    bonus = planet.getBuildings().get(i).getTechBonus();
+                }
+
+            }
+        }
+        return bonus;
+    }
+
+    public static boolean hasSpacePort(Planet planet){
+        for(int i=0; i< planet.getBuildings().size();i++){
+            if(planet.getBuildings().get(i).isSpaceport()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPlanetOwner(Planet planet, Player aPlayer){
+        if(planet.getPlayerInControl() != null && planet.getPlayerInControl() == aPlayer){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isRazed(Planet planet){
+        return planet.getPopulation() == 0;
+    }
+
 }
