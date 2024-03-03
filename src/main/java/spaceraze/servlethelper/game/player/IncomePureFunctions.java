@@ -43,7 +43,7 @@ public class IncomePureFunctions {
 
     public static int getPlayerIncomeWithoutCorruption(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy) {
         int income;
-        if (GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).isAlien()) {
+        if (GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).isAlien()) {
             income = getPlayerIncomeAlien(aPlayer, addToIncomeReport, galaxy);
         } else {
             income = getPlayerIncomeNonAlien(aPlayer, addToIncomeReport, galaxy);
@@ -138,7 +138,7 @@ public class IncomePureFunctions {
         if (!aPlanet.isBesieged()) {
             VIP tempVIP = findVIPEconomicBonus(aPlanet, aPlayer, vips, gameWorld);
             if (tempVIP != null) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), gameWorld);
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), gameWorld);
                 if (aPlanet.isOpen()) {
                     incomeBonus = vipType.getOpenIncBonus();
                     if (playerTurnInfo != null)
@@ -159,7 +159,7 @@ public class IncomePureFunctions {
         VIP foundVIP = null;
         int bonus = 0;
         for (VIP vip : vips) {
-            VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), gameWorld);
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), gameWorld);
             if (vip.getBoss() == aPlayer && vip.getPlanetLocation() == aPlanet) {
                 if (aPlanet.isOpen()) {
                     if (vipType.getOpenIncBonus() > bonus) {
@@ -285,7 +285,7 @@ public class IncomePureFunctions {
 
     public static int getUpkeep(Planet planet, GameWorld gameWorld){
         int tempUpkeep = 0;
-        if (planet.getPlayerInControl() != null && GameWorldHandler.getFactionByKey(planet.getPlayerInControl().getFactionKey(), gameWorld).isAlien()){
+        if (planet.getPlayerInControl() != null && GameWorldHandler.getFactionByUuid(planet.getPlayerInControl().getFactionUuid(), gameWorld).isAlien()){
             tempUpkeep = planet.getResistance();
         }else{
             if (planet.getPopulation() > 0){

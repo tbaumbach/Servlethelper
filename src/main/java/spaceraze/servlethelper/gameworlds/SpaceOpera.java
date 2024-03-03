@@ -19,6 +19,7 @@ import spaceraze.world.enums.SpaceshipTargetingType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SpaceOpera{
 
@@ -27,7 +28,7 @@ public class SpaceOpera{
 //		gw.setCumulativeBombardment(false);
 //		gw.setSquadronsSurviveOutsideCarriers(false);
 //		gw.setInitMethod(InitiativeMethod.WEIGHTED_2);
-		
+		gw.setUuid(UUID.randomUUID().toString());
 		gw.setFileName("spaceopera");
 		
 		gw.setFullName("Space Opera");
@@ -49,11 +50,11 @@ public class SpaceOpera{
 		gw.setChangedDate("2006-04-11");
 		gw.setCreatedByUser("pabod");		
 
-		gw.setAlignments(AlignmentHelper.createDefaultAlignments());
+		gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
 		String aStr= "Arachnid";
 		String kStr = "Klackon";
-            gw.getAlignments().add(new Alignment(aStr));
-            gw.getAlignments().add(new Alignment(kStr));
+            gw.getAlignments().add(new Alignment(aStr, gw));
+            gw.getAlignments().add(new Alignment(kStr, gw));
 		Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
 		Alignment good = AlignmentHelper.findAlignment("good", gw.getAlignments());
 		Alignment evil = AlignmentHelper.findAlignment("evil", gw.getAlignments());
@@ -711,7 +712,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "UTF","U",5,10,15,25);
         setSpaceStations(tempBuildings, "UTF","U",0,0,3);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("UTF Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("UTF Small Orbital Wharf"));
         
         tempFaction.setDescription("The United Terran Federation (UTF) is above average tech level, and it's space fleet is very powerful, with many varied ship types. UTF are one of the three human factions.");
         tempFaction.setShortDescription("Human well-balanced faction, with the largest huge ships.");
@@ -889,7 +890,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Azuriach","A",5,10,15,25);
         setSpaceStations(tempBuildings, "Azuriach","A",-1,1,3);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Azuriach Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Azuriach Small Orbital Wharf"));
         
 
       
@@ -1076,7 +1077,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "IRSOL","I",5,5,10,15);
         setSpaceStations(tempBuildings, "IRSOL","I",1,-2,3);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("IRSOL Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("IRSOL Small Orbital Wharf"));
         
 
                
@@ -1199,7 +1200,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Transhuman","T",5,10,15,25);
         setSpaceStations(tempBuildings, "Transhuman","T",0,0,3);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Transhuman Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Transhuman Small Orbital Wharf"));
         
 
 
@@ -1291,7 +1292,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "MekPurr","M",5,10,15,25);
         setSpaceStations(tempBuildings, "MekPurr","M",0,0,3);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("MekPurr Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("MekPurr Small Orbital Wharf"));
         
 
 
@@ -1421,7 +1422,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Blarad","B",5,10,15,20);
         setSpaceStations(tempBuildings, "Blarad","B",0,0,3);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Blarad Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Blarad Small Orbital Wharf"));
         
 
                
@@ -1614,7 +1615,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Hiss'ist","H",5,10,15,25);
         setSpaceStations(tempBuildings, "Hiss'ist","H",0,1,3);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Hiss'ist Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Hiss'ist Small Orbital Wharf"));
         
 
         
@@ -1760,7 +1761,7 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Ranan","R",5,10,15);
         setSpaceStations(tempBuildings, "Ranan","R",-2,2,3);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Ranan Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Ranan Small Orbital Wharf"));
         
 
         
@@ -1941,8 +1942,8 @@ public class SpaceOpera{
         setSpaceStations(tempBuildings, "Klackon","K",-2,2,1);
         setKlackonMissileDefence(tempBuildings);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Klackon Small Orbital Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Klackon Missile Defence Mk 3"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Klackon Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Klackon Missile Defence Mk 3"));
         
 
         
@@ -2117,8 +2118,8 @@ public class SpaceOpera{
         setWharfs(tempBuildings, "Bug","B",false,5,10,15,25);
         setSpaceStations(tempBuildings, "Bug","B",-2,2,1);
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Bug Small Orbital Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Bug Deep Caves"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Bug Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Bug Deep Caves"));
         
 
 

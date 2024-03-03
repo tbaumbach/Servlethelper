@@ -12,7 +12,7 @@ public class SpaceshipMutator {
     private SpaceshipMutator(){}
 
     public static Spaceship createSpaceShip(Player player, SpaceshipType type, int vipTechBonus, int factionTechBonus, int buildingBonus){
-        PlayerSpaceshipImprovement playerSpaceshipImprovement = PlayerPureFunctions.findSpaceshipImprovement(type.getName(), player);
+        PlayerSpaceshipImprovement playerSpaceshipImprovement = PlayerPureFunctions.findSpaceshipImprovement(type.getUuid(), player);
         SpaceshipType spaceshipType = playerSpaceshipImprovement != null ? new SpaceshipType(type, playerSpaceshipImprovement) : type;
         int nrProduced = playerSpaceshipImprovement != null ? playerSpaceshipImprovement.updateNrProduced() : 0;
 
@@ -69,7 +69,7 @@ public class SpaceshipMutator {
             tmpDamage = SpaceshipPureFunctions.getWeaponsStrengthSquadron(spaceship, gameWorld) * (1.0 - targetShip.getArmorSmall());
         } else {
             tmpDamage = SpaceshipPureFunctions.getWeaponsStrengthSmall(spaceship, gameWorld) * (1.0 - targetShip.getArmorSmall());
-            SpaceShipSize spaceShipSize = SpaceshipPureFunctions.getSpaceshipTypeByKey(targetShip.getTypeKey(), gameWorld).getSize();
+            SpaceShipSize spaceShipSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(targetShip.getTypeUuid(), gameWorld).getSize();
             //TODO 2020-12-20 Check this out, the should not the damage be all sizes <= the target size? As it work now only the small + huge damage will be used against a huge target.
             if (spaceShipSize == SpaceShipSize.MEDIUM) {
                 tmpDamage = tmpDamage + getMediumSalvo(spaceship, gameWorld, true) * (1.0 - targetShip.getArmorMedium());

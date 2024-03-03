@@ -27,7 +27,7 @@ public class SpaceshipSizeAndBuildCostComparator implements Comparator<Spaceship
 
 	public int compare(Spaceship ss1, Spaceship ss2) {
 		SpaceshipTypeSizeAndBuildCostComparator stsabcc = new SpaceshipTypeSizeAndBuildCostComparator();
-		int diff = stsabcc.compare(SpaceshipPureFunctions.getSpaceshipTypeByKey(ss1.getTypeKey(), gameWorld), SpaceshipPureFunctions.getSpaceshipTypeByKey(ss2.getTypeKey(), gameWorld));
+		int diff = stsabcc.compare(SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss1.getTypeUuid(), gameWorld), SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss2.getTypeUuid(), gameWorld));
 
 		/*
 		 * if (diff == 0){ diff = ss2.getSpaceshipType().getBuildCost(null) -

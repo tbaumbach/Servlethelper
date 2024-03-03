@@ -29,23 +29,23 @@ public class TroopTypeAndBuildCostComparator implements Comparator<Troop> {
 		if (!t1.isSpaceshipTravel() & t2.isSpaceshipTravel()){
 			diff = 1;
 		}else
-		if ((TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).getDefaultPosition() == BattleGroupPosition.SUPPORT) & (TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).getDefaultPosition() != BattleGroupPosition.SUPPORT)){
+		if ((TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld).getDefaultPosition() == BattleGroupPosition.SUPPORT) & (TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld).getDefaultPosition() != BattleGroupPosition.SUPPORT)){
 			diff = 1;
 		}else
-		if ((TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).getDefaultPosition() != BattleGroupPosition.SUPPORT) & (TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).getDefaultPosition() == BattleGroupPosition.SUPPORT)){
+		if ((TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld).getDefaultPosition() != BattleGroupPosition.SUPPORT) & (TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld).getDefaultPosition() == BattleGroupPosition.SUPPORT)){
 			diff = -1;
 		}else
-		if (!TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).isArmor() & TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).isArmor()){
+		if (!TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld).isArmor() & TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld).isArmor()){
 			diff = 1;
 		}else
-		if (TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).isArmor() & !TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).isArmor()){
+		if (TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld).isArmor() & !TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld).isArmor()){
 			diff = -1;
 		}else if (diff == 0){
-			diff = TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld),0) - TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld),0);
+			diff = TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld),0) - TroopPureFunctions.getCostBuild(TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld),0);
 		}else if (diff == 0){
 			diff = t2.getUpkeep() - t1.getUpkeep();
 		}else if (diff == 0){
-			diff = TroopPureFunctions.getTroopTypeByKey(t2.getTypeKey(), gameWorld).getName().compareTo(TroopPureFunctions.getTroopTypeByKey(t1.getTypeKey(), gameWorld).getName());
+			diff = TroopPureFunctions.getTroopTypeByUuid(t2.getTypeUuid(), gameWorld).getName().compareTo(TroopPureFunctions.getTroopTypeByUuid(t1.getTypeUuid(), gameWorld).getName());
 		}
 		return diff;
 	}

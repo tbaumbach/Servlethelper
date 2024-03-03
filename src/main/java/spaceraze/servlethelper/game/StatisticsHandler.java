@@ -52,7 +52,7 @@ public class StatisticsHandler{
 		String playerName = key;
 		StatisticPost post = findPost(playerName, statistics);
 		if (post == null){ // assumes this is turn 1 and a new player should be added
-			post = StatisticPost.builder().key(key).build();
+			post = StatisticPost.builder().uuid(key).build();
 			post.getValues().add(value);
 			statistics.getStatisticPosts().add(post);
 		}else{
@@ -67,7 +67,7 @@ public class StatisticsHandler{
 	}
 
 	public static StatisticPost findPost(String key, Statistics statistics){
-		return statistics.getStatisticPosts().stream().filter(statisticPost -> statisticPost.getKey().equals(key)).findFirst().orElse(null);
+		return statistics.getStatisticPosts().stream().filter(statisticPost -> statisticPost.getUuid().equals(key)).findFirst().orElse(null);
 	}
 
 	public static int getLastTurn(Statistics statistics){
@@ -94,7 +94,7 @@ public class StatisticsHandler{
 		int maxValue = 0;
 
 		for(StatisticPost statisticPost :statistics.getStatisticPosts()){
-			if (!statisticPost.getKey().equalsIgnoreCase("Neutral")) {
+			if (!statisticPost.getUuid().equalsIgnoreCase("Neutral")) {
 				for (Integer value : statisticPost.getValues()) {
 					if (value > maxValue) {
 						maxValue = value;

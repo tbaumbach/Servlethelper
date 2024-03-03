@@ -2,8 +2,10 @@ package spaceraze.servlethelper.gameworlds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipMutator;
 import spaceraze.util.general.Functions;
@@ -27,6 +29,7 @@ public class Titanium {
 
     public static GameWorld getGameWorld() {
         GameWorld gw = new GameWorld();
+        gw.setUuid(UUID.randomUUID().toString());
 
         gw.setFileName("titanium");
 
@@ -55,12 +58,12 @@ public class Titanium {
         String gStr = "Ghost";
         String tStr = "Templar";
         String mStr = "Mercenary";
-        gw.getAlignments().add(new Alignment(oStr));
-        gw.getAlignments().add(new Alignment(lStr));
-        gw.getAlignments().add(new Alignment(cStr));
-        gw.getAlignments().add(new Alignment(gStr));
-        gw.getAlignments().add(new Alignment(tStr));
-        gw.getAlignments().add(new Alignment(mStr));
+        gw.getAlignments().add(new Alignment(oStr, gw));
+        gw.getAlignments().add(new Alignment(lStr, gw));
+        gw.getAlignments().add(new Alignment(cStr, gw));
+        gw.getAlignments().add(new Alignment(gStr, gw));
+        gw.getAlignments().add(new Alignment(tStr, gw));
+        gw.getAlignments().add(new Alignment(mStr, gw));
         Alignment orb = AlignmentHelper.findAlignment(oStr, gw.getAlignments());
         Alignment lancer = AlignmentHelper.findAlignment(lStr, gw.getAlignments());
         Alignment cyber = AlignmentHelper.findAlignment(cStr, gw.getAlignments());
@@ -1314,16 +1317,16 @@ public class Titanium {
         createSTresearch(gw, tempFaction, "Orb Advanced Fighter", sqd, "Squadron shiptype: ");
         ResearchAdvantage car = createSTresearch(gw, tempFaction, "Orb Hexapod", null, "Carrier shiptype: ");
         car = createSTresearch(gw, tempFaction, "Orb Pendecapod", car, "Carrier shiptype: ");
-        car.addParent(oLargeShips);
+        oLargeShips.addChild(car);
         car = createSTresearch(gw, tempFaction, "Orb Centipod", car, "Carrier shiptype: ");
-        car.addParent(oHugeShips);
+        oHugeShips.addChild(car);
 
         // Buildings
         createBTresearch(buildings, tempFaction, "Medium Planetary Shield", null, "Upgrade planet shield building to protect against bomberdment of 2");
 
         ResearchAdvantage olow = createBTresearch(buildings, tempFaction, "Large Orbital Wharf", oLargeShips, "Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         ResearchAdvantage ohow = createBTresearch(buildings, tempFaction, "Huge Orbital Wharf", olow, "Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
-        ohow.addParent(oHugeShips);
+        oHugeShips.addChild(ohow);
 
         ResearchAdvantage oha = createBTresearch(buildings, tempFaction, "Orb High Academy", null, "");
         ResearchAdvantage ohu = createBTresearch(buildings, tempFaction, "Orb High University", oha, "");
@@ -1379,10 +1382,10 @@ public class Titanium {
         tempFaction.addStartingTroop(gw.getTroopTypeByName("Infantry"));
 
         // starting buildings
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Medium Orbital Wharf"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Infantry Training Base"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Orbital Industries"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Small Planetary Shield"));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Medium Orbital Wharf", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Infantry Training Base", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Orbital Industries", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Small Planetary Shield", gw));
 
         // other faction abilities
         tempFaction.setCanReconstruct(true);
@@ -1593,26 +1596,26 @@ public class Titanium {
         // def ships
         ResearchAdvantage pdc = createSTresearch(gw, tempFaction, "PD Cruiser", lLargeShips, "Large defence shiptype: ");
         ResearchAdvantage lbs = createSTresearch(gw, tempFaction, "PD Battleship", lHugeShips, "Huge defence shiptype: ");
-        lbs.addParent(pdc);
+        pdc.addChild(lbs);
 
         // capital ships
         ResearchAdvantage cap = createSTresearch(gw, tempFaction, "Lancer Cruiser", lLargeShips);
         cap = createSTresearch(gw, tempFaction, "Lancer Q-ship Cruiser", cap);
         cap = createSTresearch(gw, tempFaction, "Lancer Battleship", cap);
-        cap.addParent(lHugeShips);
+        lHugeShips.addChild(cap);
         createSTresearch(gw, tempFaction, "Lancer Leviathan", cap);
 
         // civ research
         ResearchAdvantage civ = createSTresearch(gw, tempFaction, "Large Merchant Freighter", lLargeShips, "Large civilian shiptype: ");
         civ = createSTresearch(gw, tempFaction, "Huge Merchant Freighter", civ, "Huge civilian shiptype: ");
-        civ.addParent(lHugeShips);
+        lHugeShips.addChild(civ);
 
         // Buildings
         createBTresearch(buildings, tempFaction, "Medium Planetary Shield", null, "Upgrade planet shield building to protect against bomberdment of 2");
 
         ResearchAdvantage llow = createBTresearch(buildings, tempFaction, "Large Orbital Wharf", lLargeShips, "Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         ResearchAdvantage lhow = createBTresearch(buildings, tempFaction, "Huge Orbital Wharf", llow, "Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
-        lhow.addParent(lHugeShips);
+        lHugeShips.addChild(lhow);
 
         ResearchAdvantage ls1 = createBTresearch(buildings, tempFaction, "Lancer Advanced Economic School", null, "");
         ResearchAdvantage ls2 = createBTresearch(buildings, tempFaction, "Lancer High University", ls1, "");
@@ -1668,10 +1671,10 @@ public class Titanium {
         tempFaction.addStartingTroop(gw.getTroopTypeByName("Infantry"));
 
         // starting buildings
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Medium Orbital Wharf"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Infantry Training Base"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Orbital Industries"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Small Planetary Shield"));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Medium Orbital Wharf", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Infantry Training Base", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Orbital Industries", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Small Planetary Shield", gw));
 
         // other faction abilities
         tempFaction.setCanReconstruct(true);
@@ -1903,14 +1906,14 @@ public class Titanium {
         ResearchAdvantage ctc = createSTresearch(gw, tempFaction, "Cyber Troop Carrier", ccr);
         createSTresearch(gw, tempFaction, "Cyber Troop Advanced Carrier", ctc);
         ResearchAdvantage cbs = createSTresearch(gw, tempFaction, "Cyber Battleship", ccr);
-        cbs.addParent(cHugeShips);
+        cHugeShips.addChild(cbs);
 
         // Buildings
         createBTresearch(buildings, tempFaction, "Medium Planetary Shield", null, "Upgrade planet shield building to protect against bomberdment of 2");
 
         ResearchAdvantage clow = createBTresearch(buildings, tempFaction, "Large Orbital Wharf", cLargeShips, "Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         ResearchAdvantage chow = createBTresearch(buildings, tempFaction, "Huge Orbital Wharf", clow, "Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
-        chow.addParent(cHugeShips);
+        cHugeShips.addChild(chow);
 
         ResearchAdvantage cs1 = createBTresearch(buildings, tempFaction, "Cyber Advanced Military Academy", null, "");
         ResearchAdvantage cs2 = createBTresearch(buildings, tempFaction, "Cyber Advanced Sky High University", cs1, "");
@@ -1965,10 +1968,10 @@ public class Titanium {
         tempFaction.addStartingTroop(gw.getTroopTypeByName("Cyber Mechs"));
 
         // starting buildings
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Medium Orbital Wharf"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Mech Factory"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Orbital Industries"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Small Planetary Shield"));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Medium Orbital Wharf", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Mech Factory", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Orbital Industries", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Small Planetary Shield", gw));
 
         // other faction abilities
         tempFaction.setCanReconstruct(true);
@@ -2163,7 +2166,7 @@ public class Titanium {
         //createSTresearch(gw,tempFaction,"Ghost Advanced Attacker",null,"Squadron shiptype: ");
         ResearchAdvantage gcap = createSTresearch(gw, tempFaction, "Ghost Cruiser", gLargeShips);
         gcap = createSTresearch(gw, tempFaction, "Ghost Battleship", gcap);
-        gcap.addParent(gHugeShips);
+        gHugeShips.addChild(gcap);
         gcap = createSTresearch(gw, tempFaction, "Ghost Light Cruiser", gcap);
 
         // buildings
@@ -2175,7 +2178,7 @@ public class Titanium {
 
         ResearchAdvantage glow = createBTresearch(buildings, tempFaction, "Large Orbital Wharf", gLargeShips, "Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         ResearchAdvantage ghow = createBTresearch(buildings, tempFaction, "Huge Orbital Wharf", glow, "Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
-        ghow.addParent(gHugeShips);
+        gHugeShips.addChild(ghow);
 
         ResearchAdvantage gs1 = createBTresearch(buildings, tempFaction, "Ghost Advanced Covert Ops School", null, "");
         ResearchAdvantage gs2 = createBTresearch(buildings, tempFaction, "Ghost Advanced Subversion University", gs1, "");
@@ -2234,10 +2237,10 @@ public class Titanium {
         tempFaction.addStartingTroop(gw.getTroopTypeByName("Infantry"));
 
         // starting buildings
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Medium Orbital Wharf"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Infantry Training Base"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Orbital Industries"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Small Planetary Shield"));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Medium Orbital Wharf", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Infantry Training Base", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Orbital Industries", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Small Planetary Shield", gw));
 
         // other faction abilities
         tempFaction.setCanReconstruct(true);
@@ -2436,14 +2439,14 @@ public class Titanium {
         ResearchAdvantage tcap = createSTresearch(gw, tempFaction, "Templar Carrier", tLargeShips);
         tcap = createSTresearch(gw, tempFaction, "Templar Light Cruiser", tLargeShips);
         tcap = createSTresearch(gw, tempFaction, "Templar Battleship", tcap);
-        tcap.addParent(tHugeShips);
+        tHugeShips.addChild(tcap);
 
         // Buildings
         createBTresearch(buildings, tempFaction, "Medium Planetary Shield", null, "Upgrade planet shield building to protect against bomberdment of 2");
 
         ResearchAdvantage tlow = createBTresearch(buildings, tempFaction, "Large Orbital Wharf", tLargeShips, "Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         ResearchAdvantage thow = createBTresearch(buildings, tempFaction, "Huge Orbital Wharf", tlow, "Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
-        thow.addParent(tHugeShips);
+        tHugeShips.addChild(thow);
 
         ResearchAdvantage ts1 = createBTresearch(buildings, tempFaction, "Templar of Reaping and Pathfinding", null, "");
         ResearchAdvantage ts2 = createBTresearch(buildings, tempFaction, "Temple of Harvest and Mind", ts1, "");
@@ -2498,10 +2501,10 @@ public class Titanium {
         tempFaction.addStartingTroop(gw.getTroopTypeByName("Templar Drone Infantry"));
 
         // starting buildings
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Medium Orbital Wharf"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Infantry Training Base"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Orbital Industries"));
-        tempFaction.addStartingBuildings(gw.getBuildingTypeByName("Small Planetary Shield"));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Medium Orbital Wharf", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Infantry Training Base", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Orbital Industries", gw));
+        tempFaction.addStartingBuildings(BuildingPureFunctions.getBuildingTypeByName("Small Planetary Shield", gw));
 
         // other faction abilities
         tempFaction.setResistanceBonus(1);
@@ -2618,7 +2621,7 @@ public class Titanium {
         tempFactionAdvantage.setTimeToResearch(2);
         tempFactionAdvantage.addTroopType(gw.getTroopTypeByName(aTTName));
         if (parent != null) {
-            tempFactionAdvantage.addParent(parent);
+            parent.addChild(tempFactionAdvantage);
             faction.getResearchAdvantages().add(tempFactionAdvantage);
         } else {
             faction.getResearchAdvantages().add(tempFactionAdvantage);
@@ -2635,7 +2638,7 @@ public class Titanium {
         tempFactionAdvantage.setTimeToResearch(2);
         tempFactionAdvantage.addShip(gw.getSpaceshipTypeByName(aSTName));
         if (parent != null) {
-            tempFactionAdvantage.addParent(parent);
+            parent.addChild(tempFactionAdvantage);
             faction.getResearchAdvantages().add(tempFactionAdvantage);
         } else {
             faction.getResearchAdvantages().add(tempFactionAdvantage);
@@ -2654,7 +2657,7 @@ public class Titanium {
         ResearchAdvantage tempFactionAdvantage = new ResearchAdvantage("Huge ships", "Allows building of huge ships");
         tempFactionAdvantage.setTimeToResearch(2);
         faction.getResearchAdvantages().add(tempFactionAdvantage);
-        tempFactionAdvantage.addParent(lLargeShips);
+        lLargeShips.addChild(tempFactionAdvantage);
         return tempFactionAdvantage;
     }
 
@@ -2663,7 +2666,7 @@ public class Titanium {
         tempFactionAdvantage.setTimeToResearch(2);
         tempFactionAdvantage.addBuildingType(getBuildingTypeByName(buildings, aBTName));
         if (parent != null) {
-            tempFactionAdvantage.addParent(parent);
+            parent.addChild(tempFactionAdvantage);
             faction.getResearchAdvantages().add(tempFactionAdvantage);
         } else {
             faction.getResearchAdvantages().add(tempFactionAdvantage);
@@ -2682,7 +2685,7 @@ public class Titanium {
             if (parent == null) {
                 faction.getResearchAdvantages().add(tempFactionAdvantage);
             } else {
-                tempFactionAdvantage.addParent(parent);
+                parent.addChild(tempFactionAdvantage);
                 faction.getResearchAdvantages().add(tempFactionAdvantage);
             }
             parent = tempFactionAdvantage;
@@ -2729,7 +2732,7 @@ public class Titanium {
             if (parent == null) {
                 faction.getResearchAdvantages().add(tempFactionAdvantage);
             } else {
-                tempFactionAdvantage.addParent(parent);
+                parent.addChild(tempFactionAdvantage);
                 faction.getResearchAdvantages().add(tempFactionAdvantage);
             }
             parent = tempFactionAdvantage;
@@ -2753,7 +2756,7 @@ public class Titanium {
         if (parent == null) {
             faction.getResearchAdvantages().add(tempFactionAdvantage);
         } else {
-            tempFactionAdvantage.addParent(parent);
+            parent.addChild(tempFactionAdvantage);
             faction.getResearchAdvantages().add(tempFactionAdvantage);
         }
         return tempFactionAdvantage;
@@ -2811,10 +2814,10 @@ public class Titanium {
     private static void createSpaceportResearch(List<BuildingType> buildings, Faction tempFaction, ResearchAdvantage largeShips, ResearchAdvantage hugeShips) {
         ResearchAdvantage s2 = createBTresearch(buildings, tempFaction, "Spaceport Class 2", null, "Enables the building of Spaceport Class 2");
         ResearchAdvantage s3 = createBTresearch(buildings, tempFaction, "Spaceport Class 3", s2, "Enables the building of Spaceport Class 3");
-        s3.addParent(largeShips);
+        largeShips.addChild(s3);
         ResearchAdvantage s4 = createBTresearch(buildings, tempFaction, "Spaceport Class 4", s3, "Enables the building of Spaceport Class 4");
         ResearchAdvantage s5 = createBTresearch(buildings, tempFaction, "Spaceport Class 5", s4, "Enables the building of Spaceport Class 5");
-        s5.addParent(hugeShips);
+        hugeShips.addChild(s5);
     }
 
     private static BuildingType getBuildingTypeByName(List<BuildingType> buildings, String name) {

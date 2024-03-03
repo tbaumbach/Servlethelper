@@ -46,13 +46,13 @@ public class SpaceshipTypeAndBuildCostComparator implements Comparator<Spaceship
 				diff = sbcc.compare(ss1,ss2);
 			}else{
 				// none of the ships are squadrons
-				if (SpaceshipPureFunctions.getSpaceshipTypeByKey(ss1.getTypeKey(), gameWorld).isCivilian() & !SpaceshipPureFunctions.getSpaceshipTypeByKey(ss2.getTypeKey(), gameWorld).isCivilian()){
+				if (SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss1.getTypeUuid(), gameWorld).isCivilian() & !SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss2.getTypeUuid(), gameWorld).isCivilian()){
 					diff = -1;
 				}else
-				if (!SpaceshipPureFunctions.getSpaceshipTypeByKey(ss1.getTypeKey(), gameWorld).isCivilian() & SpaceshipPureFunctions.getSpaceshipTypeByKey(ss2.getTypeKey(), gameWorld).isCivilian()){
+				if (!SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss1.getTypeUuid(), gameWorld).isCivilian() & SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss2.getTypeUuid(), gameWorld).isCivilian()){
 					diff = 1;
 				}else
-				if (SpaceshipPureFunctions.getSpaceshipTypeByKey(ss1.getTypeKey(), gameWorld).isCivilian() & SpaceshipPureFunctions.getSpaceshipTypeByKey(ss2.getTypeKey(), gameWorld).isCivilian()){
+				if (SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss1.getTypeUuid(), gameWorld).isCivilian() & SpaceshipPureFunctions.getSpaceshipTypeByUuid(ss2.getTypeUuid(), gameWorld).isCivilian()){
 					diff = sbcc.compare(ss1,ss2);
 				}else{
 					// both of the ships must be defenders

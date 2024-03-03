@@ -2,6 +2,7 @@ package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
 import spaceraze.servlethelper.game.GameWorldCreator;
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Corruption;
@@ -17,12 +18,14 @@ import spaceraze.world.enums.SpaceshipTargetingType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TheLastGreatWarClassic {
 
     public static GameWorld getGameWorld() {
         // XXX The Last Great War Classic
         GameWorld gw = new GameWorld();
+        gw.setUuid(UUID.randomUUID().toString());
 
 
         gw.setFileName("thelastgreatwarclassic");
@@ -52,18 +55,18 @@ public class TheLastGreatWarClassic {
         String sStr= "Smuggler";
         String gStr= "Trade";
 
-        gw.getAlignments().add(new Alignment(uStr));
-        gw.getAlignments().add(new Alignment(cStr));
-        gw.getAlignments().add(new Alignment(eStr));
-        gw.getAlignments().add(new Alignment(aStr));
-        gw.getAlignments().add(new Alignment(tStr));
-        gw.getAlignments().add(new Alignment(rStr));
-        gw.getAlignments().add(new Alignment(fStr));
+        gw.getAlignments().add(new Alignment(uStr, gw));
+        gw.getAlignments().add(new Alignment(cStr, gw));
+        gw.getAlignments().add(new Alignment(eStr, gw));
+        gw.getAlignments().add(new Alignment(aStr, gw));
+        gw.getAlignments().add(new Alignment(tStr, gw));
+        gw.getAlignments().add(new Alignment(rStr, gw));
+        gw.getAlignments().add(new Alignment(fStr, gw));
 
         //VIP
-        gw.getAlignments().add(new Alignment(nStr));
-        gw.getAlignments().add(new Alignment(sStr));
-        gw.getAlignments().add(new Alignment(gStr));
+        gw.getAlignments().add(new Alignment(nStr, gw));
+        gw.getAlignments().add(new Alignment(sStr, gw));
+        gw.getAlignments().add(new Alignment(gStr, gw));
 
         Alignment usa = AlignmentHelper.findAlignment(uStr, gw.getAlignments());
         Alignment china = AlignmentHelper.findAlignment(cStr, gw.getAlignments());
@@ -294,7 +297,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         // China Defence platforms
         // -----------------
@@ -479,10 +482,10 @@ public class TheLastGreatWarClassic {
         gw.addVipType(tmpVipType);
         tempFaction.addStartingVIPType(tmpVipType);
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("WarBattleship"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("China Home Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("China Bomber"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("China Bomber"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("WarBattleship", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("China Home Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("China Bomber", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("China Bomber", gw));
 
 
         // *******************************************************************************
@@ -601,7 +604,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         // Defence platforms
         // -----------------
@@ -801,11 +804,11 @@ public class TheLastGreatWarClassic {
         gw.addVipType(tmpVipType);
         tempFaction.addStartingVIPType(tmpVipType);
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Ship"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Liberty Carrier"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Assault Attacker"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Allians Home Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Allians Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Ship", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Liberty Carrier", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Attacker", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Allians Home Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Allians Defender", gw));
 
 
         //tempFaction.setResistanceBonus();
@@ -866,7 +869,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         // Trade Federation Defence platforms
         // -----------------
@@ -1058,12 +1061,12 @@ public class TheLastGreatWarClassic {
         gw.addVipType(tmpVipType);
         tempFaction.addStartingVIPType(tmpVipType);
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Medium Destroyer"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Federation Home Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Federation Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Medium Destroyer", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Federation Home Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Federation Defender", gw));
 
 
         tempFaction.setResistanceBonus(1);
@@ -1122,7 +1125,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
 
         // Trade Federation Defence platforms
@@ -1318,15 +1321,15 @@ public class TheLastGreatWarClassic {
         tempFaction.addStartingVIPType(tmpVipType);
 
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette II"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Frigate II"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Bomber"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Attacker"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Carrier II"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Military Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette II", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Frigate II", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Bomber", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Attacker", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Carrier II", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Military Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Defender", gw));
 
 
         tempFaction.setResistanceBonus(1);
@@ -1387,7 +1390,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
 
         // Russian Defence platforms
@@ -1584,13 +1587,13 @@ public class TheLastGreatWarClassic {
         gw.addVipType(tmpVipType);
         tempFaction.addStartingVIPType(tmpVipType);
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Russian Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Cruiser"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Cruiser"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Ship Destroyer"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Russian Home Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Russian Defender"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Russian Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Russian Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Cruiser", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Cruiser", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Ship Destroyer", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Russian Home Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Russian Defender", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Russian Defender", gw));
 
 
         tempFaction.setResistanceBonus(3);
@@ -1652,7 +1655,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         // EU Defence platforms
         // -----------------
@@ -1845,12 +1848,12 @@ public class TheLastGreatWarClassic {
         gw.addVipType(tmpVipType);
         tempFaction.addStartingVIPType(tmpVipType);
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("EU Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Assault Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Fighter Transporter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("EU Home Base"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("EU Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("EU Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Fighter Transporter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("EU Home Base", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("EU Defender", gw));
 
 
         tempFaction.setAdvantages("Start with medium wharf, good shields");
@@ -1910,7 +1913,7 @@ public class TheLastGreatWarClassic {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         // Federation of liberty Defence platforms
         // -----------------
@@ -2141,13 +2144,13 @@ public class TheLastGreatWarClassic {
         tempFaction.addStartingVIPType(tmpVipType);
 
 
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Fighter Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Suport Carrier"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Planet Raider"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Liberty Heavy Attacker"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Old Troop Transporter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Raid Station"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Liberty Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Fighter Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Suport Carrier", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Planet Raider", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Liberty Heavy Attacker", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Old Troop Transporter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Raid Station", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Liberty Defender", gw));
 
 
         tempFaction.setClosedPlanetBonus(1);

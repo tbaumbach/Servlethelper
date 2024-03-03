@@ -24,13 +24,13 @@ public class PlayerPureFunctions {
     public static List<SpaceshipType> getSpaceshipTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return player.getSpaceshipImprovements().stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+        return player.getSpaceshipImprovements().stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeUuid(), player, galaxy)).collect(Collectors.toList());
     }
 
     public static List<SpaceshipType> getAvailableSpaceshipTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return getAvailableSpaceshipImprovements(galaxy, player).stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+        return getAvailableSpaceshipImprovements(galaxy, player).stream().map(improvement -> findOwnSpaceshipType(improvement.getTypeUuid(), player, galaxy)).collect(Collectors.toList());
     }
 
     public static List<PlayerSpaceshipImprovement> getAvailableSpaceshipImprovements(Galaxy galaxy, Player player){
@@ -38,25 +38,25 @@ public class PlayerPureFunctions {
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
         return player.getSpaceshipImprovements().stream()
-                .filter(improvement -> SpaceshipPureFunctions.isConstructable(galaxy, player, galaxy.getGameWorld().getSpaceshipTypeByName(improvement.getTypeId()), improvement))
+                .filter(improvement -> SpaceshipPureFunctions.isConstructable(galaxy, player, SpaceshipPureFunctions.getSpaceshipTypeByUuid(improvement.getTypeUuid(), galaxy.getGameWorld()), improvement))
                 .collect(Collectors.toList());
     }
 
-    public static PlayerSpaceshipImprovement findSpaceshipImprovement(String findName, Player player){
+    public static PlayerSpaceshipImprovement findSpaceshipImprovement(String uuid, Player player){
         return player.getSpaceshipImprovements().stream()
-                .filter(improvement -> improvement.getTypeId().equalsIgnoreCase(findName)).findFirst().orElse(null);
+                .filter(improvement -> improvement.getTypeUuid().equalsIgnoreCase(uuid)).findFirst().orElse(null);
     }
 
     public static List<TroopType> getTroopTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return player.getTroopImprovements().stream().map(improvement -> findOwnTroopType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+        return player.getTroopImprovements().stream().map(improvement -> findOwnTroopType(improvement.getTypeUuid(), player, galaxy)).collect(Collectors.toList());
     }
 
     public static List<TroopType> getAvailableTroopTypes(Galaxy galaxy, Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return getAvailableTroopImprovements(galaxy, player).stream().map(improvement -> findOwnTroopType(improvement.getTypeId(), player, galaxy)).collect(Collectors.toList());
+        return getAvailableTroopImprovements(galaxy, player).stream().map(improvement -> findOwnTroopType(improvement.getTypeUuid(), player, galaxy)).collect(Collectors.toList());
     }
 
     public static  List<PlayerTroopImprovement> getAvailableTroopImprovements(Galaxy galaxy, Player player){
@@ -64,78 +64,96 @@ public class PlayerPureFunctions {
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
         return player.getTroopImprovements().stream()
-                .filter(improvement -> TroopPureFunctions.isConstructable(player, galaxy, galaxy.findTroopType(improvement.getTypeId()), improvement))
+                .filter(improvement -> TroopPureFunctions.isConstructable(player, galaxy, TroopPureFunctions.getTroopTypeByUuid(improvement.getTypeUuid(), galaxy.getGameWorld()), improvement))
                 .collect(Collectors.toList());
     }
 
-    public static PlayerTroopImprovement findTroopImprovement(String findName, Player player){
+    public static PlayerTroopImprovement findTroopImprovement(String uuid, Player player){
         return player.getTroopImprovements().stream()
-                .filter(improvement -> improvement.getTypeId().equalsIgnoreCase(findName)).findFirst().orElse(null);
+                .filter(improvement -> improvement.getTypeUuid().equalsIgnoreCase(uuid)).findFirst().orElse(null);
     }
 
     /**
      * Find a TroopType from the players types.
      */
-    public static TroopType findOwnTroopType(String findName, Player player, Galaxy galaxy){
-        PlayerTroopImprovement playerTroopImprovement = findTroopImprovement(findName, player);
+    public static TroopType findOwnTroopType(String troopTypeUuid, Player player, Galaxy galaxy){
+        PlayerTroopImprovement playerTroopImprovement = findTroopImprovement(troopTypeUuid, player);
 
-        return playerTroopImprovement != null ? new TroopType(galaxy.findTroopType(findName), playerTroopImprovement) : null;
+        return playerTroopImprovement != null ? new TroopType(TroopPureFunctions.getTroopTypeByUuid(troopTypeUuid, galaxy.getGameWorld()), playerTroopImprovement) : null;
     }
 
     /**
      * If the player researched/upgraded a TroopType that type will be returned instead of original one from the galaxy
      */
-    public static TroopType findTroopType(String findName, Player player, Galaxy galaxy){
-        return findOwnTroopType(findName, player, galaxy) != null ? findOwnTroopType(findName, player, galaxy) : galaxy.findTroopType(findName);
+    public static TroopType findTroopType(String troopTypeUuid, Player player, Galaxy galaxy){
+        return findOwnTroopType(troopTypeUuid, player, galaxy) != null ? findOwnTroopType(troopTypeUuid, player, galaxy) : TroopPureFunctions.getTroopTypeByUuid(troopTypeUuid, galaxy.getGameWorld());
     }
 
 
     /**
      * Find a SpaceshipType from the players types.
      */
-    public static SpaceshipType findOwnSpaceshipType(String findName, Player player, Galaxy galaxy){
-        PlayerSpaceshipImprovement playerSpaceshipImprovement = findSpaceshipImprovement(findName, player);
+    public static SpaceshipType findOwnSpaceshipType(String spaceShipUuid, Player player, Galaxy galaxy){
+        PlayerSpaceshipImprovement playerSpaceshipImprovement = findSpaceshipImprovement(spaceShipUuid, player);
 
-        return playerSpaceshipImprovement != null ? new SpaceshipType(galaxy.findSpaceshipType(findName), playerSpaceshipImprovement) : null;
+        return playerSpaceshipImprovement != null ? new SpaceshipType(SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceShipUuid, galaxy.getGameWorld()), playerSpaceshipImprovement) : null;
     }
 
     /**
      * If the player researched/upgraded a BuildingType that type will be returned instead of original one from the galaxy
      */
-    public static BuildingType findBuildingType(String findName, Player player){
-        return findOwnBuildingType(findName, player) != null ? findOwnBuildingType(findName, player) : GameWorldHandler.getFactionByKey(player.getFactionKey(), player.getGalaxy().getGameWorld()).getBuildingTypeByName(findName);
+    public static BuildingType findBuildingTypeByUuid(String uuid, Player player){
+        return findOwnBuildingTypeByUuid(uuid, player) != null ? findOwnBuildingTypeByUuid(uuid, player) : BuildingPureFunctions.getBuildingTypeByUuid(uuid, player.getGalaxy().getGameWorld());
+    }
+
+    public static BuildingType findBuildingTypeByName(String findName, Player player) {
+        return findOwnBuildingTypeByName(findName, player) != null ? findOwnBuildingTypeByName(findName, player) : BuildingPureFunctions.getBuildingTypeByName(findName, player.getGalaxy().getGameWorld());
     }
 
     public static List<BuildingType> getBuildingTypes(Player player){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return player.getBuildingImprovements().stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
+        return player.getBuildingImprovements().stream().map(improvement -> findOwnBuildingTypeByUuid(improvement.getTypeUuid(), player)).collect(Collectors.toList());
     }
 
     public static List<BuildingType> getAvailableBuildingTypes(Galaxy galaxy, Player player, Planet planet, String buildingKey){
         //The client will soon get this from servlets, turnInfo object = this method will be used for add the ships to turnInfo
 
-        return getAvailableBuildingImprovements(galaxy, player, planet, buildingKey).stream().map(improvement -> findOwnBuildingType(improvement.getName(), player)).collect(Collectors.toList());
+        return getAvailableBuildingImprovements(galaxy, player, planet, buildingKey).stream().map(improvement -> findOwnBuildingTypeByUuid(improvement.getTypeUuid(), player)).collect(Collectors.toList());
     }
 
     public static List<PlayerBuildingImprovement> getAvailableBuildingImprovements(Galaxy galaxy, Player player, Planet planet, String buildingKey){
+
         return player.getBuildingImprovements().stream()
-                .filter(improvement -> BuildingPureFunctions.isConstructable(galaxy, player, planet, galaxy.getGameWorld().getBuildingTypeByName(improvement.getName()), buildingKey, improvement))
+                .filter(improvement -> BuildingPureFunctions.isConstructable(galaxy, player, planet, BuildingPureFunctions.getBuildingTypeByUuid(improvement.getTypeUuid(), galaxy.getGameWorld()), buildingKey, improvement))
                 .collect(Collectors.toList());
     }
 
     /**
      * Find a BuildingType from the players types.
      */
-    public static BuildingType findOwnBuildingType(String findName, Player player){
-        PlayerBuildingImprovement improvement = findBuildingImprovement(findName, player);
+    public static BuildingType findOwnBuildingTypeByUuid(String buildingTypeUuid, Player player){
+        PlayerBuildingImprovement improvement = findBuildingImprovementByUuid(buildingTypeUuid, player);
 
-        return improvement != null ? new BuildingType(GameWorldHandler.getFactionByKey(player.getFactionKey(), player.getGalaxy().getGameWorld()).getBuildingTypeByName(findName), improvement) : null;
+        return improvement != null ? new BuildingType(BuildingPureFunctions.getBuildingTypeByUuid(buildingTypeUuid, player.getGalaxy().getGameWorld()), improvement) : null;
     }
 
-    public static PlayerBuildingImprovement findBuildingImprovement(String findName, Player player){
+    public static BuildingType findOwnBuildingTypeByName(String buildingName, Player player){
+        PlayerBuildingImprovement improvement = findBuildingImprovementByName(buildingName, player);
+
+        return improvement != null ? new BuildingType(BuildingPureFunctions.getBuildingTypeByUuid(improvement.getTypeUuid(), player.getGalaxy().getGameWorld()), improvement) : null;
+    }
+
+    public static PlayerBuildingImprovement findBuildingImprovementByUuid(String uuid, Player player){
         return player.getBuildingImprovements().stream()
-                .filter(improvement -> improvement.getName().equalsIgnoreCase(findName)).findFirst().orElse(null);
+                .filter(improvement -> improvement.getTypeUuid().equalsIgnoreCase(uuid)).findFirst().orElse(null);
+    }
+
+    public static PlayerBuildingImprovement findBuildingImprovementByName(String name, Player player){
+        BuildingType buildingType = GameWorldHandler.getFactionByUuid(player.getFactionUuid(), player.getGalaxy().getGameWorld()).getBuildingTypeByName(name);
+
+        return buildingType != null ? player.getBuildingImprovements().stream()
+                .filter(improvement -> improvement.getTypeUuid().equalsIgnoreCase(buildingType.getUuid())).findFirst().orElse(null) : null;
     }
 
     /**

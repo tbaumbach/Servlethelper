@@ -13,13 +13,15 @@ import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.enums.SpaceshipRange;
 import spaceraze.world.enums.SpaceshipTargetingType;
 
+import java.util.UUID;
+
 @SuppressWarnings("unused")
 public class StarWars {
 
     public static GameWorld getGameWorld() {
         // XXX Star Wars
         GameWorld gw = new GameWorld();
-
+        gw.setUuid(UUID.randomUUID().toString());
 //    gw.setCumulativeBombardment(false);
 
         gw.setFileName("sw");
@@ -48,17 +50,17 @@ public class StarWars {
         String sJedi = "Jedi";
         String sBountyHunter = "BountyHunter";
 
-        gw.getAlignments().add(new Alignment(sEmpire));
-        gw.getAlignments().add(new Alignment(sAlliance));
-        gw.getAlignments().add(new Alignment(sTrade));
-        gw.getAlignments().add(new Alignment(sOldRepublic));
+        gw.getAlignments().add(new Alignment(sEmpire, gw));
+        gw.getAlignments().add(new Alignment(sAlliance, gw));
+        gw.getAlignments().add(new Alignment(sTrade, gw));
+        gw.getAlignments().add(new Alignment(sOldRepublic, gw));
 //	gw.getAlignments().add(sAliens);
 
         //VIP
-        gw.getAlignments().add(new Alignment(sNeutral));
-        gw.getAlignments().add(new Alignment(sEvil));
-        gw.getAlignments().add(new Alignment(sGood));
-        gw.getAlignments().add(new Alignment(sJedi));
+        gw.getAlignments().add(new Alignment(sNeutral, gw));
+        gw.getAlignments().add(new Alignment(sEvil, gw));
+        gw.getAlignments().add(new Alignment(sGood, gw));
+        gw.getAlignments().add(new Alignment(sJedi, gw));
 
         Alignment aEmpire = AlignmentHelper.findAlignment(sEmpire, gw.getAlignments());
         Alignment aAlliance = AlignmentHelper.findAlignment(sAlliance, gw.getAlignments());

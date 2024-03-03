@@ -4,7 +4,6 @@ import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.vip.VipMutator;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
-import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.HighlightType;
 
@@ -36,7 +35,7 @@ public class PlanetMutator {
         attacker.addToHighlights(planet.getName(), HighlightType.TYPE_PLANET_INFESTATED);
         attacker.addToGeneral("You have infected the planet " + planet.getName());
         planet.setProd(0);
-        planet.setResistance(1 + GameWorldHandler.getFactionByKey(attacker.getFactionKey(), gameWorld).getResistanceBonus());
+        planet.setResistance(1 + GameWorldHandler.getFactionByUuid(attacker.getFactionUuid(), gameWorld).getResistanceBonus());
         planet.setPlayerInControl(attacker);
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
@@ -44,7 +43,7 @@ public class PlanetMutator {
             VIP aVIP = VipMutator.maybeAddVIP(attacker, attacker.getGalaxy());
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld);
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld);
                 attacker.addToVIPReport("When you conquered " + planet.getName() + " you have found a " + vipType.getName() + " who has joined your service.");
                 attacker.addToHighlights(vipType.getName(), HighlightType.TYPE_VIP_JOINS);
             }
@@ -53,11 +52,11 @@ public class PlanetMutator {
 
     public static  void joinsVisitingInfector(Planet planet, VIP tempInf, GameWorld gameWorld){
         planet.setPopulation(0);
-        planet.setResistance(planet.getResistance() + GameWorldHandler.getFactionByKey(tempInf.getBoss().getFactionKey(), gameWorld).getResistanceBonus());
+        planet.setResistance(planet.getResistance() + GameWorldHandler.getFactionByUuid(tempInf.getBoss().getFactionUuid(), gameWorld).getResistanceBonus());
         // destroy all buildings, when an alien conquers a planet it is always razed in the process
         planet.getBuildings().clear();
         // spaceStation = null;
-        tempInf.getBoss().addToGeneral("The planet " + planet.getName() + " has been infected by your " + VipPureFunctions.getVipTypeByKey(tempInf.getTypeKey(), gameWorld).getName() + " to join your forces!");
+        tempInf.getBoss().addToGeneral("The planet " + planet.getName() + " has been infected by your " + VipPureFunctions.getVipTypeByUuid(tempInf.getTypeUuid(), gameWorld).getName() + " to join your forces!");
         tempInf.getBoss().addToHighlights(planet.getName(),HighlightType.TYPE_PLANET_JOINS);
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
@@ -65,8 +64,8 @@ public class PlanetMutator {
             VIP aVIP = VipMutator.maybeAddVIP(tempInf.getBoss(), tempInf.getBoss().getGalaxy());
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
-                tempInf.getBoss().addToVIPReport("When you conquered " + planet.getName() + " you have found a " + VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getName() + " who has joined your service.");
-                tempInf.getBoss().addToHighlights(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getName(),HighlightType.TYPE_VIP_JOINS);
+                tempInf.getBoss().addToVIPReport("When you conquered " + planet.getName() + " you have found a " + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getName() + " who has joined your service.");
+                tempInf.getBoss().addToHighlights(VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getName(),HighlightType.TYPE_VIP_JOINS);
             }
         }
         if (planet.getPlayerInControl() != null){
@@ -79,7 +78,7 @@ public class PlanetMutator {
     public static void joinsVisitingDiplomat(Planet planet, VIP tempVIP, boolean addInfoToPlayer, GameWorld gameWorld){
         planet.setResistance(planet.getResistance() + tempVIP.getBoss().getResistanceBonus());  // olika typer av spelare får olika res på ny erövrade planeter?
         if(addInfoToPlayer){
-            tempVIP.getBoss().addToGeneral("The neutral planet " + planet.getName() + " has been convinced by your " + VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), gameWorld).getName() + " to join your forces!");
+            tempVIP.getBoss().addToGeneral("The neutral planet " + planet.getName() + " has been convinced by your " + VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), gameWorld).getName() + " to join your forces!");
             tempVIP.getBoss().addToHighlights(planet.getName(),HighlightType.TYPE_PLANET_JOINS);
         }
         if (planet.isHasNeverSurrendered()){
@@ -89,8 +88,8 @@ public class PlanetMutator {
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
                 if(addInfoToPlayer){
-                    tempVIP.getBoss().addToVIPReport("When you conquered " + planet.getName() + " you have found a " + VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getName() + " who has joined your service.");
-                    tempVIP.getBoss().addToHighlights(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getName(),HighlightType.TYPE_VIP_JOINS);
+                    tempVIP.getBoss().addToVIPReport("When you conquered " + planet.getName() + " you have found a " + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getName() + " who has joined your service.");
+                    tempVIP.getBoss().addToHighlights(VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getName(),HighlightType.TYPE_VIP_JOINS);
                 }
             }
         }
@@ -114,7 +113,7 @@ public class PlanetMutator {
     }
 
     public static void removeBuilding(Planet planet, String  key) {
-        planet.getBuildings().removeIf(building -> building.getKey().equalsIgnoreCase(key));
+        planet.getBuildings().removeIf(building -> building.getUuid().equalsIgnoreCase(key));
     }
 
     /**
@@ -124,7 +123,7 @@ public class PlanetMutator {
     public static void destroyBuildingsThatCanNotBeOverTaken(Planet planet, Player conqueringPlayer, GameWorld gameWorld){
         int i=0;
         while(i< planet.getBuildings().size()){
-            BuildingType buildingType = BuildingPureFunctions.getBuildingType(planet.getBuildings().get(i).getTypeKey(), gameWorld);
+            BuildingType buildingType = BuildingPureFunctions.getBuildingTypeByUuid(planet.getBuildings().get(i).getTypeUuid(), gameWorld);
             if(buildingType.isAutoDestructWhenConquered()){
                 if (conqueringPlayer != null){
                     conqueringPlayer.addToGeneral("The " + buildingType.getName() + " on the planet " + planet.getName() + " has been destroyed.");

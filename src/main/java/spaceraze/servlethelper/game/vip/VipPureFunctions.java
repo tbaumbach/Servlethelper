@@ -24,9 +24,9 @@ public class VipPureFunctions {
     public static boolean isConstructable(Player aPlayer, Galaxy galaxy, VIPType vipType){
         boolean constructible =  true;
 
-        if((vipType.isWorldUnique() && vipTypeExist(vipType, null, null, galaxy)) || (vipType.isFactionUnique() && vipTypeExist(vipType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy)) || (vipType.isPlayerUnique() && vipTypeExist(vipType, null, aPlayer, galaxy))){
+        if((vipType.isWorldUnique() && vipTypeExist(vipType, null, null, galaxy)) || (vipType.isFactionUnique() && vipTypeExist(vipType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy)) || (vipType.isPlayerUnique() && vipTypeExist(vipType, null, aPlayer, galaxy))){
             constructible = false;
-        }else if(!GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())){
+        }else if(!GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())){
             constructible = false;
         }else if(vipType.isWorldUnique() || vipType.isFactionUnique() || vipType.isPlayerUnique()){
             // check if a build order already exist
@@ -74,12 +74,12 @@ public class VipPureFunctions {
         Logger.finest("VIPs found on planet: " + allVIPsonPlanet.size());
         for (int i = 0; i < allVIPsonPlanet.size(); i++) {
             VIP tempVIP = allVIPsonPlanet.get(i);
-            VIPType vipType = VipPureFunctions.getVipTypeByKey(tempVIP.getTypeKey(), galaxy.getGameWorld());
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
             Logger.finest("VIP found: " + vipType.getName());
             if (vipType.isGovernor()) {
                 Logger.finest("VIP is governor!");
-                Logger.finest(GameWorldHandler.getFactionByKey(tempVIP.getBoss().getFactionKey(), galaxy.getGameWorld()).getName() + " equals " + aFaction.getName() + " ?");
-                if (tempVIP.getBoss().getFactionKey().equals(aFaction.getKey())) {
+                Logger.finest(GameWorldHandler.getFactionByUuid(tempVIP.getBoss().getFactionUuid(), galaxy.getGameWorld()).getName() + " equals " + aFaction.getName() + " ?");
+                if (tempVIP.getBoss().getFactionUuid().equals(aFaction.getUuid())) {
                     Logger.finest("Remove VIP!");
                     allGovs.add(tempVIP);
                 }
@@ -91,8 +91,8 @@ public class VipPureFunctions {
     public static boolean isDuellistConflict(Planet aPlanet, VIP VIP1, VIP VIP2, Galaxy galaxy) {
         boolean fight = false;
         if (getLocation(VIP1) == aPlanet && getLocation(VIP2) == aPlanet) {
-            VIPType vipType1 = VipPureFunctions.getVipTypeByKey(VIP1.getTypeKey(), galaxy.getGameWorld());
-            VIPType vipType2 = VipPureFunctions.getVipTypeByKey(VIP2.getTypeKey(), galaxy.getGameWorld());
+            VIPType vipType1 = VipPureFunctions.getVipTypeByUuid(VIP1.getTypeUuid(), galaxy.getGameWorld());
+            VIPType vipType2 = VipPureFunctions.getVipTypeByUuid(VIP2.getTypeUuid(), galaxy.getGameWorld());
             if (vipType1.getDuellistSkill() > 0 && vipType2.getDuellistSkill() > 0) {
                 if (hatesDuellist(VIP1, galaxy.getGameWorld(), VIP2)) {
                     fight = true;
@@ -174,8 +174,8 @@ public class VipPureFunctions {
         boolean isOnOwnPlanet = false;
         if ((VIP1.getPlanetLocation() == aPlanet) & (VIP2.getPlanetLocation() == aPlanet)
                 & DiplomacyPureFunctions.hostileCounterSpies(VIP1.getBoss(), VIP2.getBoss(), galaxy)) {
-            VIPType vipType1 = VipPureFunctions.getVipTypeByKey(VIP1.getTypeKey(), galaxy.getGameWorld());
-            VIPType vipType2 = VipPureFunctions.getVipTypeByKey(VIP2.getTypeKey(), galaxy.getGameWorld());
+            VIPType vipType1 = VipPureFunctions.getVipTypeByUuid(VIP1.getTypeUuid(), galaxy.getGameWorld());
+            VIPType vipType2 = VipPureFunctions.getVipTypeByUuid(VIP2.getTypeUuid(), galaxy.getGameWorld());
             if (vipType1.isCounterSpy()) {
                 Planet planetLocation = VIP1.getPlanetLocation();
                 if (planetLocation != null) {
@@ -203,7 +203,7 @@ public class VipPureFunctions {
     public static List<VIP> getExterminators(Planet aPlanet, List<VIP> vips, GameWorld gameWorld) {
         List<VIP> exterminators = new LinkedList<>();
         for (VIP aVIP : vips) {
-            if (VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), gameWorld).getExterminator() > 0 && getLocation(aVIP) == aPlanet) {
+            if (VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getExterminator() > 0 && getLocation(aVIP) == aPlanet) {
                 if (aPlanet.getPlayerInControl() == aVIP.getBoss()) { // exterminators can only work on own planets
                     exterminators.add(aVIP);
                 }
@@ -215,7 +215,7 @@ public class VipPureFunctions {
     public static List<VIP> getInfestators(Planet aPlanet, List<VIP> vips, GameWorld gameWorld) {
         List<VIP> infestators = new LinkedList<>();
         for (VIP aVIP : vips) {
-            if (getVipTypeByKey(aVIP.getTypeKey(), gameWorld).isInfestate() && getLocation(aVIP) == aPlanet) {
+            if (getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).isInfestate() && getLocation(aVIP) == aPlanet) {
                 infestators.add(aVIP);
             }
         }
@@ -237,14 +237,14 @@ public class VipPureFunctions {
         boolean possibleAssassination = false;
 
         if (hostileAssassin(VIP1.getBoss(), VIP2.getBoss(), galaxy)) {
-            if (getVipTypeByKey(VIP1.getTypeKey(), galaxy.getGameWorld()).getAssassination() > 0 && !VIP1.getHasKilled() && getLocation(VIP1) == aPlanet
-                    && getLocation(VIP2) == aPlanet && !getVipTypeByKey(VIP2.getTypeKey(), galaxy.getGameWorld()).isWellGuarded()) {
+            if (getVipTypeByUuid(VIP1.getTypeUuid(), galaxy.getGameWorld()).getAssassination() > 0 && !VIP1.getHasKilled() && getLocation(VIP1) == aPlanet
+                    && getLocation(VIP2) == aPlanet && !getVipTypeByUuid(VIP2.getTypeUuid(), galaxy.getGameWorld()).isWellGuarded()) {
                 if (hostileAssassin(VIP1.getBoss(), VIP2.getBoss(), galaxy)) {
                     possibleAssassination = true;
                 }
             }
-            if (getVipTypeByKey(VIP2.getTypeKey(), galaxy.getGameWorld()).getAssassination() > 0 && !VIP2.getHasKilled() && getLocation(VIP2) == aPlanet
-                    && getLocation(VIP1) == aPlanet && !getVipTypeByKey(VIP1.getTypeKey(), galaxy.getGameWorld()).isWellGuarded()) {
+            if (getVipTypeByUuid(VIP2.getTypeUuid(), galaxy.getGameWorld()).getAssassination() > 0 && !VIP2.getHasKilled() && getLocation(VIP2) == aPlanet
+                    && getLocation(VIP1) == aPlanet && !getVipTypeByUuid(VIP1.getTypeUuid(), galaxy.getGameWorld()).isWellGuarded()) {
                 if (hostileAssassin(VIP1.getBoss(), VIP2.getBoss(), galaxy)) {
                     possibleAssassination = true;
                 }
@@ -257,7 +257,7 @@ public class VipPureFunctions {
         boolean found = false;
         for (VIP vip : galaxy.getAllVIPs()) {
             if (vip.getShipLocation() == aShip) {
-                if (VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), galaxy.getGameWorld()).isFTLbonus()) {
+                if (VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld()).isFTLbonus()) {
                     Orders orders = aShip.getOwner().getOrders();
                     if (VIPWillStay(vip, aShip.getOwner().getOrders())) {
                         found = true;
@@ -274,7 +274,7 @@ public class VipPureFunctions {
         int i = 0;
         while ((i < orders.getVIPMoves().size()) & (vipStays)) {
             VIPMovement tempVIPMove = orders.getVIPMoves().get(i);
-            if (vip.getKey().equalsIgnoreCase(tempVIPMove.getVipKey())) {
+            if (vip.getUuid().equalsIgnoreCase(tempVIPMove.getVipKey())) {
                 vipStays = false;
             } else {
                 i++;
@@ -288,7 +288,7 @@ public class VipPureFunctions {
         int bonus = 0;
         for (VIP vip : galaxy.getAllVIPs()) {
             if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), galaxy.getGameWorld());
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
                 if (vipType.getTechBonus() > bonus) {
                     if (VIPWillStay(vip, orders)) {
                         foundVIP = vip;
@@ -305,7 +305,7 @@ public class VipPureFunctions {
         int bonus = 0;
         for (VIP vip : galaxy.getAllVIPs()) {
             if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), galaxy.getGameWorld());
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
                 if (vipType.getShipBuildBonus() > bonus) {
                     if (VIPWillStay(vip, orders)) {
                         foundVIP = vip;
@@ -322,7 +322,7 @@ public class VipPureFunctions {
         int bonus = 0;
         for (VIP vip : galaxy.getAllVIPs()) {
             if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), galaxy.getGameWorld());
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
                 if (vipType.getTroopBuildBonus() > bonus) {
                     if (VIPWillStay(vip, orders)) {
                         foundVIP = vip;
@@ -339,7 +339,7 @@ public class VipPureFunctions {
         int bonus = 0;
         for (VIP vip : galaxy.getAllVIPs()) {
             if ((vip.getBoss() == aPlayer) & (vip.getPlanetLocation() == aPlanet)) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(vip.getTypeKey(), galaxy.getGameWorld());
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
                 if (vipType.getBuildingBuildBonus() > bonus) {
                     if (VIPWillStay(vip, orders)) {
                         foundVIP = vip;
@@ -357,7 +357,7 @@ public class VipPureFunctions {
         while ((foundVIP == null) & (index < galaxy.getAllVIPs().size())) {
             VIP aVIP = galaxy.getAllVIPs().get(index);
             if (aVIP.getShipLocation() == aShip) {
-                VIPType vipType = VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), galaxy.getGameWorld());
+                VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), galaxy.getGameWorld());
                 if (vipType.isStealth()) {
                     foundVIP = aVIP;
                 }
@@ -459,12 +459,12 @@ public class VipPureFunctions {
         return gameWorld.getVipTypes().stream().filter(vipType1 -> vipType1.getName().equalsIgnoreCase(name)).findAny().orElse(null);
     }
 
-    public static VIPType getVipTypeByKey(String key, GameWorld gameWorld){
-        return gameWorld.getVipTypes().stream().filter(vipType -> vipType.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
+    public static VIPType getVipTypeByUuid(String uuid, GameWorld gameWorld){
+        return gameWorld.getVipTypes().stream().filter(vipType -> vipType.getUuid().equalsIgnoreCase(uuid)).findAny().orElse(null);
     }
 
     public static boolean isFactionUniqueBuild(VIPType vipType, Player aPlayer, Galaxy galaxy) {
-        return vipTypeExist(vipType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy);
+        return vipTypeExist(vipType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy);
     }
 
     public static boolean isPlayerUniqueBuild(VIPType vipType,Player aPlayer, Galaxy galaxy) {
@@ -483,7 +483,7 @@ public class VipPureFunctions {
         } else if (aFaction != null) {// factionUnique
             vipsToCheck = new ArrayList<VIP>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (tempPlayer.getFactionKey().equals(aFaction.getKey())) {
+                if (tempPlayer.getFactionUuid().equals(aFaction.getUuid())) {
                     vipsToCheck.addAll(getPlayersVips(tempPlayer, galaxy));
                 }
             }
@@ -492,7 +492,7 @@ public class VipPureFunctions {
         }
 
         for (VIP tempVIP : vipsToCheck) {
-            if (tempVIP.getTypeKey().equalsIgnoreCase(aVIPType.getKey())) {
+            if (tempVIP.getTypeUuid().equalsIgnoreCase(aVIPType.getUuid())) {
                 exist = true;
             }
         }
@@ -505,7 +505,7 @@ public class VipPureFunctions {
     }
 
     public static VIP findVIP(String key, Galaxy galaxy) {
-        return galaxy.getAllVIPs().stream().filter(vip -> vip.getKey().equalsIgnoreCase(key)).findAny().orElseThrow();
+        return galaxy.getAllVIPs().stream().filter(vip -> vip.getUuid().equalsIgnoreCase(key)).findAny().orElseThrow();
     }
 
     public static List<VIPMovement> getVIPMoves(Planet aPlanet, Orders orders) {
@@ -727,19 +727,19 @@ public class VipPureFunctions {
     }
 
     public static int getAssassinationSkill(VIP vip, GameWorld gameWorld) {
-        int skill = getVipTypeByKey(vip.getTypeKey(), gameWorld).getAssassination();
+        int skill = getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getAssassination();
         skill = skill + (vip.getKills() * 5);
         return skill;
     }
 
     public static int getDuellistSkill(VIP vip, GameWorld gameWorld) {
-        int skill = getVipTypeByKey(vip.getTypeKey(), gameWorld).getDuellistSkill();
+        int skill = getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getDuellistSkill();
         skill = skill + (vip.getKills() * 5);
         return skill;
     }
 
     public static int getCounterEspionage(VIP vip, GameWorld gameWorld) {
-        int skill = getVipTypeByKey(vip.getTypeKey(), gameWorld).getCounterEspionage();
+        int skill = getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getCounterEspionage();
         skill = skill + (vip.getKills() * 5);
         if (skill > 95) {
             skill = 95;
@@ -748,7 +748,7 @@ public class VipPureFunctions {
     }
 
     public static int getExterminatorSkill(VIP vip, GameWorld gameWorld) {
-        int skill = getVipTypeByKey(vip.getTypeKey(), gameWorld).getExterminator();
+        int skill = getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getExterminator();
         skill = skill + (vip.getKills() * 5);
         if (skill > 95) {
             skill = 95;
@@ -757,7 +757,7 @@ public class VipPureFunctions {
     }
 
     public static boolean hatesDuellist(VIP vip, GameWorld gameWorld, VIP anotherVIP) {
-        return getVipTypeByKey(vip.getTypeKey(), gameWorld).getAlignment().hateDuellist(getVipTypeByKey(anotherVIP.getTypeKey(), gameWorld).getAlignment().getName());
+        return getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getAlignment().hateDuellist(getVipTypeByUuid(anotherVIP.getTypeUuid(), gameWorld).getAlignment().getName());
     }
 
     public static VIP findVIPGovernor(Player aPlayer, Galaxy galaxy) {
@@ -765,7 +765,7 @@ public class VipPureFunctions {
         int i = 0;
         while ((foundVIP == null) & (i < galaxy.getAllVIPs().size())) {
             VIP tempVIP = galaxy.getAllVIPs().get(i);
-            if ((getVipTypeByKey(tempVIP.getTypeKey(), galaxy.getGameWorld()).isGovernor()) & (tempVIP.getBoss() == aPlayer)) {
+            if ((getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld()).isGovernor()) & (tempVIP.getBoss() == aPlayer)) {
                 foundVIP = tempVIP;
             } else {
                 i++;
@@ -779,7 +779,7 @@ public class VipPureFunctions {
         int i = 0;
         while ((foundVIP == null) & (i < galaxy.getAllVIPs().size())) {
             VIP tempVIP = galaxy.getAllVIPs().get(i);
-            if ((getVipTypeByKey(tempVIP.getTypeKey(), galaxy.getGameWorld()).isSpying()) & (tempVIP.getBoss() == aPlayer) & (tempVIP.getPlanetLocation() == aPlanet)) {
+            if ((getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld()).isSpying()) & (tempVIP.getBoss() == aPlayer) & (tempVIP.getPlanetLocation() == aPlanet)) {
                 foundVIP = tempVIP;
             } else {
                 i++;
@@ -791,7 +791,7 @@ public class VipPureFunctions {
     public static int findHighestVIPResistanceBonus(Planet aPlanet, Player aPlayer, Galaxy galaxy) {
         int highestResistanceBonus = 0;
         for (VIP tempVIP :  galaxy.getAllVIPs()) {
-            VIPType vipType = getVipTypeByKey(tempVIP.getTypeKey(), galaxy.getGameWorld());
+            VIPType vipType = getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
             if (vipType.getResistanceBonus() > 0 && (tempVIP.getBoss() == aPlayer)
                     & (tempVIP.getPlanetLocation() == aPlanet)) {
                 if (vipType.getResistanceBonus() > highestResistanceBonus) {
@@ -806,7 +806,7 @@ public class VipPureFunctions {
         int i = 0;
         while ((foundVIP == null) & (i < galaxy.getAllVIPs().size())) {
             VIP tempVIP = galaxy.getAllVIPs().get(i);
-            if (getVipTypeByKey(tempVIP.getTypeKey(), galaxy.getGameWorld()).isPlanetarySurvey() & (tempVIP.getBoss() == aPlayer)) {
+            if (getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld()).isPlanetarySurvey() & (tempVIP.getBoss() == aPlayer)) {
                 if (tempVIP.getShipLocation() != null) { // VIP is on a ship
                     if (tempVIP.getShipLocation().getLocation() == aPlanet) { // ship is in orbit around aPlanet
                         foundVIP = tempVIP;

@@ -23,7 +23,7 @@ public class OrderMutator {
         }
         for (int j = nrFoundIndexes - 1; j >= 0; j--) {
             Logger.finest("Removing: " + j);
-            Logger.finest("Removing: " + orders.getExpenses().get(j).getSpaceshipTypeName());
+            Logger.finest("Removing: " + orders.getExpenses().get(j).getSpaceshipTypeUuid());
             orders.getExpenses().remove(removeIndexes[j]);
         }
     }

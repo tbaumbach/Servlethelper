@@ -16,6 +16,7 @@ import spaceraze.world.enums.SpaceshipTargetingType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class FinalFrontier {
 
@@ -24,6 +25,7 @@ public class FinalFrontier {
         // XXX Spaceraze Expanded
         GameWorld gw = new GameWorld();
 
+        gw.setUuid(UUID.randomUUID().toString());
 
         gw.setFileName("FFrontier");
 
@@ -44,7 +46,7 @@ public class FinalFrontier {
         gw.setRazedPlanetChance(5);
         gw.setClosedNeutralPlanetChance(30);
 
-        gw.setAlignments(AlignmentHelper.createDefaultAlignments());
+        gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
         Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
 
         Corruption tmpCorruption = new Corruption();
@@ -663,7 +665,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
@@ -713,7 +715,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -763,7 +765,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -813,7 +815,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -863,7 +865,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -913,7 +915,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -962,7 +964,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -1012,7 +1014,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -1062,7 +1064,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -1112,7 +1114,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -1162,7 +1164,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 
@@ -1210,7 +1212,7 @@ public class FinalFrontier {
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
 

@@ -173,7 +173,7 @@ public class GameData implements Serializable {
 				statusChar = "s";
 			}
 			players[i][2] = statusChar;
-			players[i][3] = GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), aPlayer.getGalaxy().getGameWorld()).getColorValues();
+			players[i][3] = GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), aPlayer.getGalaxy().getGameWorld()).getColorValues();
 			i++;
 		}
 	}

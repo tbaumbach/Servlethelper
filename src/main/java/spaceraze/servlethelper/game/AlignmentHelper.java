@@ -1,6 +1,7 @@
 package spaceraze.servlethelper.game;
 
 import spaceraze.world.Alignment;
+import spaceraze.world.GameWorld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,11 @@ public class AlignmentHelper {
 
     private AlignmentHelper(){}
 
-    public static List<Alignment> createDefaultAlignments(){
+    public static List<Alignment> createDefaultAlignments(GameWorld gameWorld){
         List<Alignment> alignments = new ArrayList<>();
-        alignments.add(new Alignment("Good"));
-        alignments.add(new Alignment("Neutral"));
-        alignments.add(new Alignment("Evil"));
+        alignments.add(new Alignment("Good", gameWorld));
+        alignments.add(new Alignment("Neutral", gameWorld));
+        alignments.add(new Alignment("Evil", gameWorld));
 
         canHaveVIP("good","neutral", alignments);
         canHaveVIP("neutral","good", alignments);

@@ -17,7 +17,7 @@ public class TroopPureFunctions {
         boolean constructible =  true;
         if((playerTroopImprovement != null && !playerTroopImprovement.isAvailableToBuild()) || (playerTroopImprovement == null && troopType.isCanBuild())){
             constructible = false;
-        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy)) || (troopType.isFactionUnique() && troopTypeExist(troopType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), galaxy.getGameWorld()), null, galaxy)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy))){
+        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy)) || (troopType.isFactionUnique() && troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy))){
             constructible = false;
         }else if(troopType.isWorldUnique() || troopType.isFactionUnique() || troopType.isPlayerUnique()){
             // check if a build order already exist
@@ -91,8 +91,8 @@ public class TroopPureFunctions {
         return gameWorld.getTroopTypes().stream().filter(troopType -> troopType.getName().equalsIgnoreCase(name)).findAny().orElse(null);
     }
 
-    public static TroopType getTroopTypeByKey(String key, GameWorld gameWorld){
-        return gameWorld.getTroopTypes().stream().filter(troopType -> troopType.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
+    public static TroopType getTroopTypeByUuid(String uuid, GameWorld gameWorld){
+        return gameWorld.getTroopTypes().stream().filter(troopType -> troopType.getUuid().equalsIgnoreCase(uuid)).findAny().orElse(null);
     }
 
     public static int getCostBuild(TroopType troopType, int vipBuildBonus) {
@@ -160,7 +160,7 @@ public class TroopPureFunctions {
         for (Troop aTroop : troops) {
             if (aTroop.getPlanetLocation() == aPlanet) {
                 if (aTroop.getOwner() == aPlayer) {
-                    if (showUnVisible || getTroopTypeByKey(aTroop.getTypeKey(), aPlayer.getGalaxy().getGameWorld()).isVisible()) {
+                    if (showUnVisible || getTroopTypeByUuid(aTroop.getTypeUuid(), aPlayer.getGalaxy().getGameWorld()).isVisible()) {
                         troopsAtPlanet.add(aTroop);
                     }
                 }
@@ -178,7 +178,7 @@ public class TroopPureFunctions {
     }
 
     public static boolean isFactionUniqueBuild(Player aPlayer, TroopType troopType) {
-        return troopTypeExist(troopType, GameWorldHandler.getFactionByKey(aPlayer.getFactionKey(), aPlayer.getGalaxy().getGameWorld()), null, aPlayer.getGalaxy());
+        return troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), aPlayer.getGalaxy().getGameWorld()), null, aPlayer.getGalaxy());
     }
 
     public static boolean troopTypeExist(TroopType aTroopType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
@@ -189,7 +189,7 @@ public class TroopPureFunctions {
         } else if (aFaction != null) {// factionUnique
             troopsToCheck = new ArrayList<Troop>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (tempPlayer.getFactionKey().equals(aFaction.getKey())) {
+                if (tempPlayer.getFactionUuid().equals(aFaction.getUuid())) {
                     troopsToCheck.addAll(getPlayersTroops(tempPlayer, galaxy));
                 }
             }
@@ -198,7 +198,7 @@ public class TroopPureFunctions {
         }
 
         for (Troop tempTroop : troopsToCheck) {
-            if (getTroopTypeByKey(tempTroop.getTypeKey(), galaxy.getGameWorld()).getName().equals(aTroopType.getName())) {
+            if (getTroopTypeByUuid(tempTroop.getTypeUuid(), galaxy.getGameWorld()).getName().equals(aTroopType.getName())) {
                 exist = true;
             }
         }
@@ -288,7 +288,7 @@ public class TroopPureFunctions {
     }
 
     public static Troop findTroop(String key, Galaxy galaxy) {
-        return galaxy.getTroops().stream().filter(troop -> troop.getKey().equalsIgnoreCase(key)).findAny().orElseThrow();
+        return galaxy.getTroops().stream().filter(troop -> troop.getUuid().equalsIgnoreCase(key)).findAny().orElseThrow();
     }
 
 
@@ -298,7 +298,7 @@ public class TroopPureFunctions {
         int i = 0;
         while ((found == false) & (i < orders.getTroopToCarrierMoves().size())) {
             TroopToCarrierMovement tempMove = orders.getTroopToCarrierMoves().get(i);
-            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+            if (aTroop.getUuid().equalsIgnoreCase(tempMove.getTroopKey())) {
                 found = true;
             } else {
                 i++;
@@ -314,9 +314,9 @@ public class TroopPureFunctions {
         int i = 0;
         while ((found == false) & (i < orders.getTroopToCarrierMoves().size())) {
             TroopToCarrierMovement tempMove = orders.getTroopToCarrierMoves().get(i);
-            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+            if (aTroop.getUuid().equalsIgnoreCase(tempMove.getTroopKey())) {
                 found = true;
-                if (tempMove.getDestinationCarrierKey().equals(aCarrier.getKey())) {
+                if (tempMove.getDestinationCarrierKey().equals(aCarrier.getUuid())) {
                     moveToCarrier = true;
                 }
             } else {
@@ -332,7 +332,7 @@ public class TroopPureFunctions {
         int i = 0;
         while ((found == false) & (i < orders.getTroopToPlanetMoves().size())) {
             TroopToPlanetMovement tempMove = orders.getTroopToPlanetMoves().get(i);
-            if (aTroop.getKey().equalsIgnoreCase(tempMove.getTroopKey())) {
+            if (aTroop.getUuid().equalsIgnoreCase(tempMove.getTroopKey())) {
                 found = true;
             } else {
                 i++;

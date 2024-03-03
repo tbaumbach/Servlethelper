@@ -14,25 +14,24 @@ public class TroopMutator {
 
     private TroopMutator(){}
 
-    public static Troop createTroop(Player player, TroopType type, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int uniqueId, GameWorld gameWorld){
-        PlayerTroopImprovement troopImprovement = player != null ?  PlayerPureFunctions.findTroopImprovement(type.getName(), player) : null;
+    public static Troop createTroop(Player player, TroopType type, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int worldProductionNumber, GameWorld gameWorld){
+        PlayerTroopImprovement troopImprovement = player != null ?  PlayerPureFunctions.findTroopImprovement(type.getUuid(), player) : null;
         TroopType troopType = troopImprovement != null ? new TroopType(type, troopImprovement) : type;
-        int nrProduced = troopImprovement != null ? troopImprovement.updateNrProduced() : uniqueId;
-        nrProduced++;
+        int productionNumber = troopImprovement != null ? troopImprovement.updateNrProduced() + 1 : worldProductionNumber;
         int totalTechBonus = 0;
         totalTechBonus += factionTechBonus;
         totalTechBonus += buildingTechBonus;
         totalTechBonus += vipTechBonus;
-        Troop tmpTroop = new Troop(troopType, nrProduced, totalTechBonus, uniqueId);
+        Troop tmpTroop = new Troop(troopType, productionNumber, totalTechBonus);
         return tmpTroop;
     }
 
-    public static Troop createTroopForSimulation(TroopType  troopType, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int uniqueId){
+    public static Troop createTroopForSimulation(TroopType  troopType, int vipTechBonus, int factionTechBonus, int buildingTechBonus, int productionNumber){
         int totalTechBonus = 0;
         totalTechBonus += factionTechBonus;
         totalTechBonus += buildingTechBonus;
         totalTechBonus += vipTechBonus;
-        Troop tmpTroop = new Troop(troopType, 0, totalTechBonus, uniqueId);
+        Troop tmpTroop = new Troop(troopType, productionNumber, totalTechBonus);
         return tmpTroop;
     }
 
@@ -44,7 +43,7 @@ public class TroopMutator {
 
     public static void addToLatestTroopsLostInSpace(Troop aTroop, TurnInfo turnInfo, GameWorld gameWorld) {
         Report report = turnInfo.getGeneralReports().get(turnInfo.getGeneralReports().size() - 1);
-        report.getTroopsLostInSpace().add(CanBeLostInSpace.builder().lostInSpaceString(TroopPureFunctions.getTroopTypeByKey(aTroop.getTypeKey(), gameWorld).getName()).owner(aTroop.getOwner() != null ? aTroop.getOwner().getGovernorName() : null).build()); // TODO 2020-11-28 This should be replaced by EvenReport logic. So add the lost ships to the new specific created Report (for the typ of event) extending EvenReport. Try to reuse the EnemySpaceship and OwnSpaceship
+        report.getTroopsLostInSpace().add(CanBeLostInSpace.builder().lostInSpaceString(TroopPureFunctions.getTroopTypeByUuid(aTroop.getTypeUuid(), gameWorld).getName()).owner(aTroop.getOwner() != null ? aTroop.getOwner().getGovernorName() : null).build()); // TODO 2020-11-28 This should be replaced by EvenReport logic. So add the lost ships to the new specific created Report (for the typ of event) extending EvenReport. Try to reuse the EnemySpaceship and OwnSpaceship
     }
 
     public static void checkTroopsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy) {

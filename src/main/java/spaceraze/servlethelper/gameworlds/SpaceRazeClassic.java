@@ -2,6 +2,7 @@ package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
 import spaceraze.servlethelper.game.GameWorldCreator;
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Faction;
@@ -18,12 +19,13 @@ import spaceraze.world.enums.SpaceshipRange;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SpaceRazeClassic{
 
 	public static GameWorld getGameWorld(){
 		GameWorld gw = new GameWorld();
-
+        gw.setUuid(UUID.randomUUID().toString());
         gw.setFileName("srclassic");
 
         gw.setFullName("SpaceRaze Classic");
@@ -40,7 +42,7 @@ public class SpaceRazeClassic{
 
 //		gw.setSquadronsSurviveOutsideCarriers(false);
 
-		gw.setAlignments(AlignmentHelper.createDefaultAlignments());
+		gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
 		Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
 		Alignment good = AlignmentHelper.findAlignment("good", gw.getAlignments());
 		Alignment evil = AlignmentHelper.findAlignment("evil", gw.getAlignments());
@@ -335,13 +337,13 @@ public class SpaceRazeClassic{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Interdictor"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Imperial Star Destroyer"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Super Star Destroyer"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Nebulon B frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Golan II"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Nebulon B frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Golan II", gw));
         tempFaction.setResistanceBonus(2);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Orbital Wharf"));
         tempFaction.setGovernorVIPType(govType);
         GameWorldCreator.addFaction(tempFaction, gw);
         Faction empireFaction = tempFaction;
@@ -358,13 +360,13 @@ public class SpaceRazeClassic{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Nebulon B frigate"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Dreadnaught"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Mon Calamari Cruiser"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Dreadnaught"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Golan II"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Dreadnaught", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Golan II", gw));
         tempFaction.setClosedPlanetBonus(1);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Orbital Wharf"));
         tempFaction.setGovernorVIPType(govType);
         GameWorldCreator.addFaction(tempFaction, gw);
         Faction rebelFaction = tempFaction;
@@ -381,14 +383,14 @@ public class SpaceRazeClassic{
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Nebulon B frigate"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Escort Carrier"));
         tempFaction.addSpaceshipType(gw.getSpaceshipTypeByName("Victory Star Destroyer"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Nebulon B frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Golan II"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Nebulon B frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Golan II", gw));
         tempFaction.setOpenPlanetBonus(1);
         tempFaction.setGovernorVIPType(govType);
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Orbital Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Orbital Wharf"));
 
 //        tempFaction.setOrbitalStructure(os1);
 //        tempFaction.setBuildOrbitalStructureCostBase(7);

@@ -375,7 +375,7 @@ public class PlanetPureFunctions {
     public static List<Building> getBuildings(Planet planet, boolean orbitOnly, GameWorld gameWorld) {
         List<Building> buildingsInOrbit = new ArrayList<>();
         for (Building aBuilding : planet.getBuildings()) {
-            if(orbitOnly == BuildingPureFunctions.getBuildingType(aBuilding.getTypeKey(), gameWorld).isInOrbit()){
+            if(orbitOnly == BuildingPureFunctions.getBuildingTypeByUuid(aBuilding.getTypeUuid(), gameWorld).isInOrbit()){
                 buildingsInOrbit.add(aBuilding);
             }
         }
@@ -406,7 +406,7 @@ public class PlanetPureFunctions {
     public static boolean getInfectedByAlien(Planet planet, Galaxy galaxy){
         boolean infectedByAlien = false;
         if (planet.getPlayerInControl() != null){
-            if (GameWorldHandler.getFactionByKey(planet.getPlayerInControl().getFactionKey(), galaxy.getGameWorld()).isAlien()){
+            if (GameWorldHandler.getFactionByUuid(planet.getPlayerInControl().getFactionUuid(), galaxy.getGameWorld()).isAlien()){
                 infectedByAlien = true;
             }
         }
@@ -427,7 +427,7 @@ public class PlanetPureFunctions {
         int bonus=0;
         for(int i=0; i< planet.getBuildings().size();i++){
             if(planet.getBuildings().get(i).getTechBonus() > bonus){
-                if(!BuildingPureFunctions.getBuildingType(planet.getBuildings().get(i).getTypeKey(), gameWorld).isInOrbit() || !planet.isBesieged()){
+                if(!BuildingPureFunctions.getBuildingTypeByUuid(planet.getBuildings().get(i).getTypeUuid(), gameWorld).isInOrbit() || !planet.isBesieged()){
                     bonus = planet.getBuildings().get(i).getTechBonus();
                 }
 

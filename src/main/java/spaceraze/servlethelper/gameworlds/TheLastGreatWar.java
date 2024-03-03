@@ -2,6 +2,7 @@ package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
 import spaceraze.servlethelper.game.GameWorldCreator;
+import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Corruption;
@@ -19,12 +20,14 @@ import spaceraze.world.enums.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TheLastGreatWar{
 	
 	public static GameWorld getGameWorld(){
 		// XXX The Last Great War
 		GameWorld gw = new GameWorld();
+        gw.setUuid(UUID.randomUUID().toString());
 		
 
         gw.setFileName("thelastgreatwar");
@@ -55,18 +58,18 @@ public class TheLastGreatWar{
 		String sStr= "Smuggler";
 		String gStr= "Trade";
 		
-		gw.getAlignments().add(new Alignment(uStr));
-        gw.getAlignments().add(new Alignment(cStr));
-        gw.getAlignments().add(new Alignment(eStr));
-        gw.getAlignments().add(new Alignment(aStr));
-        gw.getAlignments().add(new Alignment(tStr));
-        gw.getAlignments().add(new Alignment(rStr));
-        gw.getAlignments().add(new Alignment(fStr));
+		gw.getAlignments().add(new Alignment(uStr, gw));
+        gw.getAlignments().add(new Alignment(cStr, gw));
+        gw.getAlignments().add(new Alignment(eStr, gw));
+        gw.getAlignments().add(new Alignment(aStr, gw));
+        gw.getAlignments().add(new Alignment(tStr, gw));
+        gw.getAlignments().add(new Alignment(rStr, gw));
+        gw.getAlignments().add(new Alignment(fStr, gw));
 		
 		//VIP
-        gw.getAlignments().add(new Alignment(nStr));
-        gw.getAlignments().add(new Alignment(sStr));
-        gw.getAlignments().add(new Alignment(gStr));
+        gw.getAlignments().add(new Alignment(nStr, gw));
+        gw.getAlignments().add(new Alignment(sStr, gw));
+        gw.getAlignments().add(new Alignment(gStr, gw));
 		
 		Alignment usa = AlignmentHelper.findAlignment(uStr, gw.getAlignments());
 		Alignment china = AlignmentHelper.findAlignment(cStr, gw.getAlignments());
@@ -108,21 +111,8 @@ public class TheLastGreatWar{
 		federation.addCanHaveVip(neutral);
 		federation.addCanHaveVip(smuggler);
 		
-		
-		// Spaceship types
-        UniqueIdCounter uniqueShipIdCounter = new UniqueIdCounter();
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
-        UniqueIdCounter uniqueBuildingIdCounter = new UniqueIdCounter();
 
-//������ vip types ������
-   /*     VIPType tmpVipType = new VIPType("Governor","Gov",uniqueVIPIdCounter);
-        tmpVipType.setCanVisitNeutralPlanets(true);
-        tmpVipType.setDiplomat(true);
-        tmpVipType.setGovernor(true);
-        tmpVipType.setWellGuarded(true);
-        tmpVipType.setOpenIncBonus(1);
-        gw.addVipType(tmpVipType);
-     */   
+//****** vip types *******
 
 	VIPType tmpVipType = new VIPType("Fanatic Spy","FSpy",neutral);
         tmpVipType.setCanVisitEnemyPlanets(true);
@@ -645,11 +635,11 @@ public class TheLastGreatWar{
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
         
-       tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
-       tempFaction.addStartingBuildings(tempFaction.getBuildingType("China Base"));
-       tempFaction.addStartingBuildings(tempFaction.getBuildingType("SpacePort"));
-       tempFaction.addStartingBuildings(tempFaction.getBuildingType("Barracks"));
-       tempFaction.addStartingBuildings(tempFaction.getBuildingType("China Home Base"));
+       tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
+       tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("China Base"));
+       tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("SpacePort"));
+       tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Barracks"));
+       tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("China Home Base"));
         
         
         
@@ -1170,10 +1160,10 @@ public class TheLastGreatWar{
         
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("General"));
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("WarBattleship"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("C Home Defender"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("C Bomber"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("C Bomber"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("WarBattleship", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("C Home Defender", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("C Bomber", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("C Bomber", gw));
         
         
         
@@ -1186,13 +1176,18 @@ public class TheLastGreatWar{
         
         
         
-        // ************************* --- Forskning Economic --- *************************
-        
+        // ************************* --- Forskning Economic --- *************************researchCorruption1.setFaction(tempFaction);
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         
@@ -1202,34 +1197,40 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setOpenPlanetBonus(1);
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Trading II
         tempResearchAdvantage = new ResearchAdvantage("Trading II","Gives more income to the Province Capital and the Capital");
-        
-        ResearchUpgradeBuilding aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+
+        ResearchUpgradeBuilding aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading III"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Trading I
         tempResearchAdvantage = new ResearchAdvantage("Trading I","Gives one more income to all new SpacePort");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("SpacePort");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("SpacePort").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading II"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -1237,6 +1238,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(researchCorruption6);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading I"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // ************************* --- Forskning Weapons --- *************************
@@ -1245,6 +1247,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Heavy Artillery"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Artillery","Gives China Artillery");
@@ -1252,18 +1255,21 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Artillery"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Heavy Artillery"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Light Tanks","Gives China Light Tanks");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Light Tanks"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
                 
         tempResearchAdvantage = new ResearchAdvantage("China AntiTank Tanks","Gives China AntiTank Tanks");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China AntiTank Tanks"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Tanks","Gives the a platfrom to develop tanks on");
@@ -1271,11 +1277,13 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Light Tanks"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China AntiTank Tanks"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Elite Command","Gives China Elite Command");
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Elite Command"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Infantry","Gives China Infantry");
@@ -1284,6 +1292,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Infantry"));
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("China Light Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Elite Command"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Heavy Infantry II","Gives China Heavy Infantry II");
@@ -1292,6 +1301,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("China Heavy Infantry II"));
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("China Heavy Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Elite Command"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Infantary","Infantary center to give better soldier");
@@ -1299,6 +1309,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Heavy Infantry II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Infantry"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -1307,6 +1318,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tanks"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Artillery"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -1315,6 +1327,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage = new ResearchAdvantage("China Attacker","Gives China Attacker");
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("C Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Fighter II","Second generation fighter");
@@ -1323,6 +1336,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("C Fighter II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("C Fighter"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Bomber II","Second generation bomber");
@@ -1331,19 +1345,23 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("C Bomber II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("C Bomber"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Squadrons","Gives shields to squadrons");
-        ResearchUpgradeShip researchUpgradeShip = new ResearchUpgradeShip("C Fighter");
+        ResearchUpgradeShip researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("C Fighter", gw).getUuid());
         researchUpgradeShip.setShields(5);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("C Bomber");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("C Bomber", gw).getUuid());
         researchUpgradeShip.setShields(5);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Fighter II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Bomber II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Galaxy WarBattleship II","Gives Galaxy WarBattleship II");
@@ -1351,6 +1369,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Galaxy WarBattleship II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Galaxy WarBattleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Huge Ships","Gives Galaxy WarBattleship");
@@ -1358,12 +1377,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Galaxy WarBattleship II"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Galaxy WarBattleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("China Heavy Defender","Gives China Heavy Defender");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("C Heavy Defender"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("WarDestroyer II","Gives WarDestroyer II");
@@ -1371,6 +1392,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("WarDestroyer II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("WarDestroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("WarDestroyer C","Gives WarDestroyer C");
@@ -1378,6 +1400,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("WarDestroyer C"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "WarDestroyer II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("WarDestroyer T","Gives WarDestroyer T");
@@ -1385,6 +1408,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("WarDestroyer T"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "WarDestroyer II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Large Ships","Gives WarDestroyer");
@@ -1394,35 +1418,42 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "WarDestroyer C"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge Ships"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("WarDestroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Destroyer Carrier","Gives Destroyer Carrier");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Destroyer Carrier"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Destroyer Large","Gives Destroyer L");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Destroyer L"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Destroyer Bombardment","Gives Destroyer B");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Destroyer B"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Troop Capacity","Gives greater capacity");
         tempResearchAdvantage.setTimeToResearch(5);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
-        researchUpgradeShip = new ResearchUpgradeShip("Troop Transporter II");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Transporter II", gw).getUuid());
         researchUpgradeShip.setTroopCarrier(1);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("WarBattleship");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("WarBattleship", gw).getUuid());
         researchUpgradeShip.setTroopCarrier(1);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Troop Transporter II","Gives Troop Transporter II");
@@ -1430,6 +1461,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Troop Transporter II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Troop Transporter"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Medium Ships","Gives medium ships");
@@ -1440,6 +1472,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Destroyer Bombardment"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Troop Transporter II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Large Ships"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Small Ships","Start develop capital ships");
@@ -1448,6 +1481,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Planet corvette II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Planet corvette"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Medium Ships"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Spaceships","Develop Spaceships");
@@ -1455,99 +1489,114 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Small Ships"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Squadrons"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // ************************* --- Forskning Buildgins --- *************************
         
         // Huge Wharf
         tempResearchAdvantage = new ResearchAdvantage("Huge Wharf","Gives Huge Wharf to build Huge ships");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge China Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge China Wharf"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge Ships"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure
         tempResearchAdvantage = new ResearchAdvantage("Infrastructure","Gives more income to towns");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Missile Defence
         tempResearchAdvantage = new ResearchAdvantage("Missile Defence","Gives Missile Defence");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Missile Defence"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Missile Defence"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet Defence
         tempResearchAdvantage = new ResearchAdvantage("Missile Silo","Gives Missile Silo");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Missile Silo"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Missile Silo"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Missile Defence"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Basic Shield
         tempResearchAdvantage = new ResearchAdvantage("Basic Shield","Gives Basic Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Basic Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Basic Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Advanced Tech Center
         tempResearchAdvantage = new ResearchAdvantage("Advanced Tech Center","Gives Advanced Tech Center");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Advanced Tech Center"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Advanced Tech Center"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         // Tank Factory
         tempResearchAdvantage = new ResearchAdvantage("Tank Factory","Gives Tank Factory");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Tank Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Tank Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // China Military Academy
         tempResearchAdvantage = new ResearchAdvantage("China Military Academy","Gives China Military Academy");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("China Military Academy"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("China Military Academy"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Agent Center
         tempResearchAdvantage = new ResearchAdvantage("Agent Center","Gives Agent Center");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Agent Center"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Agent Center"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Buildings","Develop Bildings");
@@ -1561,6 +1610,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "China Military Academy"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Agent Center"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
 
         tempFaction.setNumberOfSimultaneouslyResearchAdvantages(2);
@@ -1792,9 +1842,9 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Alliance Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Barracks"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Alliance Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Barracks"));
         
         
         
@@ -2175,10 +2225,10 @@ public class TheLastGreatWar{
         
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Ace"));
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Ship"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Liberty Carrier"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Ace Attacker"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("A Home Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Ship", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Liberty Carrier", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Ace Attacker", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("A Home Defender", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -2220,81 +2270,99 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
         tempResearchAdvantage.addChild(researchCorruption6);
         //tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading I"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Space Harbour
         tempResearchAdvantage = new ResearchAdvantage("Space Harbour","Gives Space Harbour");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Space Harbour"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Space Harbour"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // University
         tempResearchAdvantage = new ResearchAdvantage("University","Gives University");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("University"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("University"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         // Infrastructure 3
         tempResearchAdvantage = new ResearchAdvantage("Infrastructure III","Shields will give one in incom on open planets.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Basic Shield");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Basic Shield").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Planet Shield");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Planet Shield").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure 2
         tempResearchAdvantage = new ResearchAdvantage("Infrastructure II","Cannon will give one in incom on open planets.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Cannon");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Cannon").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Heavy Cannon");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Heavy Cannon").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Planet Defender Cannon");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Planet Defender Cannon").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure III"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure
@@ -2302,16 +2370,19 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         
@@ -2319,43 +2390,50 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Space Harbour"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "University"));
+        tempResearchAdvantage.setFaction(tempFaction);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet Defender Cannon
         tempResearchAdvantage = new ResearchAdvantage("Planet Defender Cannon","Gives Planet Defender Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Defender Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Defender Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Heavy Cannon
         tempResearchAdvantage = new ResearchAdvantage("Heavy Cannon","Gives Heavy Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Heavy Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Heavy Cannon"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet Defender Cannon"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Cannon
         tempResearchAdvantage = new ResearchAdvantage("Cannon","Gives Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Cannon"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet Shield
         tempResearchAdvantage = new ResearchAdvantage("Planet Shield","Gives Planet Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Basic Shield
         tempResearchAdvantage = new ResearchAdvantage("Basic Shield","Gives Basic Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Basic Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Basic Shield"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet defence
@@ -2363,6 +2441,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Basic Shield"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Cannon"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -2370,6 +2449,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage = new ResearchAdvantage("Africa Fanatics","Gives Africa Fanatics");
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Africa Fanatics"));
         tempResearchAdvantage.setTimeToResearch(0);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Mobil Infantry II
@@ -2378,6 +2458,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Africa Mobil Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Mobil Infantry
@@ -2387,6 +2468,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Fanatics"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Heavy Infantry II
@@ -2395,6 +2477,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Africa Heavy Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Infantry
@@ -2405,6 +2488,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Fanatics"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Antitank Infantry
@@ -2412,16 +2496,18 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Africa Antitank Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infantry
         tempResearchAdvantage = new ResearchAdvantage("Infantry","Gives Training Center");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Training Center"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Training Center"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Antitank Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Mobil Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Africa Heavy Antitank Tank
@@ -2429,15 +2515,17 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Africa Heavy Antitank Tank"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Tanks
         tempResearchAdvantage = new ResearchAdvantage("Tanks","Gives Tank Factory and Africa Tanks");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Tank Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Tank Factory"));
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Africa Tanks"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Africa Heavy Antitank Tank"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Army
@@ -2445,30 +2533,38 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tanks"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         tempResearchAdvantage = new ResearchAdvantage("Better squadrons","Gives greater squadrons");
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
-        researchUpgradeShip = new ResearchUpgradeShip("Alliance Fighter");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Alliance Fighter", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("Alliance Bomber");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Alliance Bomber", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("Alliance Attacker");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Alliance Attacker", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("Assault Fighter");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Fighter", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("Assault Bomber");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Bomber", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
-        researchUpgradeShip = new ResearchUpgradeShip("Assault Attacker");
+        researchUpgradeShip = new ResearchUpgradeShip(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Attacker", gw).getUuid());
         researchUpgradeShip.setShields(3);
+        researchUpgradeShip.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeShip(researchUpgradeShip);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Alliance Attacker
@@ -2477,12 +2573,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Alliance Attacker"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Better squadrons"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Assault Attacker
         tempResearchAdvantage = new ResearchAdvantage("Assault Attacker","Gives Assault Attacker");
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Assault Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Assault Fighter
@@ -2491,6 +2589,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Assault Fighter"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Assault Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Assault Bomber
@@ -2499,6 +2598,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Assault Bomber"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Assault Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Squadrons
@@ -2507,6 +2607,8 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Assault Bomber"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Assault Fighter"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Alliance Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -2515,6 +2617,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Conqueror"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Assault Ship
@@ -2522,6 +2625,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Assault Ship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Galaxy WarCarrier
@@ -2529,24 +2633,27 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(5);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Galaxy WarCarrier"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Huge Wharf
         tempResearchAdvantage = new ResearchAdvantage("Huge Wharf","Gives Huge Africa Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge Africa Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge Africa Wharf"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Galaxy WarCarrier"));
         tempResearchAdvantage.setTimeToResearch(5);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large Wharf
         tempResearchAdvantage = new ResearchAdvantage("Large Wharf","Gives Large Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Wharf"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Assault Ship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Conqueror"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge Wharf"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // AOA Carrier
@@ -2554,6 +2661,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("AOA Carrier"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Fleet
@@ -2561,6 +2669,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "AOA Carrier"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Large Wharf"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempFaction.setNumberOfSimultaneouslyResearchAdvantages(2);
@@ -2813,11 +2922,11 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Trade Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Civilian Outpost"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Company Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Mech Construction Yard"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Trade Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Civilian Outpost"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Company Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Mech Construction Yard"));
         
         
         
@@ -2914,7 +3023,7 @@ public class TheLastGreatWar{
         tt = new TroopType("Mercenary Elite","MeE",130,5,20, 55,50);
         tt.setDescription("Heavy infantry unit that is the elite of the elite.");
         tt.setShortDescription("Heavy infantry unit that is the elit of the elit.");
-        tt.setAdvantages("The strongest mercenary infantary.");
+        tt.setAdvantages("The strongest mercenary infantry.");
         tt.setDisadvantages("Can only be one of them.");
         tt.setWorldUnique(true);
         tt.setBlackMarketFrequency(BlackMarketFrequency.NEVER);
@@ -3363,11 +3472,11 @@ public class TheLastGreatWar{
         
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Negotiator"));
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Falcon Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Swallow"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("F Home Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Falcon Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Swallow", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("F Home Defender", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -3381,6 +3490,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("A-8"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("A-2"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -3391,20 +3501,23 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Troop Frigate II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Troop Frigate"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary Elite
         tempResearchAdvantage = new ResearchAdvantage("Mercenary Elite", "Gives possibility to build Mercenary Elite.");
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Mercenary Elite"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary Tavern
         tempResearchAdvantage = new ResearchAdvantage("Mercenary Tavern", "Gives possibility to build Mercenary Base.");
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Mercenary Tavern"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Mercenary Tavern"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary Elite"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary HAI
@@ -3413,6 +3526,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Mercenary HAI"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary Tavern"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary HI
@@ -3422,6 +3536,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Mercenary HI"));
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Mercenary Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary HAI"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Hawk Frigate
@@ -3430,6 +3545,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Hawk Frigate"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Falcon Frigate"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // B-55
@@ -3437,6 +3553,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("B-55"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // B-21
@@ -3447,6 +3564,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("B-12"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "A-8"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "B-55"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Battleship Retaliation
@@ -3455,6 +3573,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Battleship Immunity"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Battleship Retaliation"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Battleship Immunity
@@ -3464,6 +3583,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Battleship Immunity"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Battleship Independent"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battleship Retaliation"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Battleship Independent
@@ -3472,12 +3592,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Battleship Independent"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battleship Immunity"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // The one
         tempResearchAdvantage = new ResearchAdvantage("The one", "Gives possibility to build The one ship class.");
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("The one"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Galaxy Battleship
@@ -3487,24 +3609,29 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Galaxy Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battleship Immunity"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "The one"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         // Customs
         tempResearchAdvantage = new ResearchAdvantage("Customs", "Added a customs check to citys.");
         tempResearchAdvantage.setTimeToResearch(0);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         //Advanced Trading
@@ -3513,6 +3640,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Customs"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Trading
@@ -3521,6 +3649,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Advanced Trading"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Simple Trading
@@ -3529,6 +3658,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure 2
@@ -3537,37 +3667,42 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Customs"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure 1
         tempResearchAdvantage = new ResearchAdvantage("Infrastructure 1","Factory will give one in incom.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Factory");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Factory").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure 2"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Huge Wharfs 
         tempResearchAdvantage = new ResearchAdvantage("Huge Wharfs", "Gives possibility to build Huge wharfs.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge Trade Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge Trade Wharf"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Advanced Trading"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Galaxy Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Large Wharfs 
         tempResearchAdvantage = new ResearchAdvantage("Large Wharfs", "Gives possibility to build Large wharfs.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Wharf"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge Wharfs"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battleship Independent"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Artillery Mechs
@@ -3575,6 +3710,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Artillery Mechs"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Cannon Mechs
@@ -3582,6 +3718,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Cannon Mechs"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Miniguns Mechs
@@ -3590,60 +3727,68 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Mechs"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Defencive Troops
         tempResearchAdvantage = new ResearchAdvantage("Defencive Troops","Gives Bunker");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Bunker"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Bunker"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Artillery Mechs"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Miniguns Mechs"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Cannon Mechs"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // School
         tempResearchAdvantage = new ResearchAdvantage("School","Gives School");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("School"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("School"));
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "The one"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         // Planet Shield
         tempResearchAdvantage = new ResearchAdvantage("Planet Shield","Gives Planet Shield and replace the old Basic shield model.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Shield"));
-        tempResearchAdvantage.addReplaceType(tempFaction.getBuildingType("Basic Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Shield"));
+        tempResearchAdvantage.addReplaceType(tempFaction.getBuildingTypeByName("Basic Shield").getUuid());
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Heavy Cannon
         tempResearchAdvantage = new ResearchAdvantage("Heavy Cannon","Gives Heavy Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Heavy Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Puls Cannon
         tempResearchAdvantage = new ResearchAdvantage("Puls Cannon","Gives Puls Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Puls Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Puls Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Air defence
@@ -3653,13 +3798,15 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Space Port
         tempResearchAdvantage = new ResearchAdvantage("Space Port","Gives Space Port");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Spaceport"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Spaceport"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Blackbird
@@ -3668,6 +3815,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Swallow"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Blackbird"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Interceptor II
@@ -3677,6 +3825,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Interceptor"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Interceptor II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "A-8"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Fleet
@@ -3685,6 +3834,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Interceptor II"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Space
@@ -3694,6 +3844,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Air defence"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Planet
@@ -3703,6 +3854,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Defencive Troops"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Troops
@@ -3713,6 +3865,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battleship Retaliation"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary HI"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Troop Frigate II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Ships
@@ -3723,6 +3876,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Troop Frigate II"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Defensive
@@ -3730,6 +3884,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Space"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Offensive
@@ -3737,6 +3892,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Ships"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Troops"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -3776,12 +3932,18 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
@@ -3789,6 +3951,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Simple Trading"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure 1"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -4011,10 +4174,10 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("USA Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small USA Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Civilian Outpost"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Tank Factory"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("USA Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small USA Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Civilian Outpost"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Tank Factory"));
         
         
         
@@ -4510,14 +4673,14 @@ public class TheLastGreatWar{
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Assassin"));
         
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Corvette II"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Tarawa"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Mustang"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Mustang"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Lancer"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Phantom"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Nimitz"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("USA Military Base"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Corvette II", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Tarawa", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Mustang", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Mustang", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Lancer", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Phantom", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Nimitz", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("USA Military Base", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -4530,6 +4693,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Thunderbolt"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Hornet
@@ -4538,6 +4702,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Hornet"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Phantom"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Spirit
@@ -4546,6 +4711,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Spirit"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Lancer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Raptor
@@ -4554,6 +4720,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Raptor"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Mustang"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Squadrons","Develop better squadrons.");
@@ -4562,12 +4729,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Thunderbolt"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Hornet"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // SEAL
         tempResearchAdvantage = new ResearchAdvantage("SEAL","Gives USA SEAL");
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("USA SEAL"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Heavy Drones
@@ -4575,6 +4744,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Heavy Drones"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Scouts
@@ -4582,6 +4752,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Drone Scouts"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Drones
@@ -4592,6 +4763,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Drones"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Scouts"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Howitzer
@@ -4600,6 +4772,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Dragon Fire"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Abrams
@@ -4607,6 +4780,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("M803 Abrams"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Hellcat
@@ -4615,6 +4789,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Abrams"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -4624,6 +4799,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Drones"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "SEAL"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Iowa Battleship
@@ -4632,6 +4808,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Iowa Battleship"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Dakota Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Dakota Battleship
@@ -4640,6 +4817,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Dakota Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Iowa Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Colorado Battleship
@@ -4647,6 +4825,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Colorado Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Tennessee Battleship
@@ -4655,6 +4834,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Tennessee Battleship"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Nevada Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Nevada Battleship
@@ -4665,6 +4845,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Colorado Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tennessee Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Dakota Battleship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Kidd Destroyer
@@ -4672,6 +4853,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Kidd Destroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Gearing Destroyer
@@ -4680,6 +4862,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Gearing Destroyer"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Gleaves Destroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Gun Ship
@@ -4687,6 +4870,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Gun Ship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Wasp
@@ -4698,6 +4882,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Colorado Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Iowa Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "SEAL"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Capital Ships","Develop better capital ships.");
@@ -4707,13 +4892,15 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kidd Destroyer"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Nevada Battleship"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Atomic Missile
         tempResearchAdvantage = new ResearchAdvantage("Atomic Missile", "Gives Atomic Missile.");
         tempResearchAdvantage.setTimeToResearch(4);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Atomic Missile"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Atomic Missile"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mobile
@@ -4722,14 +4909,16 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tennessee Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Thunderbolt"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Fixed
         tempResearchAdvantage = new ResearchAdvantage("Fixed", "Gives Missile Silo.");
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Missile Silo"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Missile Silo"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Atomic Missile"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Missile
@@ -4738,6 +4927,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Fixed"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mobile Missile"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Bombardment
@@ -4747,6 +4937,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kidd Destroyer"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Iowa Battleship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Atomic Missile"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         tempResearchAdvantage = new ResearchAdvantage("Heavy Weaponse","Develop better weaponse.");
@@ -4754,68 +4945,77 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Bombardment"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "SEAL"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Huge Wharf
         tempResearchAdvantage = new ResearchAdvantage("Huge Wharf","Gives Huge USA Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge USA Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge USA Wharf"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Dakota Battleship"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large Wharf
         tempResearchAdvantage = new ResearchAdvantage("Large Wharf","Gives Large USA Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large USA Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large USA Wharf"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge Wharf"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Nevada Battleship"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet Shield
         tempResearchAdvantage = new ResearchAdvantage("Planet Shield","Gives Planet Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Basic Shield
         tempResearchAdvantage = new ResearchAdvantage("Basic Shield","Gives Basic Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Basic Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Basic Shield"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Armor Factory
         tempResearchAdvantage = new ResearchAdvantage("Armor Factory","Gives Armor Factory");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Armor Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Armor Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Factory
         tempResearchAdvantage = new ResearchAdvantage("Factory","Gives Factory");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Factory"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Armor Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Military Academy
         tempResearchAdvantage = new ResearchAdvantage("Military Academy","Gives Military Academy");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Military Academy"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Military Academy"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "SEAL"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Agent Center
         tempResearchAdvantage = new ResearchAdvantage("Agent Center","Gives Agent Center");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Agent Center"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Agent Center"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // VIPs
@@ -4824,19 +5024,22 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Military Academy"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Buildings
@@ -4848,6 +5051,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Factory"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "VIPs"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Province Capital"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -4856,37 +5060,44 @@ public class TheLastGreatWar{
         // Trade 2
         tempResearchAdvantage = new ResearchAdvantage("Trade 2","Gives more income to open planets.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Large USA Wharf");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Large USA Wharf").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Huge USA Wharf");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Huge USA Wharf").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Trade
         tempResearchAdvantage = new ResearchAdvantage("Trade","Better tax control.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trade 2"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         researchCorruption1 = new ResearchAdvantage("Corruption level 6","Lower corruption");
@@ -4923,18 +5134,25 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
         tempResearchAdvantage.addChild(researchCorruption6);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trade"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -5176,10 +5394,10 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Russian Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Civilian Outpost"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Barracks"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Russian Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Civilian Outpost"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Barracks"));
         
         
         
@@ -5690,11 +5908,11 @@ public class TheLastGreatWar{
         
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Designer"));
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Steregushchy Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Sergey Gorshkov"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("The Army"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Kashin"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Russian Home Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Steregushchy Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Sergey Gorshkov", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("The Army", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Kashin", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Russian Home Defender", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -5709,12 +5927,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Kirov II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Kirov"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // The Army II
         tempResearchAdvantage = new ResearchAdvantage("The Army II", "Gives possibility to build The Army II.");
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("The Army II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Ships
@@ -5723,6 +5943,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kirov II"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // BMP
@@ -5730,6 +5951,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("BMP"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // T-34
@@ -5737,6 +5959,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("T-34"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // SU-85
@@ -5744,15 +5967,17 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("SU-85"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Tanks
-        tempResearchAdvantage = new ResearchAdvantage("Tanks","Develop better infantry.");
+        tempResearchAdvantage = new ResearchAdvantage("Tanks","Develop better tanks.");
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "BMP"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "T-34"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "SU-85"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Stalin Organ
@@ -5761,13 +5986,15 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Spetsnaz"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Large Barracks 
         tempResearchAdvantage = new ResearchAdvantage("Large Barracks", "Gives possibility to build Large Barracks.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Barracks"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Barracks"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Infantry
@@ -5776,13 +6003,15 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Large Barracks"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Russian Armor Factory 
         tempResearchAdvantage = new ResearchAdvantage("Russian Armor Factory", "Gives possibility to build Russian Armor Factory.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Russian Armor Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Russian Armor Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Stalin Organ
@@ -5790,6 +6019,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Stalin Organ"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Invader Force
@@ -5800,21 +6030,24 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Russian Armor Factory"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Stalin Organ"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Planet Shield 
         tempResearchAdvantage = new ResearchAdvantage("Planet Shield", "Gives Planet Shield.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Basic Shield 
         tempResearchAdvantage = new ResearchAdvantage("Basic Shield", "Gives Basic Shield.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Basic Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Basic Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet Shield"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Russian L Defender
@@ -5822,27 +6055,31 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Russian L Defender"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Heavy Puls Cannon 
         tempResearchAdvantage = new ResearchAdvantage("Heavy Puls Cannon", "Gives Heavy Puls Cannon.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Heavy Puls Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Heavy Puls Cannon"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Puls Cannon 
         tempResearchAdvantage = new ResearchAdvantage("Puls Cannon", "Gives Puls Cannon.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Puls Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Puls Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Puls Cannon"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Heavy Cannon 
         tempResearchAdvantage = new ResearchAdvantage("Heavy Cannon", "Gives Heavy Cannon.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Heavy Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Cannons
@@ -5851,6 +6088,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Puls Cannon"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Russian Infantry
@@ -5859,6 +6097,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Russian Light Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Russian Artillery
@@ -5868,6 +6107,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Stalin Organ"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Narodnoe Opolcheniye II
@@ -5876,6 +6116,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Narodnoe Opolcheniye"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Troops
@@ -5885,6 +6126,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Narodnoe Opolcheniye II"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Planet Defense
@@ -5894,6 +6136,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Basic Shield"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Russian L Defender"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Udaloy
@@ -5901,6 +6144,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Udaloy"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Sovremenny
@@ -5909,6 +6153,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Sovremenny"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Kashin"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Kuznetsov II
@@ -5917,6 +6162,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Kuznetsov II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Kuznetsov"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Long range
@@ -5926,6 +6172,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Sovremenny"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Kirov
@@ -5934,6 +6181,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Kirov"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kirov II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Potemkin II
@@ -5942,6 +6190,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Potemkin II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Potemkin"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Potemkin
@@ -5951,6 +6200,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Potemkin"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Potemkin II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kirov"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // MiG-29
@@ -5959,6 +6209,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("MiG-29"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("MiG-21"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Su-27
@@ -5966,6 +6217,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Su-27"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Su-35
@@ -5973,6 +6225,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Su-35"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Squadrons
@@ -5982,6 +6235,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Su-35"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Independent Force
@@ -5990,60 +6244,68 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Long range"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Potemkin"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Factory
         tempResearchAdvantage = new ResearchAdvantage("Factory","Gives Factory");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // University
         tempResearchAdvantage = new ResearchAdvantage("University","Gives University");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("University"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("University"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mining Base
         tempResearchAdvantage = new ResearchAdvantage("Mining Base","Gives Mining Base");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Mining Base"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Mining Base"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Spaceport
         tempResearchAdvantage = new ResearchAdvantage("Spaceport","Gives Spaceport");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Spaceport"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Spaceport"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(15);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Huge Wharf
         tempResearchAdvantage = new ResearchAdvantage("Huge Wharf","Gives Huge Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge Wharf"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Kirov"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large wharf
         tempResearchAdvantage = new ResearchAdvantage("Large Wharf","Gives Large Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Wharf"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Spaceport"));
@@ -6051,6 +6313,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "The Army II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Russian L Defender"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Potemkin"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Buildings
@@ -6061,6 +6324,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mining Base"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Factory"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure 2
@@ -6068,26 +6332,31 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setOpenPlanetBonus(1);
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure 1
         tempResearchAdvantage = new ResearchAdvantage("Infrastructure 1","Better tax control.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure 2"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // ************************* --- Forskning Economic --- *************************
@@ -6126,18 +6395,25 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
         tempResearchAdvantage.addChild(researchCorruption6);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure 1"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -6345,11 +6621,11 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("EU Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Civilian Outpost"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Company Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Barracks"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("EU Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Civilian Outpost"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Company Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Barracks"));
         
         
         
@@ -6775,11 +7051,11 @@ public class TheLastGreatWar{
         
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Commander"));
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("EU Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Assault Frigate"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Troop Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Fighter Transporter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("EU Home Defender"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("EU Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Assault Frigate", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Troop Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Fighter Transporter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("EU Home Defender", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -6792,12 +7068,14 @@ public class TheLastGreatWar{
         tempResearchAdvantage = new ResearchAdvantage("Bismarck", "Gives possibility to build Bismark.");
         tempResearchAdvantage.setTimeToResearch(6);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Bismarck"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // HMS Victory
         tempResearchAdvantage = new ResearchAdvantage("HMS Victory", "Gives possibility to build HMS Victory.");
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("HMS Victory"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Fleet
@@ -6805,24 +7083,28 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "HMS Victory"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Bismarck"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Hummel Mechs
         tempResearchAdvantage = new ResearchAdvantage("Hummel Mechs","Gives Hummel Mechs");
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Hummel Mech"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Tiger Mechs
         tempResearchAdvantage = new ResearchAdvantage("Tiger Mechs","Gives Tiger Mechs");
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Tiger Mech"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Panther Mechs
         tempResearchAdvantage = new ResearchAdvantage("Panther Mechs","Gives Panther Mechs");
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Panther Mech"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Army
@@ -6832,6 +7114,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tiger Mechs"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(20);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Leader of the herd
@@ -6839,6 +7122,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Army"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Fleet"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // King George
@@ -6847,6 +7131,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("King George"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Vittorio Veneto"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Marauder
@@ -6854,6 +7139,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Marauder"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Huge weaponse
@@ -6862,6 +7148,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Marauder"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "King George"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Battlecruiser
@@ -6870,6 +7157,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Battlecruiser"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Bismarck"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Vittorio Veneto
@@ -6879,27 +7167,31 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Vittorio Veneto"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Battlecruiser"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge weaponse"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Huge EU Wharf
         tempResearchAdvantage = new ResearchAdvantage("Huge EU Wharf","Gives Huge EU Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge EU Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge EU Wharf"));
         tempResearchAdvantage.setTimeToResearch(2);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large wharf
         tempResearchAdvantage = new ResearchAdvantage("Large Wharf","Gives Large Wharf");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Wharf"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Vittorio Veneto"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge EU Wharf"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Heavy Fleet
         tempResearchAdvantage = new ResearchAdvantage("Heavy Fleet","Gives possibility to develop our heavy fleet.");
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Large Wharf"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -6908,6 +7200,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Hovercraft Robot Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Robot Heavy Infantry II
@@ -6916,6 +7209,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Robot Heavy Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(15);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infantry
@@ -6923,6 +7217,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Hovercraft Robot Infantry"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Robot Heavy Infantry II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Robot Artillery
@@ -6930,16 +7225,18 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Robot Artillery"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary Mech Center
         tempResearchAdvantage = new ResearchAdvantage("Mercenary Mech Center","Gives Mercenary Mech Center");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Mercenary Mech Center"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Mercenary Mech Center"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Robot Artillery"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tiger Mechs"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Hummel Mechs"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Troop Fighter II
@@ -6949,14 +7246,16 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Troop Fighter II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Troop Fighter"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infantry"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large Barracks
         tempResearchAdvantage = new ResearchAdvantage("Large Barracks","Gives Large Barracks");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Barracks"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Barracks"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infantry"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Offensive Army
@@ -6965,28 +7264,32 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Troop Fighter II"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary Mech Center"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Cannon
         tempResearchAdvantage = new ResearchAdvantage("Cannon","Gives Cannon");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Large Planet Shield
         tempResearchAdvantage = new ResearchAdvantage("Large Planet Shield","Gives Large Planet Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Planet Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Planet Shield
         tempResearchAdvantage = new ResearchAdvantage("Planet Shield","Gives Planet Shield");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Planet Shield"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Planet Shield"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Large Planet Shield"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Robot Infantry
@@ -6995,6 +7298,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Robot Heavy Infantry II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Planet Defense
@@ -7003,6 +7307,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Planet Shield"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Cannon"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Typhoon
@@ -7011,6 +7316,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Typhoon"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Rafale"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Gripen
@@ -7019,6 +7325,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Gripen"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Viggen"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Fighter Transporter II
@@ -7027,6 +7334,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Fighter Transporter II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Fighter Transporter"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Light Fleet
@@ -7035,78 +7343,91 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Gripen"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Typhoon"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         // Factory
         tempResearchAdvantage = new ResearchAdvantage("Factory","Gives Factory");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Factory"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Factory"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // University
         tempResearchAdvantage = new ResearchAdvantage("University","Gives University");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("University"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("University"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Improvments III
         tempResearchAdvantage = new ResearchAdvantage("Improvments III","Cannon will give one in incom on open planets.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Cannon");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Cannon").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
         aResearchUpgradeBuilding.setClosedPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Improvments II
         tempResearchAdvantage = new ResearchAdvantage("Improvments II","University will give one in incom on open planets.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("University");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("University").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Improvments III"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Improvments I
         tempResearchAdvantage = new ResearchAdvantage("Improvments I", "Better tax control.");
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Improvments II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -7117,6 +7438,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Improvments I"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Province Capital"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // ************************* --- Forskning Economic --- *************************
@@ -7155,18 +7477,25 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
         tempResearchAdvantage.addChild(researchCorruption6);
         //tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading I"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -7377,10 +7706,10 @@ public class TheLastGreatWar{
 
         // Adding all buildings to the faction.
         tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Federation Home Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Small Hidden Wharf"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Planet Base"));
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Mercenary Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Federation Home Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Small Hidden Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Planet Base"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Mercenary Base"));
         
         
         
@@ -7790,14 +8119,14 @@ public class TheLastGreatWar{
         tempFaction.addStartingVIPType(gw.getVIPTypeByName("Spy"));
         
         
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Liberty Corvette"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Suport Carrier"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Raider"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Piranha Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Piranha Fighter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Tiger Attacker"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Old Troop Transporter"));
-        tempFaction.addStartingShipType(tempFaction.getSpaceshipTypeByName("Raid Station"));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Liberty Corvette", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Suport Carrier", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Raider", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Piranha Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Piranha Fighter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Tiger Attacker", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Old Troop Transporter", gw));
+        tempFaction.addStartingShipType(SpaceshipPureFunctions.getSpaceshipTypeByName("Raid Station", gw));
         
         // *******************************************************************************
         // ****************************** --- Forskning --- ******************************
@@ -7807,15 +8136,17 @@ public class TheLastGreatWar{
         
         // Capital
         tempResearchAdvantage = new ResearchAdvantage("Capital","Gives Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Province Capital
         tempResearchAdvantage = new ResearchAdvantage("Province Capital","Gives Province Capital");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Province Capital"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Province Capital"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Capital"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mining
@@ -7823,11 +8154,12 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Liberty Mining Base");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Liberty Mining Base").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
         aResearchUpgradeBuilding.setClosedPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
-        
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Trading
@@ -7835,11 +8167,13 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mining"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Infrastructure
@@ -7847,19 +8181,23 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("City");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("City").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Province Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Province Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
-        aResearchUpgradeBuilding = new ResearchUpgradeBuilding("Capital");
+        aResearchUpgradeBuilding = new ResearchUpgradeBuilding(tempFaction.getBuildingTypeByName("Capital").getUuid());
         aResearchUpgradeBuilding.setOpenPlanetBonus(1);
+        aResearchUpgradeBuilding.setResearchAdvantage(tempResearchAdvantage);
         tempResearchAdvantage.addResearchUpgradeBuilding(aResearchUpgradeBuilding);
         
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -7868,6 +8206,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(5);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Dominator"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Galaxy ship
@@ -7876,6 +8215,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Galaxy Ship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Dominator"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Warship II
@@ -7884,6 +8224,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Warship II"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Warship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Warship
@@ -7892,6 +8233,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Warship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Warship II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Sweeper
@@ -7899,23 +8241,26 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Sweeper"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Troop Destroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Huge Wharfs 
         tempResearchAdvantage = new ResearchAdvantage("Huge ships", "Gives possibility to build Huge liberty wharfs.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Huge Liberty Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Huge Liberty Wharf"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Galaxy Ship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Large Ships 
         tempResearchAdvantage = new ResearchAdvantage("Large ships", "Gives possibility to build Large liberty wharfs.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Large Liberty Wharf"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Large Liberty Wharf"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Huge ships"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Warship"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Short range fleet
@@ -7924,6 +8269,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Sweeper"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Wiper
@@ -7931,6 +8277,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Wiper"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Fighter Corvette
@@ -7938,6 +8285,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Fighter Corvette"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Carrier Destroyer
@@ -7945,6 +8293,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Carrier Destroyer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Shadow
@@ -7953,13 +8302,15 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Shadow"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Old Troop Transporter"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Space station 
         tempResearchAdvantage = new ResearchAdvantage("Space station", "Gives possibility to build Space stations.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Space station"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Space station"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Long range fleet
@@ -7970,6 +8321,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Wiper"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Shadow"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -7978,6 +8330,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage = new ResearchAdvantage("Puma Attacker", "Gives possibility to build Puma Attacker class.");
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Puma Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Whale Bomber
@@ -7986,6 +8339,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Whale Bomber"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Puma Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Bass Fighter
@@ -7995,6 +8349,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Bass Fighter"));
         tempResearchAdvantage.addReplaceShip(gw.getSpaceshipTypeByName("Piranha Fighter"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Puma Attacker"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Observer
@@ -8002,6 +8357,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(5);
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Observer"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Squadrons
@@ -8011,6 +8367,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Whale Bomber"));
         tempResearchAdvantage.addShip(gw.getSpaceshipTypeByName("Tiger Attacker"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -8019,6 +8376,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Hummel Mech"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Tiger Mech
@@ -8026,6 +8384,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Tiger Mech"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Panther Mech
@@ -8034,6 +8393,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(0);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Hummel Mech"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tiger Mech"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary HAI
@@ -8041,6 +8401,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addTroopType(gw.getTroopTypeByName("Mercenary HAI"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Mercenary HI
@@ -8049,6 +8410,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addReplaceTroopTypes(gw.getTroopTypeByName("Mercenary Infantry"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         // Troop transport
@@ -8057,6 +8419,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Shadow"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Sweeper"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Army
@@ -8066,57 +8429,65 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Mercenary HAI"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Panther Mech"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
         //Heavy Cannon 
         tempResearchAdvantage = new ResearchAdvantage("Heavy Cannon", "Gives possibility to build Heavy Cannon.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Heavy Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(1);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Puls Cannon 
         tempResearchAdvantage = new ResearchAdvantage("Puls Cannon", "Gives possibility to build Puls Cannon.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Puls Cannon"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Puls Cannon"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Trading Base 
         tempResearchAdvantage = new ResearchAdvantage("Trading Base", "Gives possibility to build Trading Base.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Trading Base"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Trading Base"));
         tempResearchAdvantage.setTimeToResearch(3);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Mining Base 
         tempResearchAdvantage = new ResearchAdvantage("Mining Base", "Gives possibility to build Liberty Mining Base.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Liberty Mining Base"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Liberty Mining Base"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Trading Base"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //University 
         tempResearchAdvantage = new ResearchAdvantage("University", "Gives possibility to build University.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("University"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("University"));
         tempResearchAdvantage.setTimeToResearch(3);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Mercenary Stronghold 
         tempResearchAdvantage = new ResearchAdvantage("Mercenary Stronghold", "Gives possibility to build Mercenary Strongholds.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Mercenary Stronghold"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Mercenary Stronghold"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Armor Construction Yard 
         tempResearchAdvantage = new ResearchAdvantage("Armor Construction Yard", "Gives possibility to build Armor Construction Yards.");
-        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingType("Armor Construction Yard"));
+        tempResearchAdvantage.addBuildingType(tempFaction.getBuildingTypeByName("Armor Construction Yard"));
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Panther Mech"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Ground Constructions
@@ -8128,6 +8499,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Puls Cannon"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Cannon"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -8136,6 +8508,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setTimeToResearch(2);
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Heavy Cannon"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Ship Cannons 
@@ -8144,6 +8517,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Galaxy Ship"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Warship II"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Army Cannons 
@@ -8152,6 +8526,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Tiger Mech"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Hummel Mech"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Bombardment 
@@ -8160,6 +8535,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.setCostToResearchOneTurnInPercent(10);
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Sweeper"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Wiper"));
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         //Heavy Weaponse
@@ -8169,6 +8545,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Ship Cannons"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Fixed Cannons"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         
@@ -8208,12 +8585,18 @@ public class TheLastGreatWar{
         researchCorruption6.setTimeToResearch(3);
         researchCorruption6.setCostToResearchOneTurnInPercent(20);
         researchCorruption6.addChild(researchCorruption5);
-        
+
+        researchCorruption1.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption1);
+        researchCorruption2.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption2);
+        researchCorruption3.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption3);
+        researchCorruption4.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption4);
+        researchCorruption5.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption5);
+        researchCorruption6.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(researchCorruption6);
         
         tempResearchAdvantage = new ResearchAdvantage("Economic","Develop Economic");
@@ -8221,6 +8604,7 @@ public class TheLastGreatWar{
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Infrastructure"));
         tempResearchAdvantage.addChild(ResearchPureFunctions.getAdvantage(tempFaction, "Province Capital"));
         tempResearchAdvantage.setTimeToResearch(1);
+        tempResearchAdvantage.setFaction(tempFaction);
         tempFaction.getResearchAdvantages().add(tempResearchAdvantage);
         
         

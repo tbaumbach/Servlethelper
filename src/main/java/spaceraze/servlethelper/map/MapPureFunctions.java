@@ -40,12 +40,12 @@ public class MapPureFunctions {
                 addShip = true;
             } else {
                 Spaceship spaceshipNext = shipsPlayer.get(i + 1);
-                if (!SpaceshipPureFunctions.getSpaceshipTypeByKey(spaceshipNext.getTypeKey(), g.getGameWorld()).getName().equals(SpaceshipPureFunctions.getSpaceshipTypeByKey(spaceship.getTypeKey(), g.getGameWorld()).getName())) {
+                if (!SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceshipNext.getTypeUuid(), g.getGameWorld()).getName().equals(SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), g.getGameWorld()).getName())) {
                     addShip = true;
                 }
             }
             if (addShip) {
-                String tmpShipStr = SpaceshipPureFunctions.getSpaceshipTypeByKey(spaceship.getTypeKey(), g.getGameWorld()).getShortName();
+                String tmpShipStr = SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), g.getGameWorld()).getShortName();
                 if (shipCount > 1) {
                     tmpShipStr = shipCount + " " + tmpShipStr;
                 }
@@ -55,7 +55,7 @@ public class MapPureFunctions {
                 if (tmpVips.size() > 0) {
                     for (Iterator<VIP> iter = tmpVips.iterator(); iter.hasNext(); ) {
                         VIP aVIP = iter.next();
-                        tmpShipStr = tmpShipStr + VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld()).getShortName();
+                        tmpShipStr = tmpShipStr + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld()).getShortName();
                         if (iter.hasNext()) {
                             tmpShipStr = tmpShipStr + ",";
                         }
@@ -416,8 +416,8 @@ public class MapPureFunctions {
                 if (aShip.isLookAsCivilian() == civilian) {
                     VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aPlanet, aShip, galaxy);
                     if (aShip.isVisibleOnMap() & (stealthVIP == null)) {
-                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
-                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize();
+                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
                         }
                     }
                 }
@@ -444,8 +444,8 @@ public class MapPureFunctions {
                 if (aShip.isLookAsCivilian()) {
                     civ = true;
                 } else if (aShip.isVisibleOnMap()) {
-                    if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
-                        maxSize = SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize();
+                    if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                        maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
                     }
                 }
             }
@@ -464,10 +464,10 @@ public class MapPureFunctions {
                 if (!aShip.isLookAsCivilian()) {
                     VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aPlanet, aShip, galaxy);
                     if (aShip.isVisibleOnMap() & (stealthVIP == null)) {
-                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
                             // Logger.info("aShip name" + aShip.getName());
                             // Logger.info("aShip location" + aShip.getLocation());
-                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByKey(aShip.getTypeKey(), galaxy.getGameWorld()).getSize();
+                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
                         }
                     }
                 }
@@ -487,7 +487,7 @@ public class MapPureFunctions {
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() == player){ // leta efter vippar som tillhör spelaren
                 if (aVIP.getPlanetLocation() == planet){
-                    vipsData.addVipShortName(VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld()).getShortName());
+                    vipsData.addVipShortName(VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld()).getShortName());
                 }
             }
         }
@@ -501,7 +501,7 @@ public class MapPureFunctions {
         VIPData vipsData = new VIPData();
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() != player){ // leta efter vippar som inte tillhör spelaren
-                VIPType vipType =VipPureFunctions.getVipTypeByKey(aVIP.getTypeKey(), g.getGameWorld());
+                VIPType vipType =VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld());
                 if (aVIP.getPlanetLocation() == planet){
                     if (vipType.getShowOnOpenPlanet()){
                         vipsData.addVipShortName(vipType.getShortName());
@@ -521,7 +521,7 @@ public class MapPureFunctions {
         if (buildings.size() > 0){
             buildingsList = new LinkedList<String>();
             for (Building building : buildings) {
-                buildingsList.add(BuildingPureFunctions.getBuildingType(building.getTypeKey(), gameWorld).getShortName());
+                buildingsList.add(BuildingPureFunctions.getBuildingTypeByUuid(building.getTypeUuid(), gameWorld).getShortName());
             }
         }
         return buildingsList;

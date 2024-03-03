@@ -24,7 +24,7 @@ public class VIPNameComparator<T extends VIP> implements Comparator<T> {
 	}
 
 	public int compare(T vip1, T vip2) {
-		return VipPureFunctions.getVipTypeByKey(vip1.getTypeKey(), gameWorld).getName().compareToIgnoreCase(VipPureFunctions.getVipTypeByKey(vip2.getTypeKey(), gameWorld).getName());
+		return VipPureFunctions.getVipTypeByUuid(vip1.getTypeUuid(), gameWorld).getName().compareToIgnoreCase(VipPureFunctions.getVipTypeByUuid(vip2.getTypeUuid(), gameWorld).getName());
 	}
 
 }

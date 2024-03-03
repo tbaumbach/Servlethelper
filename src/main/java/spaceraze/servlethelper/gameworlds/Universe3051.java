@@ -16,6 +16,7 @@ import spaceraze.world.enums.SpaceshipTargetingType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Universe3051{
 	
@@ -23,6 +24,7 @@ public class Universe3051{
 	public static GameWorld getGameWorld(){
 		// XXX Spaceraze Expanded
 		GameWorld gw = new GameWorld();
+        gw.setUuid(UUID.randomUUID().toString());
 		
 //	    gw.setCumulativeBombardment(true);
 //		gw.setSquadronsSurviveOutsideCarriers(false);
@@ -47,7 +49,7 @@ public class Universe3051{
 		gw.setRazedPlanetChance(5);
 		gw.setClosedNeutralPlanetChance(30);
 
-		gw.setAlignments(AlignmentHelper.createDefaultAlignments());
+		gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
 		Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
 		//Alignment good = AlignmentHelper.findAlignment("good", gw.getAlignments());
 		//Alignment evil = AlignmentHelper.findAlignment("evil", gw.getAlignments());
@@ -179,7 +181,7 @@ public class Universe3051{
         tmpVipType.setFrequency(BlackMarketFrequency.SOMEWHAT_UNCOMMON);
         tmpVipType.setCanVisitNeutralPlanets(true);
         tmpVipType.setDiplomat(true);
-        gw.addVipType(tmpVipType);	    
+        gw.addVipType(tmpVipType);
 	    
 //###################  Buildings  ##########################################
         List<BuildingType> tempBuildings = new ArrayList<>();
@@ -983,7 +985,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
 
         
@@ -1040,7 +1042,7 @@ public class Universe3051{
         tempFaction.addStartingShipType(gw.getSpaceshipTypeByName("Head Quarter"));
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
 
         
@@ -1098,7 +1100,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
@@ -1155,7 +1157,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1211,7 +1213,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1267,7 +1269,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1321,7 +1323,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1377,7 +1379,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1433,7 +1435,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1489,7 +1491,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
        
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
@@ -1546,7 +1548,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
@@ -1600,7 +1602,7 @@ public class Universe3051{
         
         // Adding all buildings to the faction.
             tempFaction.setBuildings(tempBuildings);
-        tempFaction.addStartingBuildings(tempFaction.getBuildingType("Medium Wharf"));
+        tempFaction.addStartingBuildings(tempFaction.getBuildingTypeByName("Medium Wharf"));
 
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         
