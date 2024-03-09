@@ -2825,7 +2825,6 @@ public class Titanium {
         if (buildingType != null) {
         } else { // om detta intr�ffar s� finns det antagligen en felstavning av en skeppstyp i gameworlden
             Logger.severe("Titanium.getBuildingTypeByName, btname:" + name + " -> " + buildingType);
-            Thread.dumpStack();
         }
         return buildingType;
     }
