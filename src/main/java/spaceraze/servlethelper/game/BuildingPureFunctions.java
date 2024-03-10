@@ -3,6 +3,7 @@ package spaceraze.servlethelper.game;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
+import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
@@ -32,7 +33,7 @@ public class BuildingPureFunctions {
     public static List<BuildingType> getNextBuildingSteps(BuildingType aBuildingType, List<BuildingType> buildings){
         List<BuildingType> tempBuildingTypes = new ArrayList<>();
         for(BuildingType buildingType :buildings){
-            if(buildingType.getParentBuildingName() != null && buildingType.getParentBuildingName().equalsIgnoreCase(aBuildingType.getName())){
+            if(buildingType.getParentBuildingType() != null && buildingType.getParentBuildingType().equalsIgnoreCase(aBuildingType.getUuid())){
                 tempBuildingTypes.add(buildingType);
             }
         }
@@ -73,12 +74,12 @@ public class BuildingPureFunctions {
     private static boolean checkIfAUniqueChildBuildingIsAlreadyBuild(BuildingType aBuildingType, Player aPlayer, String buildingName){
         boolean childAlreadyBuild = false;
         Logger.finer("aBuildingType.getName(): " + aBuildingType.getName());
-        if (aBuildingType.getParentBuildingName() != null){
-            Logger.finer("aBuildingType.getParentBuilding().getName(): " + aBuildingType.getParentBuildingName());
-            if(aBuildingType.getParentBuildingName().equalsIgnoreCase(buildingName)){
+        if (aBuildingType.getParentBuildingType() != null){
+            Logger.finer("aBuildingType.getParentBuilding().getName(): " + BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer.getGalaxy().getGameWorld()).getName());
+            if(BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer.getGalaxy().getGameWorld()).getName().equalsIgnoreCase(buildingName)){
                 childAlreadyBuild = true;// det finns en child byggnad som är byggd och eftersom denna byggnad är unik så måste den också vara det och då stoppa bygge av denna byggnad.
             }else{
-                BuildingType tempBuildingType = PlayerPureFunctions.findBuildingTypeByName(aBuildingType.getParentBuildingName(), aPlayer);
+                BuildingType tempBuildingType = PlayerPureFunctions.findBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer);
                 if(tempBuildingType != null){
                     Logger.finer("tempBuildingType.getName(): " + tempBuildingType.getName());
                     childAlreadyBuild = checkIfAUniqueChildBuildingIsAlreadyBuild(tempBuildingType, aPlayer, buildingName);
@@ -175,7 +176,7 @@ public class BuildingPureFunctions {
 
         return PlayerPureFunctions.getAvailableBuildingTypes(galaxy, player, planet, null).stream()
                 .filter(buildingType ->
-                        buildingType.getParentBuildingName() == null  && isConstructable(galaxy, player, planet, buildingType, null, null)).collect(Collectors.toList());
+                        buildingType.getParentBuildingType() == null  && isConstructable(galaxy, player, planet, buildingType, null, null)).collect(Collectors.toList());
 
     }
 
@@ -194,7 +195,7 @@ public class BuildingPureFunctions {
     }
 
     public static List<BuildingType> getRootBuildings(List<BuildingType> buildingTypes){
-        return buildingTypes.stream().filter(buildingType -> buildingType.getParentBuildingName() == null).collect(Collectors.toList());
+        return buildingTypes.stream().filter(buildingType -> buildingType.getParentBuildingType() == null).collect(Collectors.toList());
     }
 
     public static int getPlanetBuildingsBonus(Planet tempPlanet, TurnInfo playerTurnInfo, GameWorld gameWorld) {
@@ -228,7 +229,7 @@ public class BuildingPureFunctions {
         return tempIncom;
     }
 
-    public static List<String> getAbilitiesStrings(BuildingType buildingType){
+    public static List<String> getAbilitiesStrings(BuildingType buildingType, GameWorld gameWorld){
         List<String> allStrings = new LinkedList<>();
 
 
@@ -296,10 +297,10 @@ public class BuildingPureFunctions {
             allStrings.add(tmp);
         }
 
-        if (buildingType.getBuildVIPTypes().size() > 0){
+        if (buildingType.getVipTypes().size()> 0){
             String tmp = "VIP building:";
             boolean addComma = false;
-            for (VIPType vipType : buildingType.getBuildVIPTypes()) {
+            for (VIPType vipType : buildingType.getVipTypes().stream().map(vipUuid -> VipPureFunctions.getVipTypeByUuid(vipUuid, gameWorld)).toList()) {
                 if (addComma){
                     tmp += ",";
                 }

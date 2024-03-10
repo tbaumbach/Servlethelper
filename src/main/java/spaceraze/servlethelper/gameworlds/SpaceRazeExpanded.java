@@ -1,6 +1,7 @@
 package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.Alignment;
@@ -47,9 +48,9 @@ public class SpaceRazeExpanded{
 		gw.setAdjustScreenedStatus(false);
 
 		gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
-		Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
-		Alignment good = AlignmentHelper.findAlignment("good", gw.getAlignments());
-		Alignment evil = AlignmentHelper.findAlignment("evil", gw.getAlignments());
+		Alignment neutral = AlignmentPureFunctions.findAlignmentByName("neutral", gw.getAlignments());
+		Alignment good = AlignmentPureFunctions.findAlignmentByName("good", gw.getAlignments());
+		Alignment evil = AlignmentPureFunctions.findAlignmentByName("evil", gw.getAlignments());
 
 		Corruption tmpCorruption = new Corruption();
 		tmpCorruption.addBreakpoint(50, 30);
@@ -483,7 +484,7 @@ public class SpaceRazeExpanded{
         tmpBuildingType = new BuildingType("Medium Orbital Wharf", "W2", 10);
         tmpBuildingType.setWharfSize(2);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(parent.getUuid());
         parent = tmpBuildingType;
         tempBuildingsLeague.add(tmpBuildingType);
         tempBuildingsEmpire.add(tmpBuildingType);
@@ -493,7 +494,7 @@ public class SpaceRazeExpanded{
         tmpBuildingType = new BuildingType("Large Orbital Wharf", "W3", 10);
         tmpBuildingType.setWharfSize(3);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(parent.getUuid());
         parent = tmpBuildingType;
         tempBuildingsLeague.add(tmpBuildingType);
         tempBuildingsEmpire.add(tmpBuildingType);
@@ -503,7 +504,7 @@ public class SpaceRazeExpanded{
         tmpBuildingType = new BuildingType("Huge Orbital Wharf", "W5", 10);
         tmpBuildingType.setWharfSize(5);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(parent.getUuid());
         tempBuildingsLeague.add(tmpBuildingType);
         tempBuildingsEmpire.add(tmpBuildingType);
         tempBuildingsPirate.add(tmpBuildingType);

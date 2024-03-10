@@ -1,8 +1,10 @@
 package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Faction;
@@ -40,7 +42,7 @@ public class CorporateSpace {
         gw.setCreatedByUser("pabod");
 
         gw.setAlignments(AlignmentHelper.createDefaultAlignments(gw));
-        Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
+        Alignment neutral = AlignmentPureFunctions.findAlignmentByName("neutral", gw.getAlignments());
 
         gw.setAdjustScreenedStatus(false);
 
@@ -167,21 +169,21 @@ public class CorporateSpace {
         tmpBuildingType = new BuildingType("Medium Orbital Wharf", "W2", 5);
         tmpBuildingType.setWharfSize(2);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, parent.getName()));
         parent = tmpBuildingType;
         tempBuildings.add(tmpBuildingType);
 
         tmpBuildingType = new BuildingType("Large Orbital Wharf", "W3", 5);
         tmpBuildingType.setWharfSize(3);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, parent.getName()));
         parent = tmpBuildingType;
         tempBuildings.add(tmpBuildingType);
 
         tmpBuildingType = new BuildingType("Huge Orbital Wharf", "W5", 5);
         tmpBuildingType.setWharfSize(5);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, parent.getName()));
         tempBuildings.add(tmpBuildingType);
 
         // Factions

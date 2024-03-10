@@ -1,6 +1,6 @@
 package spaceraze.servlethelper.gameworlds;
 
-import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.world.Alignment;
 import spaceraze.world.Faction;
@@ -62,17 +62,17 @@ public class StarWars {
         gw.getAlignments().add(new Alignment(sGood, gw));
         gw.getAlignments().add(new Alignment(sJedi, gw));
 
-        Alignment aEmpire = AlignmentHelper.findAlignment(sEmpire, gw.getAlignments());
-        Alignment aAlliance = AlignmentHelper.findAlignment(sAlliance, gw.getAlignments());
-        Alignment aTrade = AlignmentHelper.findAlignment(sTrade, gw.getAlignments());
+        Alignment aEmpire = AlignmentPureFunctions.findAlignmentByName(sEmpire, gw.getAlignments());
+        Alignment aAlliance = AlignmentPureFunctions.findAlignmentByName(sAlliance, gw.getAlignments());
+        Alignment aTrade = AlignmentPureFunctions.findAlignmentByName(sTrade, gw.getAlignments());
 //	Alignment aAliens = AlignmentHelper.findAlignment(sAliens, gw.getAlignments());
-        Alignment aOldRepublic = AlignmentHelper.findAlignment(sOldRepublic, gw.getAlignments());
+        Alignment aOldRepublic = AlignmentPureFunctions.findAlignmentByName(sOldRepublic, gw.getAlignments());
 
 //	VIP
-        Alignment aNeutral = AlignmentHelper.findAlignment(sNeutral, gw.getAlignments());
-        Alignment aEvil = AlignmentHelper.findAlignment(sEvil, gw.getAlignments());
-        Alignment aGood = AlignmentHelper.findAlignment(sGood, gw.getAlignments());
-        Alignment aJedi = AlignmentHelper.findAlignment(sJedi, gw.getAlignments());
+        Alignment aNeutral = AlignmentPureFunctions.findAlignmentByName(sNeutral, gw.getAlignments());
+        Alignment aEvil = AlignmentPureFunctions.findAlignmentByName(sEvil, gw.getAlignments());
+        Alignment aGood = AlignmentPureFunctions.findAlignmentByName(sGood, gw.getAlignments());
+        Alignment aJedi = AlignmentPureFunctions.findAlignmentByName(sJedi, gw.getAlignments());
 
         aEmpire.addCanHaveVip(aEvil);
         aEmpire.addCanHaveVip(aJedi);

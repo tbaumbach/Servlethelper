@@ -9,15 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import spaceraze.util.general.Logger;
-import spaceraze.world.Faction;
-import spaceraze.world.Galaxy;
-import spaceraze.world.GameWorld;
+import spaceraze.world.*;
 import spaceraze.servlethelper.gameworlds.SpaceOpera;
 import spaceraze.servlethelper.gameworlds.SpaceRazeExpanded;
 import spaceraze.servlethelper.gameworlds.TheLastGreatWar;
 import spaceraze.servlethelper.gameworlds.Titanium;
 import spaceraze.servlethelper.gameworlds.Universe3051;
-import spaceraze.world.Planet;
 
 
 /**
@@ -44,6 +41,11 @@ public class GameWorldHandler{
 	public static void reloadGameWorldTypes(){
 		gameWorldTypes = null;
 		getGameWorldTypes();
+	}
+
+	@Deprecated
+	public static String getBuildingTypeUuid(List<BuildingType> buildings, String name){
+		return buildings.stream().filter(buildingType -> buildingType.getName().equalsIgnoreCase(name)).map(buildingType -> buildingType.getUuid()).findFirst().orElse(null);
 	}
 
 	private static void createHardcodedGameWorlds(List<GameWorld> gameWorldTypes){

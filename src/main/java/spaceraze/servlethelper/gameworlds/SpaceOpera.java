@@ -1,8 +1,10 @@
 package spaceraze.servlethelper.gameworlds;
 
 import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipMutator;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Corruption;
@@ -55,11 +57,11 @@ public class SpaceOpera{
 		String kStr = "Klackon";
             gw.getAlignments().add(new Alignment(aStr, gw));
             gw.getAlignments().add(new Alignment(kStr, gw));
-		Alignment neutral = AlignmentHelper.findAlignment("neutral", gw.getAlignments());
-		Alignment good = AlignmentHelper.findAlignment("good", gw.getAlignments());
-		Alignment evil = AlignmentHelper.findAlignment("evil", gw.getAlignments());
-		Alignment arachnid = AlignmentHelper.findAlignment(aStr, gw.getAlignments());
-		Alignment klackon = AlignmentHelper.findAlignment(kStr, gw.getAlignments());
+		Alignment neutral = AlignmentPureFunctions.findAlignmentByName("neutral", gw.getAlignments());
+		Alignment good = AlignmentPureFunctions.findAlignmentByName("good", gw.getAlignments());
+		Alignment evil = AlignmentPureFunctions.findAlignmentByName("evil", gw.getAlignments());
+		Alignment arachnid = AlignmentPureFunctions.findAlignmentByName(aStr, gw.getAlignments());
+		Alignment klackon = AlignmentPureFunctions.findAlignmentByName(kStr, gw.getAlignments());
 		neutral.setDescription("Balanced view of the universe");
 		good.setDescription("Respectful of life and prefers law and order");
 		evil.setDescription("Unscroupulous and seek power at any cost");
@@ -2349,7 +2351,7 @@ public class SpaceOpera{
 			tmpBuildingType.setWharfSize(2);
 			tmpBuildingType.setInOrbit(true);
 			tmpBuildingType.setVisibleOnMap(visibleOnMap);
-	        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 			parent = tmpBuildingType;
 			aBuildings.add(tmpBuildingType);
 		}
@@ -2359,7 +2361,7 @@ public class SpaceOpera{
 			tmpBuildingType.setWharfSize(3);
 			tmpBuildingType.setInOrbit(true);
 			tmpBuildingType.setVisibleOnMap(visibleOnMap);
-	        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 			parent = tmpBuildingType;
 			aBuildings.add(tmpBuildingType);
 		}
@@ -2369,7 +2371,7 @@ public class SpaceOpera{
 			tmpBuildingType.setWharfSize(5);
 			tmpBuildingType.setInOrbit(true);
 			tmpBuildingType.setVisibleOnMap(visibleOnMap);
-	        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 			aBuildings.add(tmpBuildingType);
 		}
 	}
@@ -2424,7 +2426,7 @@ public class SpaceOpera{
 			tmpBuildingType.setInOrbit(true);
 	        tmpBuildingType.setPlanetUnique(true);
 	        tmpBuildingType.setAutoDestructWhenConquered(true);
-	        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 			parent = tmpBuildingType;
 	        aBuildings.add(tmpBuildingType);        
 		}
@@ -2438,7 +2440,7 @@ public class SpaceOpera{
 			tmpBuildingType.setInOrbit(true);
 	        tmpBuildingType.setPlanetUnique(true);
 	        tmpBuildingType.setAutoDestructWhenConquered(true);
-	        tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 //			parent = tmpBuildingType;
 	        aBuildings.add(tmpBuildingType);        
 		}
@@ -2468,7 +2470,7 @@ public class SpaceOpera{
 	        tmpBuildingType.setPlanetUnique(true);
 	        tmpBuildingType.setAutoDestructWhenConquered(true);
 	        tmpBuildingType.setVisibleOnMap(false);
-	        if (parent != null) tmpBuildingType.setParentBuildingTypeName(parent.getName());
+	        if (parent != null) tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(aBuildings, parent.getName()));
 			parent = tmpBuildingType;
 	        aBuildings.add(tmpBuildingType);        
 		}

@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
@@ -131,8 +132,8 @@ public class VipMutator {
             aVIP = createRandomVIP(galaxy);
             VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), galaxy.getGameWorld());
             Logger.finer(vipType.getName() + ", alignment=" + vipType.getAlignment() + ", canHaveVip="
-                    + GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName()));
-            if (!GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())) {
+                    + AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, galaxy.getGameWorld())));
+            if (!AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, galaxy.getGameWorld()))) {
                 ok = false;
             }
         }

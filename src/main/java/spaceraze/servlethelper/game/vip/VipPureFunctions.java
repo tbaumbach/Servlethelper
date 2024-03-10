@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
@@ -26,7 +27,7 @@ public class VipPureFunctions {
 
         if((vipType.isWorldUnique() && vipTypeExist(vipType, null, null, galaxy)) || (vipType.isFactionUnique() && vipTypeExist(vipType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy)) || (vipType.isPlayerUnique() && vipTypeExist(vipType, null, aPlayer, galaxy))){
             constructible = false;
-        }else if(!GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).getAlignment().canHaveVip(vipType.getAlignment().getName())){
+        }else if(!AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, galaxy.getGameWorld()))){
             constructible = false;
         }else if(vipType.isWorldUnique() || vipType.isFactionUnique() || vipType.isPlayerUnique()){
             // check if a build order already exist
@@ -103,7 +104,7 @@ public class VipPureFunctions {
                         // determine if they
                         // fight
                         if (vipType1.getAlignment().equals(vipType2.getAlignment())) {
-                            if (vipType1.getAlignment().isDuelOwnAlignment()) {
+                            if (AlignmentPureFunctions.findAlignmentByUuid(vipType1.getAlignment(),galaxy.getGameWorld().getAlignments()).isDuelOwnAlignment()) {
                                 fight = true;
                             }
                         } else {
@@ -757,7 +758,7 @@ public class VipPureFunctions {
     }
 
     public static boolean hatesDuellist(VIP vip, GameWorld gameWorld, VIP anotherVIP) {
-        return getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getAlignment().hateDuellist(getVipTypeByUuid(anotherVIP.getTypeUuid(), gameWorld).getAlignment().getName());
+        return AlignmentPureFunctions.hateDuellist(getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getAlignment(), AlignmentPureFunctions.findAlignmentByUuid(getVipTypeByUuid(anotherVIP.getTypeUuid(), gameWorld).getAlignment(), gameWorld.getAlignments()));
     }
 
     public static VIP findVIPGovernor(Player aPlayer, Galaxy galaxy) {

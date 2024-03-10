@@ -94,10 +94,10 @@ public class ExpensePureFunction {
         }else
         if (expense.getType().equalsIgnoreCase("building")){
             BuildingType buildingType = BuildingPureFunctions.getBuildingTypeByUuid(expense.getBuildingTypeUuid(), galaxy.getGameWorld());
-            if(buildingType.getParentBuildingName() == null){
+            if(buildingType.getParentBuildingType() == null){
                 returnString = "Build new " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
             }else{
-                returnString = "Upgrade " + buildingType.getParentBuildingName() + " to " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
+                returnString = "Upgrade " + BuildingPureFunctions.getBuildingTypeByUuid(buildingType.getParentBuildingType(), galaxy.getGameWorld()).getName() + " to " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
             }
         }else
         if (expense.getType().equalsIgnoreCase("buildship")){

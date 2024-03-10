@@ -1,8 +1,9 @@
 package spaceraze.servlethelper.gameworlds;
 
-import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
 import spaceraze.world.Corruption;
@@ -68,19 +69,19 @@ public class TheLastGreatWarClassic {
         gw.getAlignments().add(new Alignment(sStr, gw));
         gw.getAlignments().add(new Alignment(gStr, gw));
 
-        Alignment usa = AlignmentHelper.findAlignment(uStr, gw.getAlignments());
-        Alignment china = AlignmentHelper.findAlignment(cStr, gw.getAlignments());
-        Alignment eu = AlignmentHelper.findAlignment(eStr, gw.getAlignments());
-        Alignment alliance = AlignmentHelper.findAlignment(aStr, gw.getAlignments());
-        Alignment trade = AlignmentHelper.findAlignment(tStr, gw.getAlignments());
-        Alignment russian = AlignmentHelper.findAlignment(rStr, gw.getAlignments());
-        Alignment federation = AlignmentHelper.findAlignment(fStr, gw.getAlignments());
+        Alignment usa = AlignmentPureFunctions.findAlignmentByName(uStr, gw.getAlignments());
+        Alignment china = AlignmentPureFunctions.findAlignmentByName(cStr, gw.getAlignments());
+        Alignment eu = AlignmentPureFunctions.findAlignmentByName(eStr, gw.getAlignments());
+        Alignment alliance = AlignmentPureFunctions.findAlignmentByName(aStr, gw.getAlignments());
+        Alignment trade = AlignmentPureFunctions.findAlignmentByName(tStr, gw.getAlignments());
+        Alignment russian = AlignmentPureFunctions.findAlignmentByName(rStr, gw.getAlignments());
+        Alignment federation = AlignmentPureFunctions.findAlignmentByName(fStr, gw.getAlignments());
 
 
         //	VIP
-        Alignment neutral = AlignmentHelper.findAlignment(nStr, gw.getAlignments());
-        Alignment smuggler = AlignmentHelper.findAlignment(sStr, gw.getAlignments());
-        Alignment good = AlignmentHelper.findAlignment(gStr, gw.getAlignments());
+        Alignment neutral = AlignmentPureFunctions.findAlignmentByName(nStr, gw.getAlignments());
+        Alignment smuggler = AlignmentPureFunctions.findAlignmentByName(sStr, gw.getAlignments());
+        Alignment good = AlignmentPureFunctions.findAlignmentByName(gStr, gw.getAlignments());
 
         usa.addCanHaveVip(neutral);
         usa.addCanHaveVip(smuggler);
@@ -271,21 +272,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 18);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 40);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -554,7 +555,7 @@ public class TheLastGreatWarClassic {
         //   tempFaction.setStartWithSS(false);
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(china);
+        tempFaction.setAlignment(china.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -576,21 +577,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 16);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 30);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -819,7 +820,7 @@ public class TheLastGreatWarClassic {
         tempFaction.setHistory("In the middle of the 21 century the nation of Africa was started to talk about the idea to start a federation to get out in to the space. At 2084 same countries from Africa founded the Alliance of Africa. The main course was to build up a space fleet to defending the interest and get for resources from the space. As soon the first hyper drives were out on the market we started to rebuild old big ships with hyper drives to start new colonies to avoid the starving around out people. This type of trips was very risky but we didn�t have any choice. It took some years before the first ships went back with food and for pick up new volunteers.\nThen we started to lost ships and colonies around 2171 we started to build up a military fleet. To build up fire power as fast as possible we began to develop squadrons to put on our ships. That was a great decision and we shot down a lot o hostile ships. But the year 2230 the pirates started to attack with large ship and own squadrons. To respond to the new threat the started to build up a military fleet with big capital ships carrying squads. But the fire power is still in our good squadrons.\nAt 2240 some of our colonies in the out space went over to the pirate called Federation of liberty.  At 2242 USA attacked us with a massive nuclear attacked and destroyed and killed all humans in Africa on the earth. We don�t rely know way but USA has always accused us for supporting religious military fanatics. But we have to say that it was not just USA that attacked us that week. Who started this war and way? I guess we never are going to found that out that but one thing is sure, we can�t rely on any one. Hit hard before they hit you and build up the fleet to get military domination. We have to try to connect our colonies to secure a good life. Beware of hostiles factions");
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(alliance);
+        tempFaction.setAlignment(alliance.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -841,21 +842,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 18);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 25);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -1075,7 +1076,7 @@ public class TheLastGreatWarClassic {
         //tempFaction.setStartingWharfSize(OrbitalWharf.MAX_SIZE_SMALL);
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(trade);
+        tempFaction.setAlignment(trade.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -1097,21 +1098,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 20);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 25);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -1339,7 +1340,7 @@ public class TheLastGreatWarClassic {
         //tempFaction.setStartingWharfSize(OrbitalWharf.MAX_SIZE_SMALL);
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(usa);
+        tempFaction.setAlignment(usa.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -1361,21 +1362,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 16);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 22);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -1604,7 +1605,7 @@ public class TheLastGreatWarClassic {
         //tempFaction.setStartingWharfSize(OrbitalWharf.MAX_SIZE_SMALL);
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(russian);
+        tempFaction.setAlignment(russian.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -1626,21 +1627,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 20);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 8);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -1861,7 +1862,7 @@ public class TheLastGreatWarClassic {
         tempFaction.setHistory("At the year 2041 we made our first trip with a new space ship type that could travel between earth and space without any helps from rockets. That�s gave us much more capacity to travel up to the space. Just after that we started a program to build ships to travel around in the space and colonise the sun system.\nIn 2098 the first pirate attacked in space chocked us all and we were not prepared on that at all. To defend us against the attacked we started to travel in fleets.\nAt 2104 we were the first nation that hade developed a hyper drive engine, but it took us more then 8 years before we could do the first jump between 2 planets. Then doing this type of jumps you need to found an absolute free ways. One single small stone could destroy a whole ship then it hits the ship in 232 times lighting speed. 4 years after we did our first jumped to a planet in another sun system. That started a new epoch in space history and soon after that we decide to sell hyper engines outside the nation fleet. The reason was that we found out that a lot of nation was trying to steal the technology from us. The only nation that we hade evidence on was Russian but we know that more nations or companies was trying. Then the hyper drive was free to bay a lot of pore people bought old ships and equipped it with the hyper drivers and did a jump to unknown sun system to start a new life. We know that many of these desperate trips ended in the hyper jump, some of the ships hull wasn�t strong enough or the jump way was unsafe.\nTo develop more safely jump we decide to develop shields to protects the ships against smaller stones. With ships equipped with shield we could began travel to all smaller colonies and start trading with them. Around 2190 the first heavy armed battle ships was made. That was of course a military threat so we decided to start developing new military ship to protect us. Lucky for us we hade a pretty good military fleet around 2230 then the bigger pirates attacks started. But we decided to start develop the strongest and most advanced large ship in the world. The first Galaxy Frigate was made and in duty deep in the space just before the war began.\nWe don�t know way and who that started this war but we hade to defend us. We have the most advanced shields to protect our ships so don�t be afraid. We must now build up our wharfs so we can secure independents with help of ours Galaxy Frigates.");
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(eu);
+        tempFaction.setAlignment(eu.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 
@@ -1883,21 +1884,21 @@ public class TheLastGreatWarClassic {
         tempBuildingType.setWharfSize(2);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Medium Wharf what can build small and medium ships");
-        tempBuildingType.setParentBuildingTypeName("Small Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Small Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Large Wharf", "W3", 18);
         tempBuildingType.setWharfSize(3);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Large Wharf what can build small, medium and large ships");
-        tempBuildingType.setParentBuildingTypeName("Medium Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Medium Wharf"));
         tempBuildings.add(tempBuildingType);
 
         tempBuildingType = new BuildingType("Huge Wharf", "W5", 25);
         tempBuildingType.setWharfSize(5);
         tempBuildingType.setInOrbit(true);
         tempBuildingType.setDescription("Huge Wharf what can build small, medium, large and huge ships");
-        tempBuildingType.setParentBuildingTypeName("Large Wharf");
+        tempBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(tempBuildings, "Large Wharf"));
         tempBuildings.add(tempBuildingType);
 
 
@@ -2159,7 +2160,7 @@ public class TheLastGreatWarClassic {
         tempFaction.setHistory("In the century of 2230 the space was a chaotic place with a lot pirates attacks. The most attacks were against outer space colonies that didn�t get any protections from the old countries and only helped from Trade Federation if the colony was a good trading partner. The smaller colonies hade to protect them self and some time they was attacked by the big federations accuse to be pirates stronghold.\nSome colonies started to build up army fleets together and some started to pay money to pirate to stop the attacks against them.\nAt AC 2240 134 colonies started the Federation of liberty. The older federation didn�t like that at all. They saw our glory federation as a simple pack of pirates. So they told us to dissolve our federation or they were going to bombard all of us. The big problem was that the pirates started attacked to divide us. They understand that the Federation of liberty were going to pirate business much harder.\nThen the big war started in 2242 we were under heavy attacks from pirates, other federation and countries. Son after that the attacks from pirates just stopped and instead they started to attack our attacker from other federations and countries. The pirates contact us and offer us military protection towards food and fuel. We answer them that they could join our glory federation or die. That was a success and from that day Federation of liberty is a powerful nation to respect.");
         tempFaction.setCanReconstruct(true);
         tempFaction.setReconstructCostBase(10);
-        tempFaction.setAlignment(federation);
+        tempFaction.setAlignment(federation.getUuid());
         tempFaction.setCorruptionPoint(tmpCorruption.getCorruptionPoint());
         GameWorldCreator.addFaction(tempFaction, gw);
 

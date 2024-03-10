@@ -16,46 +16,32 @@ public class AlignmentHelper {
         alignments.add(new Alignment("Neutral", gameWorld));
         alignments.add(new Alignment("Evil", gameWorld));
 
-        canHaveVIP("good","neutral", alignments);
-        canHaveVIP("neutral","good", alignments);
-        canHaveVIP("neutral","evil", alignments);
-        canHaveVIP("evil","neutral", alignments);
-        hateDuellist("good","evil", alignments);
-        duelOwnAlignment("good",false, alignments);
+        canHaveVIP("Good","Neutral", alignments);
+        canHaveVIP("Neutral","Good", alignments);
+        canHaveVIP("Neutral","Evil", alignments);
+        canHaveVIP("Evil","Neutral", alignments);
+        hateDuellist("Good","Evil", alignments);
+        duelOwnAlignment("Good",false, alignments);
 
         return alignments;
     }
 
     public static void canHaveVIP(String factionAlignmentName, String vipAlignmentName, List<Alignment> alignments){
-        Alignment factionAlignment = findAlignment(factionAlignmentName, alignments);
-        Alignment vipAlignment = findAlignment(vipAlignmentName, alignments);
+        Alignment factionAlignment = AlignmentPureFunctions.findAlignmentByName(factionAlignmentName, alignments);
+        Alignment vipAlignment = AlignmentPureFunctions.findAlignmentByName(vipAlignmentName, alignments);
         factionAlignment.addCanHaveVip(vipAlignment);
     }
 
     public static void hateDuellist(String duellistAlignmentName1, String duellistAlignmentName2, List<Alignment> alignments){
-        Alignment duellistAlignment1 = findAlignment(duellistAlignmentName1, alignments);
-        Alignment duellistAlignment2 = findAlignment(duellistAlignmentName2, alignments);
+        Alignment duellistAlignment1 = AlignmentPureFunctions.findAlignmentByName(duellistAlignmentName1, alignments);
+        Alignment duellistAlignment2 = AlignmentPureFunctions.findAlignmentByName(duellistAlignmentName2, alignments);
         duellistAlignment1.addHateDuellist(duellistAlignment2);
         duellistAlignment2.addHateDuellist(duellistAlignment1);
     }
 
     public static void duelOwnAlignment(String duellistAlignmentName, boolean duelOwn, List<Alignment> alignments){
-        Alignment duellistAlignment = findAlignment(duellistAlignmentName, alignments);
+        Alignment duellistAlignment = AlignmentPureFunctions.findAlignmentByName(duellistAlignmentName, alignments);
         duellistAlignment.setDuelOwnAlignment(duelOwn);
-    }
-
-    public static Alignment findAlignment(String findName, List<Alignment> alignments){
-        Alignment found = null;
-        int index = 0;
-        while ((found == null) & (index < alignments.size())) {
-            Alignment anAlignment = alignments.get(index);
-            if (anAlignment.isAlignment(findName)){
-                found = anAlignment;
-            }else{
-                index++;
-            }
-        }
-        return found;
     }
 
 }

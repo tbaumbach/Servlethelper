@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import spaceraze.servlethelper.game.AlignmentHelper;
+import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipMutator;
+import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.Alignment;
@@ -64,12 +65,12 @@ public class Titanium {
         gw.getAlignments().add(new Alignment(gStr, gw));
         gw.getAlignments().add(new Alignment(tStr, gw));
         gw.getAlignments().add(new Alignment(mStr, gw));
-        Alignment orb = AlignmentHelper.findAlignment(oStr, gw.getAlignments());
-        Alignment lancer = AlignmentHelper.findAlignment(lStr, gw.getAlignments());
-        Alignment cyber = AlignmentHelper.findAlignment(cStr, gw.getAlignments());
-        Alignment ghost = AlignmentHelper.findAlignment(gStr, gw.getAlignments());
-        Alignment templar = AlignmentHelper.findAlignment(tStr, gw.getAlignments());
-        Alignment mercenary = AlignmentHelper.findAlignment(mStr, gw.getAlignments());
+        Alignment orb = AlignmentPureFunctions.findAlignmentByName(oStr, gw.getAlignments());
+        Alignment lancer = AlignmentPureFunctions.findAlignmentByName(lStr, gw.getAlignments());
+        Alignment cyber = AlignmentPureFunctions.findAlignmentByName(cStr, gw.getAlignments());
+        Alignment ghost = AlignmentPureFunctions.findAlignmentByName(gStr, gw.getAlignments());
+        Alignment templar = AlignmentPureFunctions.findAlignmentByName(tStr, gw.getAlignments());
+        Alignment mercenary = AlignmentPureFunctions.findAlignmentByName(mStr, gw.getAlignments());
         
         orb.setDescription("Diversity and flexibility");
         lancer.setDescription("Profit and diplomacy");
@@ -875,7 +876,8 @@ public class Titanium {
         tmpBuildingType = new BuildingType("Medium Orbital Wharf", "W2", 10);
         tmpBuildingType.setDescription("Can build one medium or two small ship every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         tmpBuildingType.setWharfSize(2);
-        tmpBuildingType.setParentBuildingTypeName("Small Orbital Wharf");
+
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Small Orbital Wharf"));
         tmpBuildingType.setInOrbit(true);
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bOrb, bLancer, bCyber, bGhost, bTemplar);
@@ -884,7 +886,7 @@ public class Titanium {
         tmpBuildingType.setDescription("Can build one large ship or some smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         tmpBuildingType.setWharfSize(3);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Medium Orbital Wharf");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Medium Orbital Wharf"));
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bOrb, bLancer, bCyber, bGhost, bTemplar);
@@ -893,7 +895,7 @@ public class Titanium {
         tmpBuildingType.setDescription("Can build one huge ship or several smaller ships every turn. Is vulnerable to enemy ships since it is in orbit around the planet.");
         tmpBuildingType.setWharfSize(5);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Large Orbital Wharf");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Large Orbital Wharf"));
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bOrb, bLancer, bCyber, bGhost, bTemplar);
@@ -910,7 +912,7 @@ public class Titanium {
         tmpBuildingType = new BuildingType("Medium Planetary Wharf", "P2", 10);
         tmpBuildingType.setDescription("Can build one medium or two small ship every turn.");
         tmpBuildingType.setWharfSize(2);
-        tmpBuildingType.setParentBuildingTypeName("Small Planetary Wharf");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Small Planetary Wharf"));
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bOrb, bLancer, bCyber, bGhost, bTemplar);
@@ -928,7 +930,7 @@ public class Titanium {
         tmpBuildingType.setShieldCapacity(2);
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName("Small Planetary Shield");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Small Planetary Shield"));
 //        parent = tmpBuildingType;
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bOrb, bLancer, bCyber, bTemplar);
@@ -938,7 +940,7 @@ public class Titanium {
         tmpBuildingType.setShieldCapacity(2);
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName("Small Planetary Shield"); // small planetary shield is parent
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Small Planetary Shield")); // small planetary shield is parent
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bGhost);
 
@@ -947,7 +949,7 @@ public class Titanium {
         tmpBuildingType.setShieldCapacity(3);
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName("Ghost Medium Planetary Shield");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Ghost Medium Planetary Shield"));
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bGhost);
 
@@ -968,7 +970,7 @@ public class Titanium {
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setAutoDestructWhenConquered(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName("Defensive Bunkers");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Defensive Bunkers"));
         buildings.add(tmpBuildingType);
         addBuildingToFactions(tmpBuildingType, bGhost);
 
@@ -989,7 +991,7 @@ public class Titanium {
         tmpBuildingType.setCannonDamage(100);
         tmpBuildingType.setCannonRateOfFire(2);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Spaceport Class 1");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Spaceport Class 1"));
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
@@ -1003,7 +1005,7 @@ public class Titanium {
         tmpBuildingType.setCannonRateOfFire(2);
         tmpBuildingType.setSpaceport(true);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Spaceport Class 2");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Spaceport Class 2"));
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
@@ -1018,7 +1020,7 @@ public class Titanium {
         tmpBuildingType.setSpaceport(true);
         tmpBuildingType.setTechBonus(10);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Spaceport Class 3");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Spaceport Class 3"));
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
@@ -1033,7 +1035,7 @@ public class Titanium {
         tmpBuildingType.setSpaceport(true);
         tmpBuildingType.setTechBonus(10);
         tmpBuildingType.setInOrbit(true);
-        tmpBuildingType.setParentBuildingTypeName("Spaceport Class 4");
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, "Spaceport Class 4"));
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setDeveloped(false);
         buildings.add(tmpBuildingType);
@@ -2778,7 +2780,7 @@ public class Titanium {
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setAutoDestructWhenConquered(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName(longNames[0]);
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, longNames[0]));
         buildings.add(tmpBuildingType);
         factionBuildings.add(tmpBuildingType);
 
@@ -2797,7 +2799,7 @@ public class Titanium {
         tmpBuildingType.setPlanetUnique(true);
         tmpBuildingType.setAutoDestructWhenConquered(true);
         tmpBuildingType.setDeveloped(false);
-        tmpBuildingType.setParentBuildingTypeName(longNames[2]);
+        tmpBuildingType.setParentBuildingType(GameWorldHandler.getBuildingTypeUuid(buildings, longNames[2]));
         buildings.add(tmpBuildingType);
         factionBuildings.add(tmpBuildingType);
 
