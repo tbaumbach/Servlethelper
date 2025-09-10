@@ -27,7 +27,6 @@ import spaceraze.util.properties.PropertiesHandler;
 import spaceraze.world.BasePlanet;
 import spaceraze.world.Map;
 import spaceraze.world.MapPlanetConnection;
-import spaceraze.world.PlanetConnection;
 
 /**
  * @author WMPABOD
@@ -103,7 +102,7 @@ public class MapImageCreator {
 		densityLimit = customLimit;
 	}
 	
-	private Dimension createImage(String imageName, Map aMap){
+	private Dimension createImage(String imageName, Map map){
 		Dimension d = null;
 //		System.out.println("Creating new image with text: " + text);
 		// need a component in order to use MediaTracker
@@ -112,12 +111,12 @@ public class MapImageCreator {
 		f.setVisible(true);
 		
 		// determine width and height???
-		int largestX = computeLargestX(aMap);
-		int largestY = computeLargestY(aMap);
-		int largestZ = computeLargestZ(aMap);
-		int smallestX = computeSmallestX(aMap);
-		int smallestY = computeSmallestY(aMap);
-		int smallestZ = computeSmallestZ(aMap);
+		int largestX = computeLargestX(map);
+		int largestY = computeLargestY(map);
+		int largestZ = computeLargestZ(map);
+		int smallestX = computeSmallestX(map);
+		int smallestY = computeSmallestY(map);
+		int smallestZ = computeSmallestZ(map);
 		Logger.finer(largestX + " " + largestY + " " + largestZ);
 		Logger.finer(smallestX + " " + smallestY + " " + smallestZ);
 		int mapWidth = largestX - smallestX;
@@ -137,10 +136,10 @@ public class MapImageCreator {
 		
 		// if needed, rescale width and height
 		double density = -1;
-		if (aMap.getNrPlanets() == 0){
+		if (map.getNrPlanets() == 0){
 			density = 800; // skall ej skalas om
 		}else{
-			density = (height*1.0)/aMap.getNrPlanets();
+			density = (height*1.0)/map.getNrPlanets();
 		}
 		Logger.finer("Map density: " + density);
 		int limit = densityLimit;
@@ -178,17 +177,17 @@ public class MapImageCreator {
 		// -------------
 		
 		// transform coors
-		movePlanets(aMap,smallestX,smallestY,smallestZ);
-		scalePlanets(aMap,scaleMod);
-		movePlanets(aMap,-5,-30,0);
+		movePlanets(map,smallestX,smallestY,smallestZ);
+		scalePlanets(map,scaleMod);
+		movePlanets(map,-5,-30,0);
 		
 		// draw all connections
-		List<MapPlanetConnection> allConnections = aMap.getConnections();
+		List<MapPlanetConnection> allConnections = map.getConnections();
 		// long range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
-				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
+				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -201,8 +200,8 @@ public class MapImageCreator {
 		// short range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
-				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
+				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 =  map.getPlanet(aConnection.getPlanetTwoUuid());
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -214,7 +213,7 @@ public class MapImageCreator {
 		}
 
 		// draw all planets
-		for (BasePlanet aPlanet : aMap.getPlanets()) {
+		for (BasePlanet aPlanet : map.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			int tmpY = (int)Math.round(aPlanet.getY());
 			int tmpZ = (int)Math.round(aPlanet.getZ());
@@ -249,10 +248,11 @@ public class MapImageCreator {
 
 	/**
 	 * Creates a map image to be shown when creating a new game in the notifier
-	 * @param aMap
+	 *
+	 * @param map
 	 * @return
 	 */
-	public Image createImage(Map aMap){
+	public Image createImage(Map map){
 //		Dimension d = null;
 //		System.out.println("Creating new image with text: " + text);
 		// need a component in order to use MediaTracker
@@ -261,12 +261,12 @@ public class MapImageCreator {
 //		f.setVisible(true);
 //		Logger.fine("aMap: " + aMap.getNameFull());
 		// determine width and height???
-		int largestX = computeLargestX(aMap);
-		int largestY = computeLargestY(aMap);
-		int largestZ = computeLargestZ(aMap);
-		int smallestX = computeSmallestX(aMap);
-		int smallestY = computeSmallestY(aMap);
-		int smallestZ = computeSmallestZ(aMap);
+		int largestX = computeLargestX(map);
+		int largestY = computeLargestY(map);
+		int largestZ = computeLargestZ(map);
+		int smallestX = computeSmallestX(map);
+		int smallestY = computeSmallestY(map);
+		int smallestZ = computeSmallestZ(map);
 		Logger.finer(largestX + " " + largestY + " " + largestZ);
 		Logger.finer(smallestX + " " + smallestY + " " + smallestZ);
 		int mapWidth = largestX - smallestX;
@@ -336,17 +336,17 @@ public class MapImageCreator {
 		// -------------
 		
 		// transform coors
-		movePlanets(aMap,smallestX,smallestY,smallestZ);
-		scalePlanets(aMap,scaleMod);
-		movePlanets(aMap,-20,-20,0);
+		movePlanets(map,smallestX,smallestY,smallestZ);
+		scalePlanets(map,scaleMod);
+		movePlanets(map,-20,-20,0);
 		
 		// draw all connections
-		List<MapPlanetConnection> allConnections = aMap.getConnections();
+		List<MapPlanetConnection> allConnections = map.getConnections();
 		// long range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
-				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
+				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -359,8 +359,8 @@ public class MapImageCreator {
 		// short range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = aConnection.getPlanetOne();
-				BasePlanet tmpPlanet2 = aConnection.getPlanetTwo();
+				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -373,9 +373,9 @@ public class MapImageCreator {
 
 		// draw all planets
 		// compute planet size on map
-		int size = (int)Math.round(7 - Math.sqrt(aMap.getPlanets().size())/4.0);
+		int size = (int)Math.round(7 - Math.sqrt(map.getPlanets().size())/4.0);
 //		Logger.fine("size (" + aMap.getNameFull() + "): " + size);
-		for (BasePlanet aPlanet : aMap.getPlanets()) {
+		for (BasePlanet aPlanet : map.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
 			int tmpY = (int)Math.round(aPlanet.getY());
 //			int tmpZ = (int)Math.round(aPlanet.getZcoor());

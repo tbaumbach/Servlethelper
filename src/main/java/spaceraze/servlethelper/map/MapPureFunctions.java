@@ -9,6 +9,7 @@ import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.servlethelper.comparator.SpaceshipSizeAndBuildCostComparator;
+import spaceraze.world.Map;
 import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.mapinfo.*;
 
@@ -525,6 +526,111 @@ public class MapPureFunctions {
             }
         }
         return buildingsList;
+    }
+
+    private static MapPlanet getOtherEnd(MapPlanetConnection connection, MapPlanet planet, boolean isLongRange, Map map) {
+        if (connection.isLongRange() == false || connection.isLongRange() == isLongRange) {
+            if (connection.getPlanetOneUuid().equals(planet.getUuid())) {
+                return map.getPlanet(connection.getPlanetTwoUuid());
+            } else if (connection.getPlanetTwoUuid().equals(planet.getUuid())) {
+                return map.getPlanet(connection.getPlanetOneUuid());
+            }
+        }
+        return null;
+    }
+
+    public static List<MapPlanet> getAllDestinations(MapPlanet location, boolean longRange, Map map){
+        List<MapPlanet> alldest = new LinkedList<>();
+        MapPlanet tempPlanet = null;
+        for (MapPlanetConnection temppc : map.getConnections()){
+            tempPlanet = getOtherEnd(temppc, location,longRange, map);
+            if (tempPlanet != null){  // there is a connection within range
+                alldest.add(tempPlanet);
+            }
+        }
+        return alldest;
+    }
+
+    public static boolean checkPlanetsAllConnected(Map map){
+        boolean allConnected = true;
+        List<MapPlanet> searchedPlanets = new LinkedList<>(); // add all serched planets + startplanet
+        if (map.getPlanets().size() > 1){ // 0 or 1 planets are by definition connected
+            List<MapPlanet> edgePlanets = new LinkedList<>();
+            List<MapPlanet> newEdgePlanets = new LinkedList<>();
+            searchedPlanets.add(map.getPlanets().get(0));
+            edgePlanets.add(map.getPlanets().get(0));
+            List<MapPlanet> allNeighbours = new LinkedList<>();
+
+            // Gå igenom alla edgePlanets (dvs bara startplaneten initialt)
+            for (int i = 0; i < edgePlanets.size(); i++){
+                MapPlanet tempPlanet = edgePlanets.get(i);
+                // Hämta alla grannar till tempPlanet
+                allNeighbours = getAllDestinations(tempPlanet,true, map);
+                // Gå igenom alla allNeighbours  (lägg i newEdgePlanets)
+                for (int j = 0; j < allNeighbours.size(); j++){
+                    MapPlanet tempNeighbourPlanet = allNeighbours.get(j);
+                    // kolla att tempNeighbourPlanet inte redan finns i searchedPlanets
+                    if ((!searchedPlanets.contains(tempNeighbourPlanet)) & (!newEdgePlanets.contains(tempNeighbourPlanet))){
+                        // lägg i newEdgePlanets
+                        newEdgePlanets.add(tempNeighbourPlanet);
+                    }
+                }
+            }
+
+            while (newEdgePlanets.size() > 0){
+                // töm edgePlanets
+                edgePlanets.clear();
+                for (int l = 0; l < newEdgePlanets.size(); l++){
+                    // kopiera över newEdgePlanets till edgePlanets
+                    edgePlanets.add(newEdgePlanets.get(l));
+                    // kopiera över newEdgePlanets till searchedPlanets
+                    searchedPlanets.add(newEdgePlanets.get(l));
+                }
+                // töm newEdgePlanets
+                newEdgePlanets.clear();
+                // töm allNeighbours
+                allNeighbours.clear();
+
+                // Gå igenom alla edgePlanets (dvs bara startplaneten initialt)
+                for (int i = 0; i < edgePlanets.size(); i++){
+                    MapPlanet tempPlanet = edgePlanets.get(i);
+                    // Hämta alla grannar till tempPlanet
+                    allNeighbours = getAllDestinations(tempPlanet,true, map);
+                    // Gå igenom alla allNeighbours  (lägg i newEdgePlanets)
+                    for (int j = 0; j < allNeighbours.size(); j++){
+                        MapPlanet tempNeighbourPlanet = allNeighbours.get(j);
+                        // kolla att tempNeighbourPlanet inte redan finns i searchedPlanets
+                        if ((!searchedPlanets.contains(tempNeighbourPlanet)) & (!newEdgePlanets.contains(tempNeighbourPlanet))){
+                            // l�gg i newEdgePlanets
+                            newEdgePlanets.add(tempNeighbourPlanet);
+                        }
+                    }
+                }
+            }
+        }
+        allConnected = map.getPlanets().size() == searchedPlanets.size();
+        return allConnected;
+    }
+
+    public static MapPlanetConnection findConnection(Map map, String planetUuidOne, String planetUuidTwo){
+        return map.getConnections().stream().filter(connection -> isConnection(connection, planetUuidOne, planetUuidTwo)).findAny().orElse(null);
+    }
+
+    private static boolean isConnection(MapPlanetConnection connection, String planetUuidOne, String planetUuidTwo) {
+        if (planetUuidOne == null || planetUuidTwo == null) {
+            return  false;
+        }
+        return (planetUuidOne.equals(connection.getPlanetOneUuid()) && planetUuidTwo.equals(connection.getPlanetTwoUuid())) ||
+                (planetUuidTwo.equals(connection.getPlanetOneUuid()) && planetUuidOne.equals(connection.getPlanetTwoUuid()));
+    }
+
+    //TODO should be replaced by a MapService method
+    public static void deleteConnection(Map map, String planetUuidOne, String planetUuidTwo) {
+        map.getConnections().remove(findConnection(map, planetUuidOne, planetUuidTwo));
+    }
+
+    public static MapPlanet getPlanet(String uuid, Map map){
+        return map.getPlanets().stream().filter(mapPlanet -> mapPlanet.getUuid().equals(uuid)).findFirst().orElse(null);
     }
 
 }
