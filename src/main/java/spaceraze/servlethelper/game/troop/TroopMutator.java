@@ -1,6 +1,8 @@
 package spaceraze.servlethelper.game.troop;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.UniqueIdHandler;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.vip.VipMutator;
 import spaceraze.util.general.Logger;
@@ -46,14 +48,14 @@ public class TroopMutator {
         report.getTroopsLostInSpace().add(CanBeLostInSpace.builder().lostInSpaceString(TroopPureFunctions.getTroopTypeByUuid(aTroop.getTypeUuid(), gameWorld).getName()).owner(aTroop.getOwner() != null ? aTroop.getOwner().getGovernorName() : null).build()); // TODO 2020-11-28 This should be replaced by EvenReport logic. So add the lost ships to the new specific created Report (for the typ of event) extending EvenReport. Try to reuse the EnemySpaceship and OwnSpaceship
     }
 
-    public static void checkTroopsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy) {
+    public static void checkTroopsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap) {
         List<Troop> troopList = getTroopsOnShip(aShip, galaxy);
         for (Troop aTroop : troopList) {
             addToLatestTroopsLostInSpace(aTroop, aPlayer.getTurnInfo(), galaxy.getGameWorld());
             aTroop.getOwner().addToGeneral("Your troop " + aTroop.getName() + " has been killed when your ship "
-                    + aShip.getName() + " was destroyed at " + aShip.getLocation().getName() + ".");
+                    + aShip.getName() + " was destroyed at " + PlanetPureFunctions.getPlanetName(galaxyMap, aShip.getLocation().getMapPlanetUuid()) + ".");
             aTroop.getOwner().addToHighlights(aTroop.getName(), HighlightType.TYPE_OWN_TROOP_DESTROYED);
-            TroopMutator.removeTroop(aTroop, galaxy);
+            TroopMutator.removeTroop(aTroop, galaxy, galaxyMap);
         }
     }
 
@@ -67,19 +69,19 @@ public class TroopMutator {
         return troopsAtPlanet;
     }
 
-    public static void removeTroop(Troop aTroop, Galaxy galaxy) {
+    public static void removeTroop(Troop aTroop, Galaxy galaxy, GalaxyMap galaxyMap) {
         boolean ok;
         aTroop.setDestroyed();
         ok = galaxy.getTroops().remove(aTroop);
         if (aTroop.getOwner() != null) { // only players can have vips on troops
-            VipMutator.checkVIPsInDestroyedTroop(aTroop, galaxy);
+            VipMutator.checkVIPsInDestroyedTroop(aTroop, galaxy, galaxyMap);
         }
         if (!ok) {
             Logger.finer("Couldn't find troop to delete!!!");
         } // sp�rutskrift
     }
 
-    public static String hit(Troop troop, int damage, boolean artillery, boolean defending, int resistance){
+    public static String hit(Troop troop, int damage, boolean artillery, boolean defending, int resistance, GalaxyMap galaxyMap){
         Logger.finer("hit: damage=" + damage + " art=" + artillery + " def=" + defending + " res=" + resistance);
         String returnString = "";
         double remainingDamage = damage;
@@ -97,7 +99,7 @@ public class TroopMutator {
         if (actualDamage >= troop.getCurrentDamageCapacity()){
             troop.setCurrentDamageCapacity(0);
             if (troop.getOwner() != null){
-                VipMutator.checkVIPsInDestroyedTroop(troop, troop.getOwner().getGalaxy());
+                VipMutator.checkVIPsInDestroyedTroop(troop, troop.getOwner().getGalaxy(), galaxyMap);
             }
             returnString = "Troop destroyed";
         }else{
@@ -114,16 +116,16 @@ public class TroopMutator {
        troop.setKills(troop.getKills() + 1);
     }
 
-    public static void performRepairs(Troop troop, double amountOfRepair) {
+    public static void performRepairs(Troop troop, double amountOfRepair, GalaxyMap galaxyMap) {
         troop.setCurrentDamageCapacity(Math.round(troop.getCurrentDamageCapacity() + (int)Math.round(amountOfRepair* troop.getDamageCapacity())));
         if (troop.getCurrentDamageCapacity() > troop.getDamageCapacity()){
             troop.setCurrentDamageCapacity(troop.getDamageCapacity());
         }
         if (troop.getOwner() != null) {
             if (troop.getCurrentDamageCapacity() == troop.getDamageCapacity()){
-                troop.getOwner().addToGeneral("Your troop " + troop.getName() + " at "	+ TroopPureFunctions.getLocationString(troop) + " has been repaired " + (int)Math.round(amountOfRepair*100) + "% to full damage capacity.");
+                troop.getOwner().addToGeneral("Your troop " + troop.getName() + " at "	+ TroopPureFunctions.getLocationString(troop, galaxyMap) + " has been repaired " + (int)Math.round(amountOfRepair*100) + "% to full damage capacity.");
             }else{
-                troop.getOwner().addToGeneral("Your troop " + troop.getName() + " at "	+ TroopPureFunctions.getLocationString(troop) + " has been repaired " + (int)Math.round(amountOfRepair*100) + "% to " + (int)Math.round((troop.getCurrentDamageCapacity() * 100)/ troop.getDamageCapacity())  + "% of full damage capacity.");
+                troop.getOwner().addToGeneral("Your troop " + troop.getName() + " at "	+ TroopPureFunctions.getLocationString(troop, galaxyMap) + " has been repaired " + (int)Math.round(amountOfRepair*100) + "% to " + (int)Math.round((troop.getCurrentDamageCapacity() * 100)/ troop.getDamageCapacity())  + "% of full damage capacity.");
             }
         }
     }

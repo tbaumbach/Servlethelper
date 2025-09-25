@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
@@ -41,7 +42,7 @@ public class BuildingPureFunctions {
     }
 
     public static boolean isConstructable(Galaxy galaxy, Player player, Planet aPlanet, BuildingType buildingType, String buildingKey, PlayerBuildingImprovement improvement){
-        Logger.finer("isConstructable, aPlanet: " + aPlanet.getName());
+        Logger.finer("isConstructable, aPlanet: " + aPlanet.getMapPlanetUuid());
         Logger.finer("isConstructable, BuildingType: " + buildingType.getName());
         boolean isConstructable =  true;
         if((improvement != null && !improvement.isDeveloped()) || (improvement == null && !buildingType.isDeveloped())){
@@ -198,7 +199,7 @@ public class BuildingPureFunctions {
         return buildingTypes.stream().filter(buildingType -> buildingType.getParentBuildingType() == null).collect(Collectors.toList());
     }
 
-    public static int getPlanetBuildingsBonus(Planet tempPlanet, TurnInfo playerTurnInfo, GameWorld gameWorld) {
+    public static int getPlanetBuildingsBonus(Planet tempPlanet, TurnInfo playerTurnInfo, GameWorld gameWorld, GalaxyMap galaxyMap) {
         int tempIncom = 0;
         for (Building building : tempPlanet.getBuildings()) {
             BuildingType buildingType = BuildingPureFunctions.getBuildingTypeByUuid(building.getTypeUuid(), gameWorld);
@@ -209,7 +210,7 @@ public class BuildingPureFunctions {
                     if (openInc > 0) {
                         if (playerTurnInfo != null) {
                             playerTurnInfo.addToLatestIncomeReport(IncomeType.BUILDING,
-                                    buildingType.getName() + " open planet bonus", tempPlanet.getName(), openInc);
+                                    buildingType.getName() + " open planet bonus", PlanetPureFunctions.getPlanetName(galaxyMap, tempPlanet.getMapPlanetUuid()), openInc);
                         }
                     }
                 }
@@ -220,7 +221,7 @@ public class BuildingPureFunctions {
                     if (closedInc > 0) {
                         if (playerTurnInfo != null) {
                             playerTurnInfo.addToLatestIncomeReport(IncomeType.BUILDING,
-                                    buildingType.getName() + " closed planet bonus", tempPlanet.getName(), closedInc);
+                                    buildingType.getName() + " closed planet bonus", PlanetPureFunctions.getPlanetName(galaxyMap, tempPlanet.getMapPlanetUuid()), closedInc);
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
@@ -159,15 +160,15 @@ public class PlayerPureFunctions {
     /**
      * Only used by client.
      */
-    public static int getTreasuryAfterCosts(Player player, Galaxy galaxy){
+    public static int getTreasuryAfterCosts(Player player, Galaxy galaxy, GalaxyMap galaxyMap){
         Logger.finer("upkeepShips();" + CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld()));
         Logger.finer("upkeepTroops();" + CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()));
         Logger.finer("upkeepVIPs();" + CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()));
-        Logger.finer("income();" + IncomePureFunctions.getPlayerIncome(player, false));
-        Logger.finer("orders.getExpensesCost();" + ExpensePureFunction.getExpensesCost(galaxy, player));
+        Logger.finer("income();" + IncomePureFunctions.getPlayerIncome(player, false, galaxyMap));
+        Logger.finer("orders.getExpensesCost();" + ExpensePureFunction.getExpensesCost(galaxy, player, galaxyMap));
         Logger.finer("treasury;" + player.getTreasury());
-        int tmpIncome = player.getTreasury() - CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld()) - CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()) -  CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()) + IncomePureFunctions.getPlayerIncome(player, false);
-        tmpIncome -= ExpensePureFunction.getExpensesCost(galaxy, player);
+        int tmpIncome = player.getTreasury() - CostPureFunctions.getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld()) - CostPureFunctions.getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()) -  CostPureFunctions.getPlayerUpkeepVIPs(player, galaxy.getAllVIPs()) + IncomePureFunctions.getPlayerIncome(player, false, galaxyMap);
+        tmpIncome -= ExpensePureFunction.getExpensesCost(galaxy, player, galaxyMap);
         return tmpIncome;
     }
 

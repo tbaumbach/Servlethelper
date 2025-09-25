@@ -1,7 +1,10 @@
 package spaceraze.servlethelper.game.expenses;
 
+import spaceraze.map.GalaxyMap;
+import spaceraze.map.MapPlanet;
 import spaceraze.servlethelper.game.BlackMarketPureFunctions;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
@@ -16,23 +19,22 @@ public class ExpensePureFunction {
 
     private ExpensePureFunction(){}
 
-    public static int getExpensesCost(Galaxy aGalaxy, Player player){
+    public static int getExpensesCost(Galaxy aGalaxy, Player player, GalaxyMap galaxyMap){
         int totalCost = 0;
         for (Expense expense : player.getOrders().getExpenses()){
-            totalCost = totalCost + ExpensePureFunction.getCost(expense, aGalaxy, player);
+            totalCost = totalCost + ExpensePureFunction.getCost(expense, aGalaxy, player, galaxyMap);
         }
         return totalCost;
     }
 
-    public static int getCost(Expense expense, Galaxy aGalaxy, Player player){
+    public static int getCost(Expense expense, Galaxy galaxy, Player player, GalaxyMap galaxyMap){
         Orders o = player.getOrders();
         int cost = 0;
-        Planet planet = null;
         String type = expense.getType();
         Logger.finer("Expense.getCost(Orders o, Galaxy aGalaxy) type: " +  expense.getType());
-        if(expense.getPlanetName() != null && !expense.getPlanetName().equalsIgnoreCase("")){
-            planet = aGalaxy.getPlanet(expense.getPlanetName());
-        }
+        MapPlanet mapPlanet = expense.getMapPlanetUuid() != null && !"".equalsIgnoreCase(expense.getMapPlanetUuid()) ? PlanetPureFunctions.getMapPlanet(galaxyMap, expense.getMapPlanetUuid()) : null;
+        Planet planet = mapPlanet != null ? PlanetPureFunctions.getPlanet(mapPlanet.getUuid(), galaxy) : null;
+
 
         if (type.equalsIgnoreCase("pop")){
             cost = planet.getPopulation();
@@ -41,31 +43,30 @@ public class ExpensePureFunction {
             cost = planet.getResistance();
         }else
         if (type.equalsIgnoreCase("building")){
-            Logger.finer("planetName: " + expense.getPlanetName());
-            Logger.finer("planet: " + planet.getName());
+            Logger.finer("planet: " + expense.getMapPlanetUuid());
             Logger.finer("planet.getPlayerInControl(): " + player);
-            VIP tempVIP = VipPureFunctions.findVIPBuildingBuildBonus(planet, player, o, aGalaxy);
+            VIP tempVIP = VipPureFunctions.findVIPBuildingBuildBonus(planet, player, o, galaxy);
             int vipBuildBonus = tempVIP == null ? 0 : VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), player.getGalaxy().getGameWorld()).getBuildingBuildBonus();
             BuildingType aBuildingType = PlayerPureFunctions.findOwnBuildingTypeByUuid(expense.getBuildingTypeUuid(), player);
             cost =  BuildingPureFunctions.getBuildCost(aBuildingType, vipBuildBonus);
         }else
         if (type.equalsIgnoreCase("buildship")){
             // kollar f�rst om det finns en engineer vid planeten
-            VIP tempEngineer = VipPureFunctions.findVIPShipBuildBonus(planet, player, o, aGalaxy);
-            int vipBuildBonus = tempEngineer == null ? 0 : VipPureFunctions.getVipTypeByUuid(tempEngineer.getTypeUuid(), aGalaxy.getGameWorld()).getShipBuildBonus();
-            cost = SpaceshipPureFunctions.getBuildCost(PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeUuid(),  player, aGalaxy), vipBuildBonus);
+            VIP tempEngineer = VipPureFunctions.findVIPShipBuildBonus(planet, player, o, galaxy);
+            int vipBuildBonus = tempEngineer == null ? 0 : VipPureFunctions.getVipTypeByUuid(tempEngineer.getTypeUuid(), galaxy.getGameWorld()).getShipBuildBonus();
+            cost = SpaceshipPureFunctions.getBuildCost(PlayerPureFunctions.findOwnSpaceshipType(expense.getSpaceshipTypeUuid(),  player, galaxy), vipBuildBonus);
         }
         else
         if (type.equalsIgnoreCase("buildtroop")){
             // first check if there is an engineer at the planet
-            VIP tempVIP = VipPureFunctions.findVIPTroopBuildBonus(planet, player , o, aGalaxy);
-            TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeUuid(), player, aGalaxy);
+            VIP tempVIP = VipPureFunctions.findVIPTroopBuildBonus(planet, player , o, galaxy);
+            TroopType troopType = PlayerPureFunctions.findOwnTroopType(expense.getTroopTypeUuid(), player, galaxy);
             int vipBuildBonus = tempVIP == null ? 0 : VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), player.getGalaxy().getGameWorld()).getTroopBuildBonus();
             cost = TroopPureFunctions.getCostBuild(troopType, vipBuildBonus);
 
         }else
         if (type.equalsIgnoreCase("buildVIP")){
-            VIPType tempVIPType = VipPureFunctions.getVipTypeByUuid(expense.getTypeVIPUuid(), aGalaxy.getGameWorld());
+            VIPType tempVIPType = VipPureFunctions.getVipTypeByUuid(expense.getTypeVIPUuid(), galaxy.getGameWorld());
             cost = tempVIPType.getBuildCost();
         }else
         if (type.equalsIgnoreCase("transaction")){
@@ -75,7 +76,7 @@ public class ExpensePureFunction {
             cost = expense.getBlackMarketBid().getCost();
         }else
         if (type.equalsIgnoreCase("reconstruct")){
-            cost = GameWorldHandler.getFactionByUuid(player.getFactionUuid(), aGalaxy.getGameWorld()).getReconstructCost(planet);
+            cost = GameWorldHandler.getFactionByUuid(player.getFactionUuid(), galaxy.getGameWorld()).getReconstructCost(planet);
         }else{
             if (type.equalsIgnoreCase("research")){
                 cost = expense.getResearchOrder().getCost();
@@ -84,41 +85,42 @@ public class ExpensePureFunction {
         return cost;
     }
 
-    public static String getText(Galaxy galaxy, int cost, Expense expense){
+    public static String getText(Galaxy galaxy, int cost, Expense expense, GalaxyMap galaxyMap){
+        String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, expense.getMapPlanetUuid());
         String returnString = "";
         if (expense.getType().equalsIgnoreCase("pop")){
-            returnString = "Increase production on " + expense.getPlanetName() + " with +1.";
+            returnString = "Increase production on " + planetName + " with +1.";
         }else
         if (expense.getType().equalsIgnoreCase("res")){
-            returnString = "Increase resistance on " + expense.getPlanetName() + " with +1.";
+            returnString = "Increase resistance on " + planetName + " with +1.";
         }else
         if (expense.getType().equalsIgnoreCase("building")){
             BuildingType buildingType = BuildingPureFunctions.getBuildingTypeByUuid(expense.getBuildingTypeUuid(), galaxy.getGameWorld());
             if(buildingType.getParentBuildingType() == null){
-                returnString = "Build new " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
+                returnString = "Build new " + buildingType.getName() + " at " + planetName + ".";
             }else{
-                returnString = "Upgrade " + BuildingPureFunctions.getBuildingTypeByUuid(buildingType.getParentBuildingType(), galaxy.getGameWorld()).getName() + " to " + buildingType.getName() + " at " + expense.getPlanetName() + ".";
+                returnString = "Upgrade " + BuildingPureFunctions.getBuildingTypeByUuid(buildingType.getParentBuildingType(), galaxy.getGameWorld()).getName() + " to " + buildingType.getName() + " at " + planetName + ".";
             }
         }else
         if (expense.getType().equalsIgnoreCase("buildship")){
             SpaceshipType sst = SpaceshipPureFunctions.getSpaceshipTypeByUuid(expense.getSpaceshipTypeUuid(), galaxy.getGameWorld());
-            returnString = "Build new " + sst.getName() + " at " + expense.getPlanetName() + ".";
+            returnString = "Build new " + sst.getName() + " at " + planetName + ".";
         }else
         if (expense.getType().equalsIgnoreCase("buildtroop")){
             TroopType troopType = TroopPureFunctions.getTroopTypeByUuid(expense.getTroopTypeUuid(), galaxy.getGameWorld());
-            returnString = "Build new " + troopType.getName() + " at " + expense.getPlanetName() + ".";
+            returnString = "Build new " + troopType.getName() + " at " + planetName + ".";
         }else
         if (expense.getType().equalsIgnoreCase("buildVIP")){
-            returnString = "Build new " + VipPureFunctions.getVipTypeByUuid(expense.getTypeVIPUuid(), galaxy.getGameWorld()).getName() + " at " + expense.getPlanetName() + ".";
+            returnString = "Build new " + VipPureFunctions.getVipTypeByUuid(expense.getTypeVIPUuid(), galaxy.getGameWorld()).getName() + " at " + planetName + ".";
         }else
         if (expense.getType().equalsIgnoreCase("transaction")){
-            returnString = "Transfer " + expense.getSum() + " money to Govenor " + galaxy.getPlayerByUserName(expense.getPlayerName()).getGovernorName();
+            returnString = "Transfer " + expense.getSum() + " money to Govenor " + galaxy.getPlayerByUserName(planetName).getGovernorName();
         }else
         if(expense.getType().equalsIgnoreCase("blackmarketbid")){
             returnString = BlackMarketBid.getBiddingText(BlackMarketPureFunctions.findBlackMarketOffer(expense.getBlackMarketBid().getOfferUniqueId(), galaxy), expense.getBlackMarketBid());
         }else
         if(expense.getType().equalsIgnoreCase("reconstruct")){
-            returnString = "Reconstruct the planet " + expense.getPlanetName();
+            returnString = "Reconstruct the planet " + planetName;
         }else
         if(expense.getType().equalsIgnoreCase("research")){
             returnString = "Research on " + expense.getResearchOrder().getAdvantageName();

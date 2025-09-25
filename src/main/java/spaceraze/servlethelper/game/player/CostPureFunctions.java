@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.world.*;
 
@@ -81,11 +82,11 @@ public class CostPureFunctions {
         return upkeep;
     }
 
-    public static boolean isBroke(Player player, Galaxy galaxy){
+    public static boolean isBroke(Player player, Galaxy galaxy, GalaxyMap galaxyMap){
         return (getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld())
                 + getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()))
                 + getPlayerUpkeepVIPs(player, galaxy.getAllVIPs())> (player.getTreasury()
-                + IncomePureFunctions.getPlayerIncome(player,false));
+                + IncomePureFunctions.getPlayerIncome(player,false, galaxyMap));
     }
 
     public static int getPlayerUpkeepVIPs(Player aPlayer, List<VIP> vips) {

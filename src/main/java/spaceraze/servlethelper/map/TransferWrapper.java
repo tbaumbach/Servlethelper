@@ -5,7 +5,7 @@ package spaceraze.servlethelper.map;
 
 import java.io.Serializable;
 
-import spaceraze.world.Map;
+import spaceraze.map.GalaxyMap;
 
 /**
  * @author WMPABOD
@@ -15,7 +15,7 @@ import spaceraze.world.Map;
  */
 public class TransferWrapper implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private Map aMap;
+	private GalaxyMap aMap;
 	private String playerLogin;
 	private String mapFileName; // name of map to be loaded or saved
 	private String action; // see MapEditorPanel for valid actions
@@ -41,7 +41,7 @@ public class TransferWrapper implements Serializable{
 	}
 
 	// Used when saving a map to the server
-	public TransferWrapper(String action, String aPlayerLogin, Map aMap, String aMapFileName){
+	public TransferWrapper(String action, String aPlayerLogin, GalaxyMap aMap, String aMapFileName){
 		this.action = action;
 		this.playerLogin = aPlayerLogin;
 		this.aMap = aMap;
@@ -49,11 +49,11 @@ public class TransferWrapper implements Serializable{
 	}
 
 	// used bu server to return a map
-	public void setMap(Map aMap){
+	public void setMap(GalaxyMap aMap){
 		this.aMap = aMap;
 	}
 	
-	public Map getMap(){
+	public GalaxyMap getMap(){
 		return aMap;
 	}
 

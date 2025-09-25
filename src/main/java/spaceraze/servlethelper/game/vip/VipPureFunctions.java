@@ -1,7 +1,9 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
@@ -69,7 +71,7 @@ public class VipPureFunctions {
     }
 
     public static List<VIP> getAllGovsFromFactionOnPlanet(Planet aPlanet, Faction aFaction, Galaxy galaxy) {
-        Logger.finer("called for planet: " + aPlanet.getName() + " and faction: " + aFaction.getName());
+        Logger.finer("called for planet: " + aPlanet.getMapPlanetUuid() + " and faction: " + aFaction.getName());
         List<VIP> allGovs = new LinkedList<VIP>();
         List<VIP> allVIPsonPlanet = findAllVIPsOnPlanet(aPlanet, galaxy);
         Logger.finest("VIPs found on planet: " + allVIPsonPlanet.size());
@@ -146,7 +148,7 @@ public class VipPureFunctions {
         Logger.info("aPlanet: " + aPlanet);
         Logger.info("aPlayer: " + aPlayer);
         Logger.info("aPlayer: " + aPlayer.getName());
-        Logger.finer("findPlayersVIPsOnPlanetOrShipsOrTroops called: " + aPlanet.getName() + " " + aPlayer.getName());
+        Logger.finer("findPlayersVIPsOnPlanetOrShipsOrTroops called: " + aPlanet.getMapPlanetUuid() + " " + aPlayer.getName());
         List<VIP> tempAllVIPs = findAllVIPsOnPlanetOrShipsOrTroops(aPlanet, galaxy);
         List<VIP> vipsAtPlanet = new LinkedList<VIP>();
         Logger.finer("tempAllVIPs: " + tempAllVIPs);
@@ -159,7 +161,7 @@ public class VipPureFunctions {
     }
 
     public static List<VIP> findPlayersVIPsOnPlanet(Planet aPlanet, Player aPlayer, Galaxy galaxy) {
-        Logger.finer("findPlayersVIPsOnPlanet called: " + aPlanet.getName() + " " + aPlayer.getName());
+        Logger.finer("findPlayersVIPsOnPlanet called: " + aPlanet.getMapPlanetUuid() + " " + aPlayer.getName());
         List<VIP> tempAllVIPs = findAllVIPsOnPlanetOrShipsOrTroops(aPlanet, galaxy);
         List<VIP> vipsAtPlanet = new LinkedList<VIP>();
         Logger.finer("tempAllVIPs: " + tempAllVIPs);
@@ -512,7 +514,7 @@ public class VipPureFunctions {
     public static List<VIPMovement> getVIPMoves(Planet aPlanet, Orders orders) {
         List<VIPMovement> vipMoves = new LinkedList<VIPMovement>();
         for (VIPMovement aVIPMovement : orders.getVIPMoves()) {
-            if (aPlanet.getName().equals(aVIPMovement.getPlanetDestination())) {
+            if (aPlanet.getMapPlanetUuid().equals(aVIPMovement.getPlanetDestination())) {
                 vipMoves.add(aVIPMovement);
             }
         }
@@ -689,10 +691,10 @@ public class VipPureFunctions {
         return allStrings;
     }
 
-    public static String getLocationString(VIP vip) {
+    public static String getLocationString(VIP vip, GalaxyMap galaxyMap) {
         String locationString = "";
         if (vip.getPlanetLocation() != null) {
-            locationString = vip.getPlanetLocation().getName();
+            locationString = PlanetPureFunctions.getPlanetName(galaxyMap, vip.getPlanetLocation().getMapPlanetUuid());
         } else if (vip.getTroopLocation() != null) {
             locationString = vip.getTroopLocation().getName();
         } else {

@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.map;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
@@ -9,13 +10,13 @@ import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.servlethelper.comparator.SpaceshipSizeAndBuildCostComparator;
-import spaceraze.world.Map;
+import spaceraze.map.*;
 import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.mapinfo.*;
 
 import java.util.*;
 
-public class MapPureFunctions {
+public class GalaxyMapPureFunctions {
 
     public static List<String> getShipsList(Planet planet, Player player, Galaxy g) {
         // list to return
@@ -78,11 +79,11 @@ public class MapPureFunctions {
         List<MapConnectionInfo> starPortConnections = new ArrayList<>();
 
         for (Planet planet : player.getGalaxy().getPlanets()) {
-            MapPlanetInfo mapPlanetInfo = MapPureFunctions.createMapPlanetInfo(planet, player, mapPlanetInfos, turn, getShipsList(planet, player, player.getGalaxy()), player.getGalaxy());
+            MapPlanetInfo mapPlanetInfo = GalaxyMapPureFunctions.createMapPlanetInfo(planet, player, mapPlanetInfos, turn, getShipsList(planet, player, player.getGalaxy()), player.getGalaxy());
             allPlanetInfos.add(mapPlanetInfo);
         }
         for (PlanetConnection aPlanetConnection : player.getGalaxy().getPlanetConnections()) {
-            if (MapPureFunctions.isStarPortConnections(aPlanetConnection, player)) {
+            if (GalaxyMapPureFunctions.isStarPortConnections(aPlanetConnection, player)) {
                 MapConnectionInfo mapConnectionInfo = new MapConnectionInfo(aPlanetConnection);
                 starPortConnections.add(mapConnectionInfo);
             }
@@ -94,8 +95,8 @@ public class MapPureFunctions {
     public static boolean isStarPortConnections(PlanetConnection planetConnection, Player player) {
         boolean haveStarPort = false;
         Galaxy g = player.getGalaxy();
-        Planet p1 = g.getPlanet(planetConnection.getPlanetOne().getName());
-        Planet p2 = g.getPlanet(planetConnection.getPlanetTwo().getName());
+        Planet p1 = g.getPlanet(planetConnection.getPlanetOne().getMapPlanetUuid());
+        Planet p2 = g.getPlanet(planetConnection.getPlanetTwo().getMapPlanetUuid());
         // check if starport make this connection short range
         if ((p1.getPlayerInControl() != null) & (p2.getPlayerInControl() != null)) { // none of the planets are neutral
             if (PlanetPureFunctions.hasSpacePort(p1) && PlanetPureFunctions.hasSpacePort(p2)) { // both have a spacestation
@@ -111,21 +112,21 @@ public class MapPureFunctions {
         return haveStarPort;
     }
 
-    public static List<String> getAllDestinationsStrings(Planet location, boolean longRange, Player aPlayer,
-                                                         boolean ownPlanetsOnly, Galaxy galaxy) {
+    public static List<String> getAllDestinationsUuids(Planet location, boolean longRange, Player aPlayer,
+                                                       boolean ownPlanetsOnly, Galaxy galaxy) {
         Logger.finer("getAllDestinationsStrings, location: " + location + " longRange: " + longRange);
         // first find if there is a spaceport on the planet
         boolean hasSpacePort = false;
         hasSpacePort = PlanetPureFunctions.hasSpacePort(location);
-        List<String> alldest = new LinkedList<String>();
+        List<String> alldest = new LinkedList<>();
         for (PlanetConnection planetConnection : galaxy.getPlanetConnections()) {
             Logger.finer("PC: " + planetConnection);
             // first check if this connection includes location at all
-            BasePlanet otherEnd = planetConnection.getOtherEnd(location, true);
+            Planet otherEnd = PlanetPureFunctions.getOtherEnd(planetConnection, location, true);
 
             if (otherEnd != null) {
-                Planet planetOtherEnd = galaxy.getPlanet(otherEnd.getName());
-                Logger.finer("PlanetOtherEnd: " + planetOtherEnd.getName());
+                Planet planetOtherEnd = galaxy.getPlanet(otherEnd.getMapPlanetUuid());
+                Logger.finer("PlanetOtherEnd: " + planetOtherEnd.getMapPlanetUuid());
                 boolean bothHaveValidSpacePorts = false;
                 if (hasSpacePort) {
                     Logger.finer(" hasSpacePort");
@@ -173,7 +174,7 @@ public class MapPureFunctions {
                     }
                 }
                 if (add) {
-                    alldest.add(planetOtherEnd.getName());
+                    alldest.add(planetOtherEnd.getMapPlanetUuid());
                 }
             }
         }
@@ -182,8 +183,8 @@ public class MapPureFunctions {
 
     public static MapPlanetInfo createMapPlanetInfo(Planet planet, Player player, MapInfos mapPlanetInfos, int turn, List<String> spaceships, Galaxy galaxy) {
         MapPlanetInfo mapPlanetInfo = new MapPlanetInfo();
-        Logger.finer("MapPlanetInfo creator, planet: " + planet.getName() + ", player: " + player.getGovernorName() + ", turn: " + turn);
-        mapPlanetInfo.setPlanetName(planet.getName());
+        Logger.finer("MapPlanetInfo creator, planet: " + planet.getMapPlanetUuid() + ", player: " + player.getGovernorName() + ", turn: " + turn);
+        mapPlanetInfo.setPlanetUuid(planet.getMapPlanetUuid());
         boolean spy = VipPureFunctions.findVIPSpy(planet, player, galaxy) != null;
         boolean shipInSystem = PlayerPureFunctions.playerHasShipsInSystem(player, planet, galaxy);
         boolean surveyShip = (SpaceshipPureFunctions.findSurveyShip(planet, player, galaxy.getSpaceships(), galaxy.getGameWorld()) != null);
@@ -330,7 +331,7 @@ public class MapPureFunctions {
                 mapPlanetInfo.setLastKnownRes(null);
             }
         }
-        mapPlanetInfo.setNotes(PlanetPureFunctions.findPlanetInfo(planet.getName(), player.getPlanetInformations()).getNotes());
+        mapPlanetInfo.setNotes(PlanetPureFunctions.findPlanetInfo(planet.getMapPlanetUuid(), player.getPlanetInformations()).getNotes());
 
 
         return mapPlanetInfo;
@@ -528,7 +529,7 @@ public class MapPureFunctions {
         return buildingsList;
     }
 
-    private static MapPlanet getOtherEnd(MapPlanetConnection connection, MapPlanet planet, boolean isLongRange, Map map) {
+    private static MapPlanet getOtherEnd(MapPlanetConnection connection, MapPlanet planet, boolean isLongRange, GalaxyMap map) {
         if (connection.isLongRange() == false || connection.isLongRange() == isLongRange) {
             if (connection.getPlanetOneUuid().equals(planet.getUuid())) {
                 return map.getPlanet(connection.getPlanetTwoUuid());
@@ -539,7 +540,7 @@ public class MapPureFunctions {
         return null;
     }
 
-    public static List<MapPlanet> getAllDestinations(MapPlanet location, boolean longRange, Map map){
+    public static List<MapPlanet> getAllDestinations(MapPlanet location, boolean longRange, GalaxyMap map){
         List<MapPlanet> alldest = new LinkedList<>();
         MapPlanet tempPlanet = null;
         for (MapPlanetConnection temppc : map.getConnections()){
@@ -551,7 +552,7 @@ public class MapPureFunctions {
         return alldest;
     }
 
-    public static boolean checkPlanetsAllConnected(Map map){
+    public static boolean checkPlanetsAllConnected(GalaxyMap map){
         boolean allConnected = true;
         List<MapPlanet> searchedPlanets = new LinkedList<>(); // add all serched planets + startplanet
         if (map.getPlanets().size() > 1){ // 0 or 1 planets are by definition connected
@@ -612,7 +613,7 @@ public class MapPureFunctions {
         return allConnected;
     }
 
-    public static MapPlanetConnection findConnection(Map map, String planetUuidOne, String planetUuidTwo){
+    public static MapPlanetConnection findConnection(GalaxyMap map, String planetUuidOne, String planetUuidTwo){
         return map.getConnections().stream().filter(connection -> isConnection(connection, planetUuidOne, planetUuidTwo)).findAny().orElse(null);
     }
 
@@ -625,11 +626,11 @@ public class MapPureFunctions {
     }
 
     //TODO should be replaced by a MapService method
-    public static void deleteConnection(Map map, String planetUuidOne, String planetUuidTwo) {
+    public static void deleteConnection(GalaxyMap map, String planetUuidOne, String planetUuidTwo) {
         map.getConnections().remove(findConnection(map, planetUuidOne, planetUuidTwo));
     }
 
-    public static MapPlanet getPlanet(String uuid, Map map){
+    public static MapPlanet getPlanet(String uuid, GalaxyMap map){
         return map.getPlanets().stream().filter(mapPlanet -> mapPlanet.getUuid().equals(uuid)).findFirst().orElse(null);
     }
 

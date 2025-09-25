@@ -1,7 +1,9 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
@@ -17,7 +19,7 @@ public class IncomePureFunctions {
 
     private IncomePureFunctions(){}
 
-    public static int getPlayerIncomeAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy) {
+    public static int getPlayerIncomeAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
         int totIncome = 0;
         TurnInfo playerTurnInfo = null;
         if (addToIncomeReport) {
@@ -27,32 +29,32 @@ public class IncomePureFunctions {
             List<Spaceship> shipsAtPlanet = SpaceshipPureFunctions.getPlayersSpaceshipsOnPlanet(aPlayer, planet, galaxy.getSpaceships());
             if (planet.getPlayerInControl() == aPlayer) {
                 int tmpInc = getIncomeAlien(planet, aPlayer.getOpenPlanetBonus(),
-                        aPlayer.getClosedPlanetBonus(), playerTurnInfo)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld());
+                        aPlayer.getClosedPlanetBonus(), playerTurnInfo, galaxyMap)
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld(), galaxyMap);
                 Logger.finer("alien base income: " + tmpInc);
                 totIncome += tmpInc;
                 // add income bonus for buildings.
 
-                totIncome += BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld());
+                totIncome += BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld(), galaxyMap);
                 Logger.finest("alien base income: " + tmpInc);
             }
-            totIncome += getShipIncome(shipsAtPlanet, planet, playerTurnInfo, galaxy);
+            totIncome += getShipIncome(shipsAtPlanet, planet, playerTurnInfo, galaxy, galaxyMap);
         }
         return totIncome;
     }
 
-    public static int getPlayerIncomeWithoutCorruption(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy) {
+    public static int getPlayerIncomeWithoutCorruption(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
         int income;
         if (GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).isAlien()) {
-            income = getPlayerIncomeAlien(aPlayer, addToIncomeReport, galaxy);
+            income = getPlayerIncomeAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap);
         } else {
-            income = getPlayerIncomeNonAlien(aPlayer, addToIncomeReport, galaxy);
+            income = getPlayerIncomeNonAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap);
         }
         return income;
     }
 
-    public static int getPlayerIncome(Player aPlayer, boolean addToIncomeReport) {
-        int income = getPlayerIncomeWithoutCorruption(aPlayer, addToIncomeReport, aPlayer.getGalaxy());
+    public static int getPlayerIncome(Player aPlayer, boolean addToIncomeReport, GalaxyMap galaxyMap) {
+        int income = getPlayerIncomeWithoutCorruption(aPlayer, addToIncomeReport, aPlayer.getGalaxy(), galaxyMap);
         // System.out.println("getPlayerIncome, income1: " + income);
         income = getIncomeAfterCorruption(income, aPlayer.getCorruptionPoint());
         // System.out.println("getPlayerIncome, income2: " + income);
@@ -103,7 +105,7 @@ public class IncomePureFunctions {
         return incomeAfterCorruption;
     }
 
-    private static int getPlayerIncomeNonAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy) {
+    private static int getPlayerIncomeNonAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
         int totIncome = 0;
         TurnInfo playerTurnInfo = null;
         if (addToIncomeReport) {
@@ -113,27 +115,27 @@ public class IncomePureFunctions {
             List<Spaceship> shipsAtPlanet = SpaceshipPureFunctions.getPlayersSpaceshipsOnPlanet(aPlayer, planet, galaxy.getSpaceships());
             // Logger.finest("shipsAtPlanet " + shipsAtPlanet.size());
             if (planet.getPlayerInControl() == aPlayer) {
-                Logger.finest("tempPlanet " + planet.getName());
+                Logger.finest("tempPlanet " + planet.getMapPlanetUuid());
                 int tmpInc = getIncome(planet, aPlayer.getOpenPlanetBonus(),
-                        aPlayer.getClosedPlanetBonus(), playerTurnInfo)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld());
+                        aPlayer.getClosedPlanetBonus(), playerTurnInfo, galaxyMap)
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld(), galaxyMap);
                 Logger.finest("tmpInc " + tmpInc);
                 totIncome = totIncome + tmpInc;
                 Logger.finest("totIncome1 " + totIncome);
                 // add income bonus for Buildings
                 Logger.finest("getPlanetBuildingsBonus(tempPlanet) f�re");
-                totIncome = totIncome + BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld());
+                totIncome = totIncome + BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld(), galaxyMap);
                 Logger.finest("totIncome2 " + totIncome);
                 Logger.finest("getPlanetBuildingsBonus(tempPlanet) efter");
                 Logger.finest("totIncome3 " + totIncome);
             }
-            totIncome += getShipIncome(shipsAtPlanet, planet, playerTurnInfo, galaxy);
+            totIncome += getShipIncome(shipsAtPlanet, planet, playerTurnInfo, galaxy, galaxyMap);
         }
         Logger.finest("getPlayerIncomeNonAlien totIncome return " + totIncome);
         return totIncome;
     }
 
-    private static int getVIPIncomeBonus(Player aPlayer, Planet aPlanet, TurnInfo playerTurnInfo, List<VIP> vips, GameWorld gameWorld) {
+    private static int getVIPIncomeBonus(Player aPlayer, Planet aPlanet, TurnInfo playerTurnInfo, List<VIP> vips, GameWorld gameWorld, GalaxyMap galaxyMap) {
         int incomeBonus = 0;
         if (!aPlanet.isBesieged()) {
             VIP tempVIP = findVIPEconomicBonus(aPlanet, aPlayer, vips, gameWorld);
@@ -143,12 +145,12 @@ public class IncomePureFunctions {
                     incomeBonus = vipType.getOpenIncBonus();
                     if (playerTurnInfo != null)
                         playerTurnInfo.addToLatestIncomeReport(IncomeType.VIP, vipType.getName() + " open planet bonus",
-                                aPlanet.getName(), incomeBonus);
+                                PlanetPureFunctions.getPlanetName(galaxyMap, aPlanet.getMapPlanetUuid()), incomeBonus);
                 } else {
                     incomeBonus = vipType.getClosedIncBonus();
                     if (playerTurnInfo != null)
                         playerTurnInfo.addToLatestIncomeReport(IncomeType.VIP,
-                                vipType.getName() + " closed planet bonus", aPlanet.getName(), incomeBonus);
+                                vipType.getName() + " closed planet bonus", PlanetPureFunctions.getPlanetName(galaxyMap, aPlanet.getMapPlanetUuid()), incomeBonus);
                 }
             }
         }
@@ -177,7 +179,7 @@ public class IncomePureFunctions {
         return foundVIP;
     }
 
-    private static int getShipIncome(List<Spaceship> shipsAtPlanet, Planet aPlanet, TurnInfo playerTurnInfo, Galaxy galaxy) {
+    private static int getShipIncome(List<Spaceship> shipsAtPlanet, Planet aPlanet, TurnInfo playerTurnInfo, Galaxy galaxy, GalaxyMap galaxyMap) {
         int tmpIncome = 0;
         Spaceship aShip = null;
         for (Spaceship spaceship : shipsAtPlanet) {
@@ -188,7 +190,7 @@ public class IncomePureFunctions {
             }
         }
         if (tmpIncome > 0 && playerTurnInfo != null) {
-            playerTurnInfo.addToLatestIncomeReport(IncomeType.SHIP, aShip.getName(), aPlanet.getName(), tmpIncome);
+            playerTurnInfo.addToLatestIncomeReport(IncomeType.SHIP, aShip.getName(), PlanetPureFunctions.getPlanetName(galaxyMap, aPlanet.getMapPlanetUuid()), tmpIncome);
         }
         return tmpIncome;
     }
@@ -237,24 +239,25 @@ public class IncomePureFunctions {
         return income;
     }
 
-    public static int getIncome(Planet planet, int openbonus, int closedbonus, TurnInfo playerTurnInfo){
+    public static int getIncome(Planet planet, int openbonus, int closedbonus, TurnInfo playerTurnInfo, GalaxyMap galaxyMap){
 //      LoggingHandler.finer("getIncome " + name + ": " + openbonus + " " + closedbonus);
+        String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, planet.getMapPlanetUuid());
         int tempIncome = 0;
         if (!planet.isBesieged()){
             if (planet.getPopulation() > 0){
                 tempIncome = planet.getPopulation();
                 if (playerTurnInfo != null) {
-                    playerTurnInfo.addToLatestIncomeReport(IncomeType.PLANET, "Planet production", planet.getName(), planet.getPopulation());
+                    playerTurnInfo.addToLatestIncomeReport(IncomeType.PLANET, "Planet production", planetName, planet.getPopulation());
                 }
                 if (planet.isOpen()){
                     tempIncome = tempIncome + 2 + openbonus;
                     if ((openbonus + 2) > 0){
-                        if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.OPEN_BONUS, "Planet open bonus", planet.getName(), 2 + openbonus);
+                        if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.OPEN_BONUS, "Planet open bonus", planetName, 2 + openbonus);
                     }
                 }else{
                     tempIncome = tempIncome + closedbonus;
                     if (closedbonus > 0){
-                        if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.CLOSED_BONUS, "Planet closed bonus", planet.getName(), closedbonus);
+                        if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.CLOSED_BONUS, "Planet closed bonus", planetName, closedbonus);
                     }
                 }
             }
@@ -262,21 +265,22 @@ public class IncomePureFunctions {
         return tempIncome;
     }
 
-    public static int getIncomeAlien(Planet planet, int openbonus, int closedbonus, TurnInfo playerTurnInfo){
+    public static int getIncomeAlien(Planet planet, int openbonus, int closedbonus, TurnInfo playerTurnInfo, GalaxyMap galaxyMap){
 //    	LoggingHandler.finer("getIncomeAlien " + name + ": " + closedbonus);
+        String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, planet.getMapPlanetUuid());
         int tempIncome = 0;
         if (!planet.isBesieged()){
             if (planet.getResistance() > 0){
                 tempIncome = planet.getResistance();
                 if (playerTurnInfo != null){
-                    playerTurnInfo.addToLatestIncomeReport(IncomeType.PLANET, "Planet resistance", planet.getName(), planet.getPopulation());
+                    playerTurnInfo.addToLatestIncomeReport(IncomeType.PLANET, "Planet resistance", planetName, planet.getPopulation());
                 }
                 if (planet.isOpen()){
                     tempIncome = tempIncome + 2 + openbonus;
-                    if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.OPEN_BONUS, "Planet open bonus", planet.getName(), 2 + openbonus);
+                    if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.OPEN_BONUS, "Planet open bonus", planetName, 2 + openbonus);
                 }else{
                     tempIncome = tempIncome + closedbonus;
-                    if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.CLOSED_BONUS, "Planet closed bonus", planet.getName(), closedbonus);
+                    if (playerTurnInfo != null) playerTurnInfo.addToLatestIncomeReport(IncomeType.CLOSED_BONUS, "Planet closed bonus", planetName, closedbonus);
                 }
             }
         }

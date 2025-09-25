@@ -3,8 +3,10 @@ package spaceraze.servlethelper.game.orders;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
 import spaceraze.util.general.Logger;
 import spaceraze.world.Building;
+import spaceraze.world.Planet;
 import spaceraze.world.orders.Expense;
 import spaceraze.world.orders.Orders;
+import spaceraze.world.orders.PlanetNotesChange;
 
 public class OrderMutator {
 
@@ -68,6 +70,38 @@ public class OrderMutator {
         }
         if (findIndex > -1) {
             orders.getExpenses().remove(findIndex);
+        }
+    }
+
+    public static void addPlanetNotesChange(Orders orders, Planet aPlanet, String planetName, String notesText) {
+        PlanetNotesChange aPlanetNotesChange = OrderPureFunctions.getPlanetNotesChange(orders, aPlanet);
+        if (aPlanetNotesChange != null) {
+            aPlanetNotesChange.setNotesText(notesText);
+        } else {
+            orders.getPlanetNotesChanges().add(new PlanetNotesChange(aPlanet.getMapPlanetUuid(), planetName, notesText));
+        }
+    }
+
+    public static  void removePlanetNotesChange(Orders orders, Planet aPlanet) {
+        PlanetNotesChange aPlanetNotesChange = OrderPureFunctions.getPlanetNotesChange(orders, aPlanet);
+        if (aPlanetNotesChange != null) {
+            orders.getPlanetNotesChanges().remove(aPlanetNotesChange);
+        }
+    }
+
+    public static void addOrRemovePlanetVisibility(Orders orders, Planet planet) {
+        // remove if order exists
+        if (!orders.getPlanetVisibilities().remove(planet.getMapPlanetUuid())) {
+            // No order was found, add a new one
+            orders.getPlanetVisibilities().add(planet.getMapPlanetUuid());
+        }
+    }
+
+    public static void addOrRemoveAbandonPlanet(Orders orders, Planet planet) {
+        // remove if order exists
+        if (!orders.getAbandonPlanets().remove(planet.getMapPlanetUuid())) {
+            // No order was found, add a new one
+            orders.getAbandonPlanets().add(planet.getMapPlanetUuid());
         }
     }
 

@@ -105,7 +105,7 @@ public class SpaceshipPureFunctions {
         List<Spaceship> tempShipList =SpaceshipPureFunctions.getPlayersSpaceshipsOnPlanet(aPlayer, aPlanet, aPlayer.getGalaxy().getSpaceships());
         List<ShipMovement> shipMovemants = aPlayer.getOrders().getShipMoves();
         for (ShipMovement shipMovement : shipMovemants) {
-            if (shipMovement.getDestinationName().equalsIgnoreCase(aPlanet.getName())) {// adding ships with travel ordes against the planet.
+            if (shipMovement.getDestination().equalsIgnoreCase(aPlanet.getMapPlanetUuid())) {// adding ships with travel ordes against the planet.
                 Spaceship tempShip = aPlayer.getGalaxy().findSpaceshipByUuid(shipMovement.getSpaceshipKey());
                 if (!tempShipList.contains(tempShip)) {
                     tempShipList.add(tempShip);

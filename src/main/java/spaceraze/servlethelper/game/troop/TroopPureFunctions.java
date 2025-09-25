@@ -1,5 +1,7 @@
 package spaceraze.servlethelper.game.troop;
 
+import spaceraze.map.GalaxyMap;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -35,7 +37,7 @@ public class TroopPureFunctions {
 
     public static List<Troop> getPlayersTroopsOnPlanet(Player aPlayer, Planet aPlanet, List<Troop> troops) {
         List<Troop> playerst = new LinkedList<Troop>();
-        Logger.finest("galaxy getPlayersTroopsOnPlanet: aPlanet: " + aPlanet.getName());
+        Logger.finest("galaxy getPlayersTroopsOnPlanet: aPlanet: " + aPlanet.getMapPlanetUuid());
         for (Troop aTroop : troops) {
             if (aTroop.getOwner() != null) {
                 // Logger.finest("aTroop.getOwner() + aPlayer: " + aTroop.getOwner().getName() +
@@ -51,7 +53,7 @@ public class TroopPureFunctions {
                         if (aTroop.getShipLocation() != null) {
                             if (aTroop.getShipLocation().getLocation() != null) {
                                 Logger.finest("aTroop.getShipLocation().getLocation() + aPlanet: "
-                                        + aTroop.getShipLocation().getLocation().getName() + " " + aPlanet.getName());
+                                        + aTroop.getShipLocation().getLocation().getMapPlanetUuid() + " " + aPlanet.getMapPlanetUuid());
                                 if (aTroop.getShipLocation().getLocation() == aPlanet) {
                                     Logger.finest("aTroop.getShipLocation().getLocation() + aPlanet: true");
                                     playerst.add(aTroop); // this should also cover troops in retreating ships
@@ -254,10 +256,10 @@ public class TroopPureFunctions {
         return (int)Math.round(temp);
     }
 
-    public static String getLocationString(Troop troop){
+    public static String getLocationString(Troop troop, GalaxyMap galaxyMap){
         String retStr = "";
         if (troop.getPlanetLocation() != null){
-            retStr = troop.getPlanetLocation().getName();
+            retStr = PlanetPureFunctions.getPlanetName(galaxyMap, troop.getPlanetLocation().getMapPlanetUuid());
         }else{
             retStr = troop.getShipLocation().getName();
         }

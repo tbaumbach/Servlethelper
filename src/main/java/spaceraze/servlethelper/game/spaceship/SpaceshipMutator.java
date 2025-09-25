@@ -1,5 +1,7 @@
 package spaceraze.servlethelper.game.spaceship;
 
+import spaceraze.map.GalaxyMap;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
@@ -128,7 +130,7 @@ public class SpaceshipMutator {
             spaceship.setOldLocation(spaceship.getLocation());
             gotAway = false;
         } else {
-            Logger.finer( "runningTo != null: " + spaceship.getRunningTo().getName());
+            Logger.finer( "runningTo != null: " + spaceship.getRunningTo().getMapPlanetUuid());
             spaceship.setOldLocation(spaceship.getLocation());
             spaceship.setRunningFrom(spaceship.getLocation());
             spaceship.setLocation(null);
@@ -171,10 +173,10 @@ public class SpaceshipMutator {
         }
     }
 
-    public static void performRepairs(Spaceship spaceship) {
+    public static void performRepairs(Spaceship spaceship, GalaxyMap galaxyMap) {
         spaceship.setCurrentDc(spaceship.getDamageCapacity());
         if (spaceship.getOwner() != null) {
-            spaceship.getOwner().addToGeneral("Your ship " + spaceship.getName() + " at "	+ spaceship.getLocation().getName() + " has been repaired up to full damage capacity.");
+            spaceship.getOwner().addToGeneral("Your ship " + spaceship.getName() + " at "	+ PlanetPureFunctions.getPlanetName(galaxyMap, spaceship.getLocation().getMapPlanetUuid()) + " has been repaired up to full damage capacity.");
         }
     }
 

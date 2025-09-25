@@ -11,7 +11,7 @@ public class PlanetOrderStatusMutator {
     public static List<PlanetOrderStatus> createPlanetOrderStatuses(List<Planet> planets){
         List<PlanetOrderStatus> planetOrderStatuses = new ArrayList<>();
         for (Planet planet : planets) {
-            planetOrderStatuses.add(PlanetOrderStatus.builder().planetName(planet.getName()).build());
+            planetOrderStatuses.add(PlanetOrderStatus.builder().mapPlanetUuid(planet.getMapPlanetUuid()).build());
         }
         return planetOrderStatuses;
     }
@@ -19,20 +19,20 @@ public class PlanetOrderStatusMutator {
 
 
     // easy to use setters
-    public static void setAttackIfNeutral(boolean attackIfNeutral,String aPlanetName, List<PlanetOrderStatus> planetOrderStatuses) {
-        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(aPlanetName, planetOrderStatuses).setAttackIfNeutral(attackIfNeutral);
+    public static void setAttackIfNeutral(boolean attackIfNeutral,String planetUuid, List<PlanetOrderStatus> planetOrderStatuses) {
+        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(planetUuid, planetOrderStatuses).setAttackIfNeutral(attackIfNeutral);
     }
 
-    public static void setDestroyOrbitalBuildings(boolean destroyOrbitalBuildings, String aPlanetName, List<PlanetOrderStatus> planetOrderStatuses) {
-        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(aPlanetName, planetOrderStatuses).setDestroyOrbitalBuildings(destroyOrbitalBuildings);
+    public static void setDestroyOrbitalBuildings(boolean destroyOrbitalBuildings, String planetUuid, List<PlanetOrderStatus> planetOrderStatuses) {
+        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(planetUuid, planetOrderStatuses).setDestroyOrbitalBuildings(destroyOrbitalBuildings);
     }
 
-    public static void setDoNotBesiege(boolean doNotBesiege, String aPlanetName, List<PlanetOrderStatus> planetOrderStatuses) {
-        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(aPlanetName, planetOrderStatuses).setDoNotBesiege(doNotBesiege);
+    public static void setDoNotBesiege(boolean doNotBesiege, String planetUuid, List<PlanetOrderStatus> planetOrderStatuses) {
+        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(planetUuid, planetOrderStatuses).setDoNotBesiege(doNotBesiege);
     }
 
-    public static void setMaxBombardment(int maxBombardment, String aPlanetName, List<PlanetOrderStatus> planetOrderStatuses) {
-        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(aPlanetName, planetOrderStatuses).setMaxBombardment(maxBombardment);
+    public static void setMaxBombardment(int maxBombardment, String planetUuid, List<PlanetOrderStatus> planetOrderStatuses) {
+        PlanetOrderStatusPureFunctions.getPlanetOrderStatus(planetUuid, planetOrderStatuses).setMaxBombardment(maxBombardment);
     }
 
 }

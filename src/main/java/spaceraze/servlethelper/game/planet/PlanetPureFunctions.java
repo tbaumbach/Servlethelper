@@ -1,5 +1,10 @@
 package spaceraze.servlethelper.game.planet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import spaceraze.map.GalaxyMap;
+import spaceraze.map.MapPlanet;
+import spaceraze.servlethelper.comparator.PlanetNameComparator;
+import spaceraze.servlethelper.comparator.PlayerNameComparator;
 import spaceraze.servlethelper.game.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
@@ -18,26 +23,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlanetPureFunctions {
 
     private PlanetPureFunctions(){}
 
-    public static PlanetInformation findPlanetInfo(String planetName, List<PlanetInformation> planetInformations){
-        return planetInformations.stream().filter(planetInformation -> planetInformation.getName().equals(planetName)).findFirst().orElse(null);
+    public static PlanetInformation findPlanetInfo(String mapPlanetUuid, List<PlanetInformation> planetInformations){
+        return planetInformations.stream().filter(planetInformation -> planetInformation.getMapPlanetUuid().equals(mapPlanetUuid)).findFirst().orElse(null);
     }
 
-    public static String getLastKnownBuildingsOnSurface(String planetName, List<PlanetInformation> planetInformations){
-        return PlanetPureFunctions.findPlanetInfo(planetName, planetInformations).getLastKnownBuildingsOnSurface();
+    public static String getLastKnownBuildingsOnSurface(String planetUuid, List<PlanetInformation> planetInformations){
+        return PlanetPureFunctions.findPlanetInfo(planetUuid, planetInformations).getLastKnownBuildingsOnSurface();
     }
 
-    public static String getLastKnownBuildings(String planetName, List<PlanetInformation> planetInformations){
+    public static String getLastKnownBuildings(String mapPlanetUuid, List<PlanetInformation> planetInformations){
         String allBuildingsString = "";
-        String tmp = PlanetPureFunctions.findPlanetInfo(planetName, planetInformations).getLastKnownBuildingsOnSurface();
+        String tmp = PlanetPureFunctions.findPlanetInfo(mapPlanetUuid, planetInformations).getLastKnownBuildingsOnSurface();
         if (tmp != null && tmp.length() > 0){
             allBuildingsString = tmp;
         }
-        tmp = PlanetPureFunctions.findPlanetInfo(planetName, planetInformations).getLastKnownBuildingsInOrbit();
+        tmp = PlanetPureFunctions.findPlanetInfo(mapPlanetUuid, planetInformations).getLastKnownBuildingsInOrbit();
         if (allBuildingsString.length() > 0 & (tmp != null && tmp.length() > 0)){
             allBuildingsString += ", ";
         }
@@ -54,7 +60,7 @@ public class PlanetPureFunctions {
 
     public static List<Planet> findClosestPlanets(Planet aLocation, Player aPlayer, SpaceshipRange aSpaceshipRange,
                                                    FindPlanetCriterion aCriterium, List<String> visitedPlanets, Galaxy galaxy) {
-        Logger.finer("findClosestOwnPlanetFromShip: " + aLocation.getName());
+        Logger.finer("findClosestOwnPlanetFromShip: " + aLocation.getMapPlanetUuid());
         List<Planet> foundPlanets = new ArrayList<Planet>();
         List<Planet> edgePlanets = new ArrayList<Planet>(); // de planeter som var på gränsen till det genomsökta
         // området
@@ -79,14 +85,14 @@ public class PlanetPureFunctions {
             for (int i = 0; i < edgePlanets.size(); i++) {
                 Logger.finest("loop edgeplanets");
                 Planet tempPlanet = edgePlanets.get(i);
-                Logger.finest("temp edgeplanet: " + tempPlanet.getName());
+                Logger.finest("temp edgeplanet: " + tempPlanet.getMapPlanetUuid());
                 // Hämta alla grannar till tempPlanet
-                allNeighbours = galaxy.getAllDestinations(tempPlanet, aSpaceshipRange == SpaceshipRange.LONG);
+                allNeighbours = getAllDestinations(galaxy, tempPlanet, aSpaceshipRange == SpaceshipRange.LONG);
                 // Gå igenom alla allNeighbours (lägg i newEdgePlanets)
                 for (int j = 0; j < allNeighbours.size(); j++) {
                     Logger.finest("loop neighbours");
                     Planet tempNeighbourPlanet = allNeighbours.get(j);
-                    Logger.finest("temp neighbours: " + tempNeighbourPlanet.getName());
+                    Logger.finest("temp neighbours: " + tempNeighbourPlanet.getMapPlanetUuid());
                     // kolla att tempNeighbourPlanet inte redan finns i searchedPlanets
                     if ((!searchedPlanets.contains(tempNeighbourPlanet))
                             & (!newEdgePlanets.contains(tempNeighbourPlanet))) {
@@ -102,9 +108,9 @@ public class PlanetPureFunctions {
             for (int k = 0; k < newEdgePlanets.size(); k++) {
                 Logger.finest("loop new edge");
                 Planet tempPlanet = newEdgePlanets.get(k);
-                Logger.finest("temp new edgeplanet: " + tempPlanet.getName());
+                Logger.finest("temp new edgeplanet: " + tempPlanet.getMapPlanetUuid());
                 boolean alreadyVisited = false;
-                if ((visitedPlanets != null) && (visitedPlanets.contains(tempPlanet.getName()))) {
+                if ((visitedPlanets != null) && (visitedPlanets.contains(tempPlanet.getMapPlanetUuid()))) {
                     alreadyVisited = true;
                 }
                 if (!alreadyVisited) {
@@ -114,7 +120,7 @@ public class PlanetPureFunctions {
                             // om den dessutom ej är belägrad, sätt in den i foundPlanets
                             if (!tempPlanet.isBesieged()) {
                                 foundPlanets.add(tempPlanet);
-                                Logger.finest("adding to found: " + tempPlanet.getName());
+                                Logger.finest("adding to found: " + tempPlanet.getMapPlanetUuid());
                             }
                         }
                     } else if (aCriterium == FindPlanetCriterion.CLOSED) { // only planets not belonging to the player
@@ -171,7 +177,7 @@ public class PlanetPureFunctions {
     // aPlayer kan vara null för att leta efter neutrala planeter
     private static Planet findClosestPlanet(Planet aLocation, Player aPlayer, SpaceshipRange aSpaceshipRange,
                                      FindPlanetCriterion aCriterium, List<String> visitedPlanets, Galaxy galaxy) {
-        Logger.finer("findClosestOwnPlanetFromShip: " + aLocation.getName());
+        Logger.finer("findClosestOwnPlanetFromShip: " + aLocation.getMapPlanetUuid());
         Planet foundPlanet = null;
         List<Planet> foundPlanets = findClosestPlanets(aLocation, aPlayer, aSpaceshipRange,
                 aCriterium, visitedPlanets, galaxy);
@@ -201,9 +207,9 @@ public class PlanetPureFunctions {
         foundPlanet = findClosestOwnPlanetFromShip(spaceship.getLocation(), spaceship.getOwner(), spaceship, galaxy);
         // om en destinationsplanet har hittats skall den 1:a planeten på väg dit hämtas
         if (foundPlanet != null){
-            Logger.finer("foundPlanet: " + foundPlanet.getName());
+            Logger.finer("foundPlanet: " + foundPlanet.getMapPlanetUuid());
             firstDestination = findFirstJumpTowardsPlanet(spaceship.getLocation(), foundPlanet, SpaceshipPureFunctions.getRange(spaceship, galaxy), galaxy);
-            Logger.finer("firstDestination: " + firstDestination.getName());
+            Logger.finer("firstDestination: " + firstDestination.getMapPlanetUuid());
         }else{
             Logger.finer("no planet found");
         }
@@ -212,7 +218,7 @@ public class PlanetPureFunctions {
     }
 
     private static Planet findFirstJumpTowardsPlanet(Planet aLocation, Planet aDestination, SpaceshipRange aSpaceshipRange, Galaxy galaxy){
-        Logger.finer("findFirstJumpTowardsPlanet aDestination: " + aDestination.getName());
+        Logger.finer("findFirstJumpTowardsPlanet aDestination: " + aDestination.getMapPlanetUuid());
         Planet firstStopPlanet = null;
         boolean found = false;
         // sätt reachFrom på startplaneten så den blir rotnod
@@ -229,13 +235,13 @@ public class PlanetPureFunctions {
             // Gå igenom alla edgePlanets
             for (int i = 0; i < edgePlanets.size(); i++){
                 Planet tempPlanet = (Planet)edgePlanets.get(i);
-                Logger.finest("tempPlanet: " + tempPlanet.getName());
+                Logger.finest("tempPlanet: " + tempPlanet.getMapPlanetUuid());
                 // Hämta alla grannar till tempPlanet
-                allNeighbours = galaxy.getAllDestinations(tempPlanet,aSpaceshipRange == SpaceshipRange.LONG);
+                allNeighbours = getAllDestinations(galaxy, tempPlanet,aSpaceshipRange == SpaceshipRange.LONG);
                 // Gå igenom alla allNeighbours  (lägg i newEdgePlanets)
                 for (int j = 0; j < allNeighbours.size(); j++){
                     Planet tempNeighbourPlanet = allNeighbours.get(j);
-                    Logger.finest("tempNeighbourPlanet: " + tempNeighbourPlanet.getName());
+                    Logger.finest("tempNeighbourPlanet: " + tempNeighbourPlanet.getMapPlanetUuid());
                     // kolla att tempNeighbourPlanet inte redan finns i searchedPlanets
                     if ((!containsPlanet(searchedPlanets,tempNeighbourPlanet)) & (!containsPlanet(newEdgePlanets,tempNeighbourPlanet))){
                         Logger.finest("containsPlanet: " + !containsPlanet(searchedPlanets,tempNeighbourPlanet));
@@ -266,11 +272,11 @@ public class PlanetPureFunctions {
         }
         Planet lastStop = aDestination;
         // loopa tills reachFrom �r null
-        Logger.finest("before while, lastStop: " + lastStop.getName());
+        Logger.finest("before while, lastStop: " + lastStop.getMapPlanetUuid());
         while (lastStop.getReachFrom().getReachFrom() != null){
             Logger.finest("");
-            Logger.finest("inside if: " + lastStop.getReachFrom().getName());
-            Logger.finest("inside if: " + lastStop.getReachFrom().getReachFrom().getName());
+            Logger.finest("inside if: " + lastStop.getReachFrom().getMapPlanetUuid());
+            Logger.finest("inside if: " + lastStop.getReachFrom().getReachFrom().getMapPlanetUuid());
             lastStop = lastStop.getReachFrom();
         }
         firstStopPlanet = lastStop;
@@ -356,16 +362,18 @@ public class PlanetPureFunctions {
         return planets.stream().anyMatch(planetInList -> planetInList == planet);
     }
 
-    public static Planet getPlanet(String planetName, Galaxy galaxy) {
-        Logger.finer("getPlanet(String planetName) planetName : " + planetName);
-        Planet aPlanet = null;
-        for (Planet tempPlanet : galaxy.getPlanets()) {
-            if (tempPlanet.getName().equalsIgnoreCase(planetName)) {
-                aPlanet = tempPlanet;
-                break;
+    public static Planet getPlanet(String uuid, Galaxy galaxy) {
+        return getPlanet(uuid, galaxy.getPlanets());
+    }
+
+    public static Planet getPlanet(String uuid, List<Planet> planets) {
+        Logger.finer("getPlanet(String planetName) planetName : " + uuid);
+        for (Planet planet : planets) {
+            if (planet.getMapPlanetUuid().equalsIgnoreCase(uuid)) {
+                return planet;
             }
         }
-        return aPlanet;
+        throw new IllegalArgumentException("Planet not found");
     }
 
     public static boolean checkSurrender(Planet planet, Galaxy galaxy){
@@ -383,7 +391,7 @@ public class PlanetPureFunctions {
     }
 
     public static List<Planet> getPlayersPlanets(Player aPlayer, Galaxy galaxy) {
-        List<Planet> playersPlanets = new ArrayList<Planet>();
+        List<Planet> playersPlanets = new ArrayList<>();
         for (int i = 0; i < galaxy.getPlanets().size(); i++) {
             Planet tempPlanet = galaxy.getPlanets().get(i);
             if (tempPlanet.getPlayerInControl() == aPlayer) {
@@ -456,4 +464,76 @@ public class PlanetPureFunctions {
         return planet.getPopulation() == 0;
     }
 
+    public static List<MapPlanet> getMapPlanets(GalaxyMap galaxyMap, List<Planet> planets){
+        ArrayList<MapPlanet> mapPlanets = galaxyMap.getPlanets().stream().filter(planet -> planetExists(planet, planets)).collect(Collectors.toCollection(ArrayList::new));
+        mapPlanets.sort(new PlanetNameComparator<>());
+        return mapPlanets;
+    }
+
+    private static boolean planetExists(MapPlanet planet, List<Planet> planets) {
+        return planets.stream().anyMatch(planetInList -> planetInList.getMapPlanetUuid().equalsIgnoreCase(planet.getUuid()));
+    }
+
+    public static MapPlanet getMapPlanet(GalaxyMap galaxyMap, String planetUuid) {
+        return galaxyMap.getPlanets().stream().filter(planet -> planet.getUuid().equals(planetUuid)).findFirst().orElse(null);
+    }
+
+    public static MapPlanet getMapPlanetByName(GalaxyMap galaxyMap, String planetName) {
+        return galaxyMap.getPlanets().stream().filter(planet -> planet.getName().equals(planetName)).findFirst().orElse(null);
+    }
+
+    public static Planet getPlanetByName(Galaxy galaxy,GalaxyMap galaxyMap, String planetName) {
+        MapPlanet mapPlanet = galaxyMap.getPlanets().stream().filter(planet -> planet.getName().equals(planetName)).findFirst().orElse(null);
+        if (mapPlanet != null) {
+            return getPlanet(mapPlanet.getUuid(), galaxy.getPlanets());
+        }
+        return null;
+    }
+
+    public static String getPlanetName(GalaxyMap galaxyMap, String planetUuid) {
+        return getMapPlanet(galaxyMap, planetUuid) != null ? getMapPlanet(galaxyMap, planetUuid).getName() : null;
+    }
+
+    public static Planet getOtherEnd(PlanetConnection connection, Planet planet, boolean isLongRange) {
+        if (!connection.isLongRange() || isLongRange) {
+            if (planet == connection.getPlanetOne()) {
+                return connection.getPlanetTwo();
+            } else if (planet == connection.getPlanetTwo()) {
+                return connection.getPlanetOne();
+            }
+        }
+        return null;
+    }
+
+    public static boolean isConnection(PlanetConnection connection, Planet aPlanet1, Planet aPlanet2) {
+        return (connection.getPlanetOne() == aPlanet1 && connection.getPlanetTwo() == aPlanet2) || (connection.getPlanetTwo() == aPlanet1 && connection.getPlanetOne() == aPlanet2);
+    }
+
+    /**
+     * Returns 0 if there is no connection between the two planets
+     */
+    public static SpaceshipRange getDistance(Galaxy galaxy, Planet planet1, Planet planet2) {
+        SpaceshipRange dist = SpaceshipRange.NONE;
+        for (PlanetConnection connection : galaxy.getPlanetConnections()) {
+            if (isConnection(connection, planet1, planet2)) { // there is a connection within range
+                if (connection.isLongRange()) {
+                    dist = SpaceshipRange.LONG;
+                } else {
+                    dist = SpaceshipRange.SHORT;
+                }
+            }
+        }
+        return dist;
+    }
+
+    public static List<Planet> getAllDestinations(Galaxy galaxy, Planet location, boolean longRange) {
+        List<Planet> allDestinations = new ArrayList<>();
+        for (PlanetConnection connection : galaxy.getPlanetConnections()) {
+            Planet planet = getOtherEnd(connection, location, longRange);
+            if (planet != null) { // there is a connection within range
+                allDestinations.add(getPlanet(planet.getMapPlanetUuid(), galaxy.getPlanets()));
+            }
+        }
+        return allDestinations;
+    }
 }

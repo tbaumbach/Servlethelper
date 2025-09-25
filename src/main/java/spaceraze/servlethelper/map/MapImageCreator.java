@@ -24,9 +24,9 @@ import java.util.List;
 import spaceraze.util.general.Logger;
 import spaceraze.util.general.StyleGuide;
 import spaceraze.util.properties.PropertiesHandler;
-import spaceraze.world.BasePlanet;
-import spaceraze.world.Map;
-import spaceraze.world.MapPlanetConnection;
+import spaceraze.map.BasePlanet;
+import spaceraze.map.GalaxyMap;
+import spaceraze.map.MapPlanetConnection;
 
 /**
  * @author WMPABOD
@@ -37,7 +37,7 @@ public class MapImageCreator {
 	private String completePath;
 	private int densityLimit = 10;
 	
-	public Dimension createGifAndGetSize(String imageName, Map aMap){
+	public Dimension createGifAndGetSize(String imageName, GalaxyMap aMap){
 		// get properties
 		String basePath = PropertiesHandler.getProperty("basepath");
 		Logger.finer("basePath: " + basePath);
@@ -48,7 +48,7 @@ public class MapImageCreator {
 		return d;
 	}
 
-	private Dimension createImageFile(String imageName, Map aMap){
+	private Dimension createImageFile(String imageName, GalaxyMap aMap){
 		Dimension d = null;
 		// check if image exists already
 		boolean imageExists = checkImage(imageName);
@@ -102,7 +102,7 @@ public class MapImageCreator {
 		densityLimit = customLimit;
 	}
 	
-	private Dimension createImage(String imageName, Map map){
+	private Dimension createImage(String imageName, GalaxyMap map){
 		Dimension d = null;
 //		System.out.println("Creating new image with text: " + text);
 		// need a component in order to use MediaTracker
@@ -186,8 +186,8 @@ public class MapImageCreator {
 		// long range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
-				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
+				BasePlanet tmpPlanet1 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -200,7 +200,7 @@ public class MapImageCreator {
 		// short range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet1 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
 				BasePlanet tmpPlanet2 =  map.getPlanet(aConnection.getPlanetTwoUuid());
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
@@ -252,7 +252,7 @@ public class MapImageCreator {
 	 * @param map
 	 * @return
 	 */
-	public Image createImage(Map map){
+	public Image createImage(GalaxyMap map){
 //		Dimension d = null;
 //		System.out.println("Creating new image with text: " + text);
 		// need a component in order to use MediaTracker
@@ -345,8 +345,8 @@ public class MapImageCreator {
 		// long range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
-				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
+				BasePlanet tmpPlanet1 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -359,8 +359,8 @@ public class MapImageCreator {
 		// short range
 		for (MapPlanetConnection aConnection : allConnections) {
 			if (!aConnection.isLongRange()){
-				BasePlanet tmpPlanet1 = MapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
-				BasePlanet tmpPlanet2 = MapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
+				BasePlanet tmpPlanet1 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetOneUuid(), map);
+				BasePlanet tmpPlanet2 = GalaxyMapPureFunctions.getPlanet(aConnection.getPlanetTwoUuid(), map);
 				int tmpX1 = (int)Math.round(tmpPlanet1.getX());
 				int tmpY1 = (int)Math.round(tmpPlanet1.getY());
 				int tmpX2 = (int)Math.round(tmpPlanet2.getX());
@@ -411,7 +411,7 @@ public class MapImageCreator {
 	/**
 	 * Moves all planets so that upper and leftmost planets are 0 in x and y
 	 */
-	private void movePlanets(Map aMap, int xOffset, int yOffset, int zOffset){
+	private void movePlanets(GalaxyMap aMap, int xOffset, int yOffset, int zOffset){
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			aPlanet.setX(aPlanet.getX() - xOffset);
 			aPlanet.setY(aPlanet.getY() - yOffset);
@@ -419,13 +419,13 @@ public class MapImageCreator {
 		}
 	}
 
-	private void scalePlanets(Map aMap, double scaleMod){
+	private void scalePlanets(GalaxyMap aMap, double scaleMod){
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			aPlanet.changeScale(scaleMod);
 		}
 	}
 
-	private int computeSmallestX(Map aMap){
+	private int computeSmallestX(GalaxyMap aMap){
 		int smallest = Integer.MAX_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
@@ -436,7 +436,7 @@ public class MapImageCreator {
 		return smallest;
 	}
 
-	private int computeSmallestY(Map aMap){
+	private int computeSmallestY(GalaxyMap aMap){
 		int smallest = Integer.MAX_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpY = (int)Math.round(aPlanet.getY());
@@ -447,7 +447,7 @@ public class MapImageCreator {
 		return smallest;
 	}
 
-	private int computeSmallestZ(Map aMap){
+	private int computeSmallestZ(GalaxyMap aMap){
 		int smallest = Integer.MAX_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpZ = (int)Math.round(aPlanet.getZ());
@@ -458,7 +458,7 @@ public class MapImageCreator {
 		return smallest;
 	}
 
-	private int computeLargestX(Map aMap){
+	private int computeLargestX(GalaxyMap aMap){
 		int largest = Integer.MIN_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpX = (int)Math.round(aPlanet.getX());
@@ -469,7 +469,7 @@ public class MapImageCreator {
 		return largest;
 	}
 
-	private int computeLargestY(Map aMap){
+	private int computeLargestY(GalaxyMap aMap){
 		int largest = Integer.MIN_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpY = (int)Math.round(aPlanet.getY());
@@ -480,7 +480,7 @@ public class MapImageCreator {
 		return largest;
 	}
 
-	private int computeLargestZ(Map aMap){
+	private int computeLargestZ(GalaxyMap aMap){
 		int largest = Integer.MIN_VALUE;
 		for (BasePlanet aPlanet : aMap.getPlanets()) {
 			int tmpZ = (int)Math.round(aPlanet.getZ());

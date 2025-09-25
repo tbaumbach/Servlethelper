@@ -5,6 +5,7 @@ package spaceraze.servlethelper.comparator;
 
 import java.util.Comparator;
 
+import spaceraze.map.MapPlanet;
 import spaceraze.world.Planet;
 
 /**
@@ -12,7 +13,7 @@ import spaceraze.world.Planet;
  *
  * Compares two planets alfanumerically
  */
-public class PlanetNameComparator<T extends Planet> implements Comparator<T> {
+public class PlanetNameComparator<T extends MapPlanet> implements Comparator<T> {
 
 	public int compare(T p1, T p2) {
 		return p1.getName().compareTo(p2.getName());

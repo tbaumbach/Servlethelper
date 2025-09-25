@@ -1,6 +1,8 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.AlignmentPureFunctions;
+import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
@@ -13,27 +15,29 @@ public class VipMutator {
 
     private VipMutator(){}
 
-    public static void checkVIPsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy) {
+    public static void checkVIPsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap) {
         List<VIP> allVIPsOnShip = VipPureFunctions.findAllVIPsOnShip(aShip, galaxy.getAllVIPs());
         for (int i = 0; i < allVIPsOnShip.size(); i++) {
             VIP tempVIP = allVIPsOnShip.get(i);
             VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
             // if VIP is hard to kill he moves to the nearby planet
+            String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aShip.getLocation().getMapPlanetUuid());
             if (vipType.isHardToKill()) {
                 setShipLocation(tempVIP, aShip.getLocation());
                 aPlayer.addToVIPReport(
                         "Your " + vipType.getName() + " travelling in " + aShip.getName() + " have moved to the planet "
-                                + aShip.getLocation().getName() + " when the ship was destroyed.");
+                                + planetName + " when the ship was destroyed.");
             } else { // annars dör VIPen
                 galaxy.getAllVIPs().remove(tempVIP);
                 aPlayer.addToVIPReport("Your " + vipType.getName() + " has been killed when your ship "
-                        + aShip.getName() + " was destroyed at " + aShip.getLocation().getName() + ".");
+                        + aShip.getName() + " was destroyed at " + planetName + ".");
                 aPlayer.addToHighlights(vipType.getName(), HighlightType.TYPE_OWN_VIP_KILLED);
             }
         }
     }
 
-    public static void checkVIPsInSelfDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy) {
+    public static void checkVIPsInSelfDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap) {
+        String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aShip.getLocation().getMapPlanetUuid());
         List<VIP> allVIPsOnShip = VipPureFunctions.findAllVIPsOnShip(aShip, galaxy.getAllVIPs());
         for (VIP tempVIP : allVIPsOnShip) {
             VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
@@ -48,46 +52,47 @@ public class VipMutator {
                 setShipLocation(tempVIP, aShip.getLocation());
                 aPlayer.addToVIPReport(
                         "Your " + vipType.getName() + " travelling in " + aShip.getName() + " have moved to the planet "
-                                + aShip.getLocation().getName() + " when the ship was selfdestructed.");
+                                + planetName + " when the ship was selfdestructed.");
             } else {
                 // annars om VIPen kan vara på fientliga planeter så flyttar den dit
                 if (vipType.isCanVisitEnemyPlanets()) {
                     setShipLocation(tempVIP, aShip.getLocation());
                     aPlayer.addToVIPReport("Your " + vipType.getName() + " travelling in " + aShip.getName()
-                            + " have moved to the planet " + aShip.getLocation().getName()
+                            + " have moved to the planet " + planetName
                             + " when the ship was selfdestructed.");
                 } else // annars om det är en neutral planet och VIP en är en guvenör flyttar han dit
                     if ((vipType.isCanVisitNeutralPlanets()) & (aShip.getLocation().getPlayerInControl() == null)) {
                         setShipLocation(tempVIP, aShip.getLocation());
                         aPlayer.addToVIPReport("Your " + vipType.getName() + " travelling in " + aShip.getName()
-                                + " have moved to the planet " + aShip.getLocation().getName()
+                                + " have moved to the planet " + planetName
                                 + " when the ship was selfdestructed.");
                     } else { // annars dör VIPen
                         galaxy.removeVIP(tempVIP);
                         aPlayer.addToVIPReport("Your " + vipType.getName() + " has been killed when your ship "
-                                + aShip.getName() + " was selfdestructed at " + aShip.getLocation().getName() + ".");
+                                + aShip.getName() + " was selfdestructed at " + planetName + ".");
                         aPlayer.addToHighlights(vipType.getName(), HighlightType.TYPE_OWN_VIP_KILLED);
                     }
             }
         }
     }
 
-    public static void checkVIPsInDestroyedTroop(Troop aTroop, Galaxy galaxy) {
+    public static void checkVIPsInDestroyedTroop(Troop aTroop, Galaxy galaxy, GalaxyMap galaxyMap) {
         List<VIP> allVIPsOnTroop = VipPureFunctions.findAllVIPsOnTroop(aTroop, galaxy.getAllVIPs());
         Player aPlayer = aTroop.getOwner();
         for (VIP vip : allVIPsOnTroop) {
             VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
+            String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getPlanetLocation().getMapPlanetUuid());
             // if VIP is hard to kill he moves to the nearby planet
             if (vipType.isHardToKill()) {
                 if (aTroop.getPlanetLocation() != null) {
                     setShipLocation(vip, aTroop.getPlanetLocation());
                     aPlayer.addToVIPReport("Your " + vipType.getName() + " travelling in " + aTroop.getName()
-                            + " have moved to the planet " + aTroop.getPlanetLocation().getName()
+                            + " have moved to the planet " + PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getPlanetLocation().getMapPlanetUuid())
                             + " when the ship was destroyed.");
                 } else { // VIP is on troop on a ship
                     setShipLocation(vip, aTroop.getShipLocation().getLocation());
                     aPlayer.addToVIPReport("Your " + vipType.getName() + " travelling in " + aTroop.getName()
-                            + " have moved to the planet " + aTroop.getShipLocation().getLocation().getName()
+                            + " have moved to the planet " + PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getShipLocation().getLocation().getMapPlanetUuid())
                             + " when the ship carrying the troop was destroyed.");
                 }
             } else { // annars d�r VIPen
@@ -95,11 +100,11 @@ public class VipMutator {
                 if (aTroop.getPlanetLocation() != null) {
                     aPlayer.addToVIPReport(
                             "Your " + vipType.getName() + " has been killed when your troop " + aTroop.getName()
-                                    + " was destroyed at " + aTroop.getPlanetLocation().getName() + ".");
+                                    + " was destroyed at " + PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getPlanetLocation().getMapPlanetUuid()) + ".");
                 } else {
                     aPlayer.addToVIPReport(
                             "Your " + vipType.getName() + " has been killed when your troop " + aTroop.getName()
-                                    + " was destroyed at " + aTroop.getShipLocation().getLocation().getName()
+                                    + " was destroyed at " + PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getShipLocation().getLocation().getMapPlanetUuid())
                                     + " when the ship carrying the troop was destroyed.");
                 }
                 aPlayer.addToHighlights(vipType.getName(), HighlightType.TYPE_OWN_VIP_KILLED);
@@ -168,24 +173,24 @@ public class VipMutator {
         return createNewVIP(vipType, true);
     }
 
-    public static void moveVIP(VIP vip, Planet moveToPlanet, TurnInfo ti, GameWorld gameWorld) {
-        String oldLocationString = VipPureFunctions.getLocationString(vip);
+    public static void moveVIP(VIP vip, Planet moveToPlanet, TurnInfo ti, GameWorld gameWorld, GalaxyMap galaxyMap) {
+        String oldLocationString = VipPureFunctions.getLocationString(vip, galaxyMap);
         vip.setPlanetLocation(moveToPlanet);
         vip.setShipLocation(null);
         vip.setTroopLocation(null);
-        ti.addToLatestVIPReport(VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getName() + " has moved from " + oldLocationString + " to " + vip.getPlanetLocation().getName() + ".");
+        ti.addToLatestVIPReport(VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getName() + " has moved from " + oldLocationString + " to " + PlanetPureFunctions.getPlanetName(galaxyMap, vip.getPlanetLocation().getMapPlanetUuid()) + ".");
     }
 
-    public static void moveVIP(VIP vip, Spaceship moveToShip, TurnInfo ti, GameWorld gameWorld) {
-        String oldLocationString = VipPureFunctions.getLocationString(vip);
+    public static void moveVIP(VIP vip, Spaceship moveToShip, TurnInfo ti, GameWorld gameWorld, GalaxyMap galaxyMap) {
+        String oldLocationString = VipPureFunctions.getLocationString(vip, galaxyMap);
         vip.setPlanetLocation(null);
         vip.setShipLocation(moveToShip);
         vip.setTroopLocation(null);
         ti.addToLatestVIPReport(VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), gameWorld).getName() + " has moved from " + oldLocationString + " to " + vip.getShipLocation().getName() + ".");
     }
 
-    public static void moveVIP(VIP vip, Troop moveToTroop, TurnInfo ti, GameWorld gameWorld) {
-        String oldLocationString = VipPureFunctions.getLocationString(vip);
+    public static void moveVIP(VIP vip, Troop moveToTroop, TurnInfo ti, GameWorld gameWorld, GalaxyMap galaxyMap) {
+        String oldLocationString = VipPureFunctions.getLocationString(vip, galaxyMap);
         vip.setPlanetLocation(null);
         vip.setShipLocation(null);
         vip.setTroopLocation(moveToTroop);
