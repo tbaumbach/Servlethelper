@@ -6,7 +6,7 @@ package spaceraze.servlethelper.comparator;
 import java.util.Comparator;
 
 import spaceraze.map.MapPlanet;
-import spaceraze.world.Planet;
+import spaceraze.game.Planet;
 
 /**
  * @author WMPABOD

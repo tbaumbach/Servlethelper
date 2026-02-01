@@ -10,7 +10,6 @@ public class GameWorldCreator {
     private GameWorldCreator(){}
 
     public static void addFaction(Faction faction, GameWorld gameWorld){
-        faction.setGameWorld(gameWorld);
         gameWorld.getFactions().add(faction);
         createDiplomacyRelations(faction, gameWorld);
     }
@@ -23,7 +22,6 @@ public class GameWorldCreator {
 
     private static void addDefaultRelation(Faction aFaction1, Faction aFaction2, GameWorld gameWorld){
         GameWorldDiplomacyRelation tmpDR = new GameWorldDiplomacyRelation(aFaction1.getUuid(),aFaction2.getUuid());
-        tmpDR.setGameWorld(gameWorld);
         gameWorld.getGameWorldDiplomacyRelations().add(tmpDR);
     }
 

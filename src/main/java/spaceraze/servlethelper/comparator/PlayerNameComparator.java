@@ -5,7 +5,7 @@ package spaceraze.servlethelper.comparator;
 
 import java.util.Comparator;
 
-import spaceraze.world.Player;
+import spaceraze.game.Player;
 
 /**
  * @author WMPABOD

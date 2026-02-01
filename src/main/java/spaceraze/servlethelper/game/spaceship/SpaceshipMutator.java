@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.spaceship;
 
+import spaceraze.game.*;
 import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
@@ -15,10 +16,82 @@ public class SpaceshipMutator {
 
     public static Spaceship createSpaceShip(Player player, SpaceshipType type, int vipTechBonus, int factionTechBonus, int buildingBonus){
         PlayerSpaceshipImprovement playerSpaceshipImprovement = PlayerPureFunctions.findSpaceshipImprovement(type.getUuid(), player);
-        SpaceshipType spaceshipType = playerSpaceshipImprovement != null ? new SpaceshipType(type, playerSpaceshipImprovement) : type;
+        SpaceshipType spaceshipType = playerSpaceshipImprovement != null ? createSpaceshipTypeWithImprovements(type, playerSpaceshipImprovement) : type;
         int nrProduced = playerSpaceshipImprovement != null ? playerSpaceshipImprovement.updateNrProduced() : 0;
 
          return new Spaceship(spaceshipType, null, nrProduced, vipTechBonus, factionTechBonus, buildingBonus);
+    }
+
+    public static SpaceshipType createSpaceshipTypeWithImprovements(SpaceshipType originSpaceshipType, PlayerSpaceshipImprovement playerSpaceshipImprovement){
+        SpaceshipType newType = new SpaceshipType();
+        newType.setUuid(originSpaceshipType.getUuid());
+        newType.setName(originSpaceshipType.getName());
+        newType.setShortName(originSpaceshipType.getShortName());
+        newType.setSize(originSpaceshipType.getSize());
+        newType.setSpaceshipRange(playerSpaceshipImprovement.getRange() != null ? playerSpaceshipImprovement.getRange() : originSpaceshipType.getRange());
+        newType.setShields(originSpaceshipType.getShields() + playerSpaceshipImprovement.getShields());
+        newType.setUpkeep(originSpaceshipType.getUpkeep() + playerSpaceshipImprovement.getUpkeep());
+        newType.setBuildCost(originSpaceshipType.getBuildCost() + playerSpaceshipImprovement.getBuildCost());
+        newType.setBombardment(originSpaceshipType.getBombardment() + playerSpaceshipImprovement.getBombardment());
+        newType.setNoRetreat(playerSpaceshipImprovement.isNoRetreat());
+
+        //Why can't we research hitpoints?
+        newType.setHits(originSpaceshipType.getHits());
+
+        newType.setInitSupport(originSpaceshipType.isInitSupport());
+        newType.setIncreaseInitiative(originSpaceshipType.getIncreaseInitiative() + playerSpaceshipImprovement.getIncreaseInitiative());
+        newType.setInitDefence(originSpaceshipType.getInitDefence() + playerSpaceshipImprovement.getInitDefence());
+        newType.setWeaponsStrengthSquadron(originSpaceshipType.getWeaponsStrengthSquadron() + playerSpaceshipImprovement.getWeaponsStrengthSquadron());
+        newType.setWeaponsStrengthSmall(originSpaceshipType.getWeaponsStrengthSmall() + playerSpaceshipImprovement.getWeaponsStrengthSmall());
+        newType.setWeaponsStrengthMedium(originSpaceshipType.getWeaponsStrengthMedium() + playerSpaceshipImprovement.getWeaponsStrengthMedium());
+        newType.setWeaponsStrengthLarge(originSpaceshipType.getWeaponsStrengthLarge() + playerSpaceshipImprovement.getWeaponsStrengthLarge());
+        newType.setWeaponsStrengthHuge(originSpaceshipType.getWeaponsStrengthHuge() + playerSpaceshipImprovement.getWeaponsStrengthHuge());
+        newType.setWeaponsMaxSalvosMedium(originSpaceshipType.getWeaponsMaxSalvosMedium() + playerSpaceshipImprovement.getWeaponsMaxSalvosMedium());
+        newType.setWeaponsMaxSalvosLarge(originSpaceshipType.getWeaponsMaxSalvosLarge() + playerSpaceshipImprovement.getWeaponsMaxSalvosLarge());
+        newType.setWeaponsMaxSalvosHuge(originSpaceshipType.getWeaponsMaxSalvosHuge() + playerSpaceshipImprovement.getWeaponsMaxSalvosHuge());
+        newType.setSupply(playerSpaceshipImprovement.getSupply()  != null ? playerSpaceshipImprovement.getSupply() : originSpaceshipType.getSupply());
+        newType.setArmorSmall(originSpaceshipType.getArmorSmall() + playerSpaceshipImprovement.getArmorSmall());
+        newType.setArmorMedium(originSpaceshipType.getArmorMedium() + playerSpaceshipImprovement.getArmorMedium());
+        newType.setArmorLarge(originSpaceshipType.getArmorLarge() + playerSpaceshipImprovement.getArmorLarge());
+        newType.setArmorHuge(originSpaceshipType.getArmorHuge() + playerSpaceshipImprovement.getArmorHuge());
+        newType.setPlanetarySurvey(playerSpaceshipImprovement.isChangePlanetarySurvey() ? playerSpaceshipImprovement.isPlanetarySurvey() : originSpaceshipType.isPlanetarySurvey());
+//        newType.siegeBonus = oldsst.getSiegeBonus();
+//        newType.troops = oldsst.getTroops();
+        newType.setPsychWarfare(originSpaceshipType.getPsychWarfare() + playerSpaceshipImprovement.getPsychWarfare());
+        newType.setTargetingType(originSpaceshipType.getTargetingType());
+        newType.setSquadronCapacity(originSpaceshipType.getSquadronCapacity() + playerSpaceshipImprovement.getSquadronCapacity());
+        newType.setDescription(playerSpaceshipImprovement.getDescription() != null ? playerSpaceshipImprovement.getDescription() : originSpaceshipType.getDescription());
+        newType.setHistory(playerSpaceshipImprovement.getHistory() != null ? playerSpaceshipImprovement.getHistory() : originSpaceshipType.getHistory());
+        newType.setIncEnemyClosedBonus(originSpaceshipType.getIncEnemyClosedBonus() + playerSpaceshipImprovement.getIncEnemyClosedBonus());
+        newType.setIncEnemyOpenBonus(originSpaceshipType.getIncEnemyOpenBonus() + playerSpaceshipImprovement.getIncEnemyOpenBonus());
+        newType.setIncFriendlyClosedBonus(originSpaceshipType.getIncFriendlyClosedBonus() + playerSpaceshipImprovement.getIncFriendlyClosedBonus());
+        newType.setIncFriendlyOpenBonus(originSpaceshipType.getIncFriendlyOpenBonus() + playerSpaceshipImprovement.getIncFriendlyOpenBonus());
+        newType.setIncNeutralClosedBonus(originSpaceshipType.getIncNeutralClosedBonus() + playerSpaceshipImprovement.getIncNeutralClosedBonus());
+        newType.setIncNeutralOpenBonus(originSpaceshipType.getIncNeutralOpenBonus() + playerSpaceshipImprovement.getIncNeutralOpenBonus());
+        newType.setIncOwnClosedBonus(originSpaceshipType.getIncOwnClosedBonus() + playerSpaceshipImprovement.getIncOwnClosedBonus());
+        newType.setIncOwnOpenBonus(originSpaceshipType.getIncOwnOpenBonus() + playerSpaceshipImprovement.getIncOwnOpenBonus());
+        newType.setCanAttackScreenedShips(playerSpaceshipImprovement.isChangeCanAttackScreenedShips() ? playerSpaceshipImprovement.isCanAttackScreenedShips() : originSpaceshipType.isCanAttackScreenedShips());
+        newType.setCivilian(originSpaceshipType.isCivilian());
+        newType.setLookAsCivilian(playerSpaceshipImprovement.isChangeLookAsCivilian() ? playerSpaceshipImprovement.isLookAsCivilian() : originSpaceshipType.isLookAsCivilian());
+        newType.setCanBlockPlanet(playerSpaceshipImprovement.isChangeCanBlockPlanet() ? playerSpaceshipImprovement.isCanBlockPlanet() : originSpaceshipType.isCanBlockPlanet());
+        newType.setVisibleOnMap(playerSpaceshipImprovement.isChangeVisibleOnMap() ? playerSpaceshipImprovement.isVisibleOnMap() : originSpaceshipType.isVisibleOnMap());
+        newType.setAvailableToBuild(playerSpaceshipImprovement.isAvailableToBuild());
+        newType.setTroopCapacity(originSpaceshipType.getTroopCapacity() + playerSpaceshipImprovement.getTroopCarrier());
+        newType.setWorldUnique(originSpaceshipType.isWorldUnique());
+        newType.setFactionUnique(originSpaceshipType.isFactionUnique());
+        newType.setPlayerUnique(originSpaceshipType.isPlayerUnique());
+        newType.setAlwaysRetreat(originSpaceshipType.isAlwaysRetreat());
+        newType.setScreened(originSpaceshipType.isScreened());
+
+        newType.setAdvantages(originSpaceshipType.getAdvantages());
+        newType.setDisadvantages(originSpaceshipType.getDisadvantages());
+        newType.setCanAppearOnBlackMarket(originSpaceshipType.isCanAppearOnBlackMarket());
+        newType.setBlackMarketFrequency(originSpaceshipType.getBlackMarketFrequency());
+        newType.setBlackmarketFirstTurn(originSpaceshipType.getBlackmarketFirstTurn());
+        newType.setBluePrintFirstTurn(originSpaceshipType.getBluePrintFirstTurn());
+        newType.setBluePrintFrequency(originSpaceshipType.getBluePrintFrequency());
+
+        return newType;
     }
 
     public static Spaceship createSpaceShip(SpaceshipType type){

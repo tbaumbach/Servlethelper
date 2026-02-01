@@ -1,7 +1,11 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.game.*;
+import spaceraze.game.report.incomeExpensesReports.IncomeType;
+import spaceraze.world.CorruptionPoint;
+import spaceraze.game.report.old.TurnInfo;
 import spaceraze.map.GalaxyMap;
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
@@ -10,8 +14,7 @@ import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
-import spaceraze.world.diplomacy.DiplomacyState;
-import spaceraze.world.incomeExpensesReports.IncomeType;
+import spaceraze.game.diplomacy.DiplomacyState;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class IncomePureFunctions {
 
     private IncomePureFunctions(){}
 
-    public static int getPlayerIncomeAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
+    public static int getPlayerIncomeAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         int totIncome = 0;
         TurnInfo playerTurnInfo = null;
         if (addToIncomeReport) {
@@ -30,12 +33,12 @@ public class IncomePureFunctions {
             if (planet.getPlayerInControl() == aPlayer) {
                 int tmpInc = getIncomeAlien(planet, aPlayer.getOpenPlanetBonus(),
                         aPlayer.getClosedPlanetBonus(), playerTurnInfo, galaxyMap)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld(), galaxyMap);
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), gameWorld, galaxyMap);
                 Logger.finer("alien base income: " + tmpInc);
                 totIncome += tmpInc;
                 // add income bonus for buildings.
 
-                totIncome += BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld(), galaxyMap);
+                totIncome += BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, gameWorld, galaxyMap);
                 Logger.finest("alien base income: " + tmpInc);
             }
             totIncome += getShipIncome(shipsAtPlanet, planet, playerTurnInfo, galaxy, galaxyMap);
@@ -43,20 +46,20 @@ public class IncomePureFunctions {
         return totIncome;
     }
 
-    public static int getPlayerIncomeWithoutCorruption(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
+    public static int getPlayerIncomeWithoutCorruption(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         int income;
-        if (GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).isAlien()) {
-            income = getPlayerIncomeAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap);
+        if (GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld).isAlien()) {
+            income = getPlayerIncomeAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap, gameWorld);
         } else {
-            income = getPlayerIncomeNonAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap);
+            income = getPlayerIncomeNonAlien(aPlayer, addToIncomeReport, galaxy, galaxyMap, gameWorld);
         }
         return income;
     }
 
-    public static int getPlayerIncome(Player aPlayer, boolean addToIncomeReport, GalaxyMap galaxyMap) {
-        int income = getPlayerIncomeWithoutCorruption(aPlayer, addToIncomeReport, aPlayer.getGalaxy(), galaxyMap);
+    public static int getPlayerIncome(Player aPlayer, boolean addToIncomeReport, GalaxyMap galaxyMap, GameWorld gameWorld, Galaxy galaxy) {
+        int income = getPlayerIncomeWithoutCorruption(aPlayer, addToIncomeReport, galaxy, galaxyMap, gameWorld);
         // System.out.println("getPlayerIncome, income1: " + income);
-        income = getIncomeAfterCorruption(income, aPlayer.getCorruptionPoint());
+        income = getIncomeAfterCorruption(income, PlayerPureFunctions.getCorruptionPoint(gameWorld, aPlayer.getFactionUuid(), aPlayer.getCorruptionPointUuid()));
         // System.out.println("getPlayerIncome, income2: " + income);
         return income;
     }
@@ -105,7 +108,7 @@ public class IncomePureFunctions {
         return incomeAfterCorruption;
     }
 
-    private static int getPlayerIncomeNonAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap) {
+    private static int getPlayerIncomeNonAlien(Player aPlayer, boolean addToIncomeReport, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         int totIncome = 0;
         TurnInfo playerTurnInfo = null;
         if (addToIncomeReport) {
@@ -118,13 +121,13 @@ public class IncomePureFunctions {
                 Logger.finest("tempPlanet " + planet.getMapPlanetUuid());
                 int tmpInc = getIncome(planet, aPlayer.getOpenPlanetBonus(),
                         aPlayer.getClosedPlanetBonus(), playerTurnInfo, galaxyMap)
-                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), galaxy.getGameWorld(), galaxyMap);
+                        + getVIPIncomeBonus(aPlayer, planet, playerTurnInfo, galaxy.getAllVIPs(), gameWorld, galaxyMap);
                 Logger.finest("tmpInc " + tmpInc);
                 totIncome = totIncome + tmpInc;
                 Logger.finest("totIncome1 " + totIncome);
                 // add income bonus for Buildings
                 Logger.finest("getPlanetBuildingsBonus(tempPlanet) f�re");
-                totIncome = totIncome + BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, galaxy.getGameWorld(), galaxyMap);
+                totIncome = totIncome + BuildingPureFunctions.getPlanetBuildingsBonus(planet, playerTurnInfo, gameWorld, galaxyMap);
                 Logger.finest("totIncome2 " + totIncome);
                 Logger.finest("getPlanetBuildingsBonus(tempPlanet) efter");
                 Logger.finest("totIncome3 " + totIncome);

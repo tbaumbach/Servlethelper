@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.world.GameWorld;
-import spaceraze.world.VIP;
+import spaceraze.game.VIP;
 
 /**
  * @author WMPABOD

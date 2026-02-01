@@ -1,14 +1,17 @@
 package spaceraze.servlethelper.game.spaceship;
 
+import spaceraze.game.*;
+import spaceraze.game.report.old.CanBeLostInSpace;
+import spaceraze.servlethelper.game.orders.OrderPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.enums.SpaceshipRange;
-import spaceraze.world.orders.Orders;
-import spaceraze.world.orders.ShipMovement;
-import spaceraze.world.orders.ShipToCarrierMovement;
+import spaceraze.game.orders.Orders;
+import spaceraze.game.orders.ShipMovement;
+import spaceraze.game.orders.ShipToCarrierMovement;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,26 +23,26 @@ public class SpaceshipPureFunctions {
 
     private SpaceshipPureFunctions(){}
 
-    public static boolean isConstructable(Galaxy galaxy, Player player, SpaceshipType spaceshipType, PlayerSpaceshipImprovement playerSpaceshipImprovement){
+    public static boolean isConstructable(Galaxy galaxy, Player player, SpaceshipType spaceshipType, PlayerSpaceshipImprovement playerSpaceshipImprovement, GameWorld gameWorld){
         //	LoggingHandler.fine("isConstructible aPlayer: " + aPlayer.getName() + " SpaceType namn: " + name);
         //	LoggingHandler.fine("isWorldUnique isFactionUnique isPlayerUnique : " + isWorldUnique() + " " + isFactionUnique() + " " +isPlayerUnique());
 
         boolean isConstructable =  true;
         if((playerSpaceshipImprovement != null && !playerSpaceshipImprovement.isAvailableToBuild()) || (playerSpaceshipImprovement == null && !spaceshipType.isAvailableToBuild())){
             isConstructable = false;
-        }else if((spaceshipType.isWorldUnique() && spaceshipTypeExist(spaceshipType, null, null, galaxy))
-                || (spaceshipType.isFactionUnique() && spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByUuid(player.getFactionUuid(), galaxy.getGameWorld()), null, galaxy))
-                || (spaceshipType.isPlayerUnique() && spaceshipTypeExist(spaceshipType, null, player, galaxy))){
+        }else if((spaceshipType.isWorldUnique() && spaceshipTypeExist(spaceshipType, null, null, galaxy, gameWorld))
+                || (spaceshipType.isFactionUnique() && spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByUuid(player.getFactionUuid(), gameWorld), null, galaxy, gameWorld))
+                || (spaceshipType.isPlayerUnique() && spaceshipTypeExist(spaceshipType, null, player, galaxy, gameWorld))){
             isConstructable = false;
         }else if(spaceshipType.isWorldUnique() || spaceshipType.isFactionUnique() || spaceshipType.isPlayerUnique()){
             //TODO 2020-04-18 This is more client side, but need something to check if build orders is valid trying to save them from client to server.
             //	LoggingHandler.fine("isWorldUnique/isFactionUnique/isPlayerUnique check orders ");
             // check if a build order already exist
-            if(player.getOrders().haveSpaceshipTypeBuildOrder(spaceshipType)){//On server side this should check if more then one order exist, id so the order is invalid.
+            if(OrderPureFunctions.haveSpaceshipTypeBuildOrder(player.getOrders(), spaceshipType)){//On server side this should check if more then one order exist, if so the order is invalid.
                 isConstructable = false;
             }
-            for (BlackMarketOffer aBlackMarketOffer : player.getGalaxy().getCurrentOffers()) {
-                if(aBlackMarketOffer.isShip() && aBlackMarketOffer.getSpaceshipType().getName().equals(spaceshipType.getName())){
+            for (BlackMarketOffer aBlackMarketOffer : galaxy.getCurrentOffers()) {
+                if(aBlackMarketOffer.isShip() && aBlackMarketOffer.getSpaceshipTypeUuid().equals(spaceshipType.getUuid())){
                     isConstructable = false;
                 }
             }
@@ -57,7 +60,7 @@ public class SpaceshipPureFunctions {
         return playersss;
     }
 
-    private static boolean spaceshipTypeExist(SpaceshipType aSpaceshipType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
+    private static boolean spaceshipTypeExist(SpaceshipType aSpaceshipType, Faction aFaction, Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         List<Spaceship> spaceshipsToCheck;
         if (aPlayer != null) {// playerUnique
             Logger.fine("spaceshipTypeExist: Player check");
@@ -65,7 +68,7 @@ public class SpaceshipPureFunctions {
         } else if (aFaction != null) {// factionUnique
             spaceshipsToCheck = new ArrayList<Spaceship>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (GameWorldHandler.getFactionByUuid(tempPlayer.getFactionUuid(), galaxy.getGameWorld()).getName().equals(aFaction.getName())) {
+                if (GameWorldHandler.getFactionByUuid(tempPlayer.getFactionUuid(), gameWorld).getName().equals(aFaction.getName())) {
                     spaceshipsToCheck.addAll(getPlayersSpaceships(tempPlayer, galaxy));
                 }
             }
@@ -101,12 +104,12 @@ public class SpaceshipPureFunctions {
      * @param aPlanet
      * @return
      */
-    public static List<Spaceship> getShipAtPlanetNextTurn(Player aPlayer, Planet aPlanet) {
-        List<Spaceship> tempShipList =SpaceshipPureFunctions.getPlayersSpaceshipsOnPlanet(aPlayer, aPlanet, aPlayer.getGalaxy().getSpaceships());
+    public static List<Spaceship> getShipAtPlanetNextTurn(Player aPlayer, Planet aPlanet, Galaxy galaxy) {
+        List<Spaceship> tempShipList =SpaceshipPureFunctions.getPlayersSpaceshipsOnPlanet(aPlayer, aPlanet, galaxy.getSpaceships());
         List<ShipMovement> shipMovemants = aPlayer.getOrders().getShipMoves();
         for (ShipMovement shipMovement : shipMovemants) {
             if (shipMovement.getDestination().equalsIgnoreCase(aPlanet.getMapPlanetUuid())) {// adding ships with travel ordes against the planet.
-                Spaceship tempShip = aPlayer.getGalaxy().findSpaceshipByUuid(shipMovement.getSpaceshipKey());
+                Spaceship tempShip = galaxy.findSpaceshipByUuid(shipMovement.getSpaceshipKey());
                 if (!tempShipList.contains(tempShip)) {
                     tempShipList.add(tempShip);
                 }
@@ -115,10 +118,10 @@ public class SpaceshipPureFunctions {
                     List<ShipToCarrierMovement> SqdToCarrierMovementList = aPlayer.getOrders().getShipToCarrierMoves();
                     for (ShipToCarrierMovement shipToCarrierMovement : SqdToCarrierMovementList) {
                         if (tempShip.getUuid().equalsIgnoreCase(shipToCarrierMovement.getDestinationCarrierKey())) {
-                            tempShipList.add(aPlayer.getGalaxy().findSpaceshipByUuid(shipToCarrierMovement.getSpaceShipKey()));
+                            tempShipList.add(galaxy.findSpaceshipByUuid(shipToCarrierMovement.getSpaceShipKey()));
                         }
                     }
-                    List<Spaceship> shipListAtCarrierPlanet = getPlayersSpaceshipsOnPlanet(aPlayer, tempShip.getLocation(), aPlayer.getGalaxy().getSpaceships());
+                    List<Spaceship> shipListAtCarrierPlanet = getPlayersSpaceshipsOnPlanet(aPlayer, tempShip.getLocation(), galaxy.getSpaceships());
                     for (Spaceship spaceship : shipListAtCarrierPlanet) {
                         if (spaceship.getCarrierLocation() == tempShip) {
                             boolean add = true;
@@ -135,7 +138,7 @@ public class SpaceshipPureFunctions {
                 }
 
             } else {
-                Spaceship tempSpaceship = aPlayer.getGalaxy().findSpaceshipByUuid(shipMovement.getSpaceshipKey());
+                Spaceship tempSpaceship = galaxy.findSpaceshipByUuid(shipMovement.getSpaceshipKey());
                 if (tempSpaceship.getLocation() != null && tempSpaceship.getLocation() == aPlanet) {// removing ships on the planet with move orders
                     tempShipList.remove(tempSpaceship);
                     if (isCarrier(tempSpaceship)) {
@@ -174,13 +177,13 @@ public class SpaceshipPureFunctions {
     /**
      *            if false, return ships destroyed
      */
-    public static List<CanBeLostInSpace> getShipsLostInSpace(Galaxy galaxy, List<CanBeLostInSpace> allLostInSpace, String aFactionName, boolean lostShips) {
+    public static List<CanBeLostInSpace> getShipsLostInSpace(Galaxy galaxy, GameWorld gameWorld, List<CanBeLostInSpace> allLostInSpace, String aFactionName, boolean lostShips) {
         List<CanBeLostInSpace> lisList = new LinkedList<>();
         for (Iterator<CanBeLostInSpace> iter = allLostInSpace.iterator(); iter.hasNext();) {
             CanBeLostInSpace aLis = iter.next();
             if (!lostShips) { // ta alla skepp som ej är från aFaction
                 if (aLis.getOwner() != null) {
-                    if (!GameWorldHandler.getFactionByUuid(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionUuid(), galaxy.getGameWorld()).getName().equalsIgnoreCase(aFactionName)) {
+                    if (!GameWorldHandler.getFactionByUuid(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionUuid(), gameWorld).getName().equalsIgnoreCase(aFactionName)) {
                         lisList.add(aLis);
                     }
                 } else { // neutralt = lägg till
@@ -188,7 +191,7 @@ public class SpaceshipPureFunctions {
                 }
             } else { // ta endast skepp från aFaction
                 if (aLis.getOwner() != null) {
-                    if (GameWorldHandler.getFactionByUuid(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionUuid(), galaxy.getGameWorld()).getName().equalsIgnoreCase(aFactionName)) {
+                    if (GameWorldHandler.getFactionByUuid(galaxy.getPlayerByGovenorName(aLis.getOwner()).getFactionUuid(), gameWorld).getName().equalsIgnoreCase(aFactionName)) {
                         lisList.add(aLis);
                     }
                 }
@@ -414,11 +417,11 @@ public class SpaceshipPureFunctions {
         return spaceship.getSquadronCapacity() > 0;
     }
 
-    public static SpaceshipRange getRange(Spaceship spaceship, Galaxy galaxy) {
-        SpaceshipRange range = getSpaceshipTypeByUuid(spaceship.getTypeUuid(), galaxy.getGameWorld()).getRange();
+    public static SpaceshipRange getRange(Spaceship spaceship, Galaxy galaxy, GameWorld gameWorld) {
+        SpaceshipRange range = getSpaceshipTypeByUuid(spaceship.getTypeUuid(), gameWorld).getRange();
         if (spaceship.getOwner() != null){ // only need to check presense of vip if not neutral
             if (range == SpaceshipRange.SHORT && galaxy != null) {
-                boolean ftlMasterOnShip = VipPureFunctions.isFTLMasterOnShip(spaceship, galaxy);
+                boolean ftlMasterOnShip = VipPureFunctions.isFTLMasterOnShip(spaceship, galaxy, gameWorld);
                 if (ftlMasterOnShip) {
                     range = SpaceshipRange.LONG;
                 }
@@ -479,11 +482,11 @@ public class SpaceshipPureFunctions {
      *            if only civilian ships should be returned
      * @return a list of civilian or military ships at the aPlanet
      */
-    public static List<Spaceship> getShips(Planet planet, boolean civilian, Galaxy galaxy) {
-        List<Spaceship> ships = new LinkedList<Spaceship>();
+    public static List<Spaceship> getShips(Planet planet, boolean civilian, Galaxy galaxy, GameWorld gameWorld) {
+        List<Spaceship> ships = new LinkedList<>();
         for (Spaceship aShip : galaxy.getSpaceships()) {
             if ((aShip.getLocation() != null) && (aShip.getLocation() == planet)) {
-                if (getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).isCivilian() == civilian) {
+                if (getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).isCivilian() == civilian) {
                     ships.add(aShip);
                 }
             }
@@ -526,16 +529,16 @@ public class SpaceshipPureFunctions {
         return hullStrength;
     }
 
-    public static boolean isPlayerUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy) {
-        return spaceshipTypeExist(spaceshipType, null, aPlayer, galaxy);
+    public static boolean isPlayerUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy, GameWorld gameWorld) {
+        return spaceshipTypeExist(spaceshipType, null, aPlayer, galaxy, gameWorld);
     }
 
-    public static boolean isWorldUniqueBuild(Galaxy aGalaxy, SpaceshipType spaceshipType) {
-        return spaceshipTypeExist(spaceshipType, null, null, aGalaxy);
+    public static boolean isWorldUniqueBuild(Galaxy aGalaxy, SpaceshipType spaceshipType, GameWorld gameWorld) {
+        return spaceshipTypeExist(spaceshipType, null, null, aGalaxy, gameWorld);
     }
 
-    public static boolean isFactionUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy) {
-        return spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), aPlayer.getGalaxy().getGameWorld()), null, galaxy);
+    public static boolean isFactionUniqueBuild(Player aPlayer, SpaceshipType spaceshipType, Galaxy galaxy, GameWorld gameWorld) {
+        return spaceshipTypeExist(spaceshipType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld), null, galaxy, gameWorld);
     }
 
     public static int getBuildCost(SpaceshipType spaceshipType, int vipBuildBonus){

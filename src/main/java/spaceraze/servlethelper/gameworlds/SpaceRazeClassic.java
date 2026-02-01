@@ -10,7 +10,6 @@ import spaceraze.world.BuildingType;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
-import spaceraze.world.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.diplomacy.DiplomacyLevel;
 import spaceraze.world.diplomacy.DiplomacyRelation;
@@ -50,7 +49,6 @@ public class SpaceRazeClassic{
 		Alignment evil = AlignmentPureFunctions.findAlignmentByName("evil", gw.getAlignments());
 
 		// Spaceship types
-        UniqueIdCounter uniqueShipIdCounter = new UniqueIdCounter();
 
         // Golan I
         SpaceshipType tempsst = new SpaceshipType("Golan I","GI", SpaceShipSize.SMALL,10,50,SpaceshipRange.NONE,1,3, 10);
@@ -193,7 +191,6 @@ public class SpaceRazeClassic{
         gw.setNeutralSize3(gw.getSpaceshipTypeByName("Golan III"));
 
         // vip types
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
 
         VIPType tmpVipType = new VIPType("Governor","Gov",neutral);
         tmpVipType.setCanVisitNeutralPlanets(true);
@@ -402,8 +399,7 @@ public class SpaceRazeClassic{
 
         // add custom diplomacy
         // ********************
-        
-        GameWorldDiplomacy diplomacy = gw.getDiplomacy();
+
         DiplomacyRelation tempDiplomacyRelation;
         
         // Empire-Empire relation

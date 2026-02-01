@@ -6,11 +6,10 @@ import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
-import spaceraze.world.Corruption;
+import spaceraze.servlethelper.Corruption;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
-import spaceraze.world.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.diplomacy.DiplomacyLevel;
 import spaceraze.world.diplomacy.DiplomacyRelation;
@@ -58,7 +57,6 @@ public class SpaceRazeExpanded{
 		tmpCorruption.addBreakpoint(150, 75);
 
 		// Spaceship types
-        UniqueIdCounter uniqueShipIdCounter = new UniqueIdCounter();
 
         // Defence platforms
         // -----------------
@@ -287,7 +285,6 @@ public class SpaceRazeExpanded{
         gw.setNeutralSize3(gw.getSpaceshipTypeByName("Golan III"));
 
         // vip types
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
 
         VIPType tmpVipType = new VIPType("Governor","Gov",neutral);
         tmpVipType.setCanVisitNeutralPlanets(true);
@@ -462,8 +459,7 @@ public class SpaceRazeExpanded{
         gw.addVipType(tmpVipType);
         
         // Buildings
-        // *********        
-		UniqueIdCounter uBIC = new UniqueIdCounter();
+        // *********
       
         List<BuildingType> tempBuildingsLeague = new ArrayList<>();
         List<BuildingType> tempBuildingsEmpire = new ArrayList<>();
@@ -692,7 +688,6 @@ public class SpaceRazeExpanded{
         // add custom diplomacy
         // ********************
         
-        GameWorldDiplomacy diplomacy = gw.getDiplomacy();
         DiplomacyRelation tempDiplomacyRelation;
         
         // Empire-Empire relation

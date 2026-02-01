@@ -3,9 +3,9 @@
  */
 package spaceraze.servlethelper.comparator.trooptype;
 
-import java.util.Comparator;
-
 import spaceraze.world.TroopType;
+
+import java.util.Comparator;
 
 /**
  * @author WMPABOD

@@ -1,13 +1,15 @@
 package spaceraze.servlethelper.game.troop;
 
+import spaceraze.game.*;
 import spaceraze.map.GalaxyMap;
+import spaceraze.servlethelper.game.orders.OrderPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
-import spaceraze.world.orders.Orders;
-import spaceraze.world.orders.TroopToCarrierMovement;
-import spaceraze.world.orders.TroopToPlanetMovement;
+import spaceraze.game.orders.Orders;
+import spaceraze.game.orders.TroopToCarrierMovement;
+import spaceraze.game.orders.TroopToPlanetMovement;
 
 import java.util.*;
 
@@ -15,19 +17,19 @@ public class TroopPureFunctions {
 
     private TroopPureFunctions(){}
 
-    public static boolean isConstructable(Player aPlayer, Galaxy galaxy, TroopType troopType, PlayerTroopImprovement playerTroopImprovement){
+    public static boolean isConstructable(Player aPlayer, Galaxy galaxy, TroopType troopType, PlayerTroopImprovement playerTroopImprovement, GameWorld gameWorld){
         boolean constructible =  true;
         if((playerTroopImprovement != null && !playerTroopImprovement.isAvailableToBuild()) || (playerTroopImprovement == null && troopType.isCanBuild())){
             constructible = false;
-        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy)) || (troopType.isFactionUnique() && troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy))){
+        }else if((troopType.isWorldUnique() && troopTypeExist(troopType, null, null, galaxy, gameWorld)) || (troopType.isFactionUnique() && troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld), null, galaxy, gameWorld)) || (troopType.isPlayerUnique() && troopTypeExist(troopType, null, aPlayer, galaxy, gameWorld))){
             constructible = false;
         }else if(troopType.isWorldUnique() || troopType.isFactionUnique() || troopType.isPlayerUnique()){
             // check if a build order already exist
-            if(aPlayer.getOrders().haveTroopTypeBuildOrder(troopType)){
+            if(OrderPureFunctions.haveTroopTypeBuildOrder(aPlayer.getOrders(), troopType)){
                 constructible = false;
             }
-            for (BlackMarketOffer aBlackMarketOffer : aPlayer.getGalaxy().getCurrentOffers()) {
-                if(aBlackMarketOffer.isTroop() && aBlackMarketOffer.getTroopType().getName().equals(troopType.getName())){
+            for (BlackMarketOffer aBlackMarketOffer : galaxy.getCurrentOffers()) {
+                if(aBlackMarketOffer.isTroop() && aBlackMarketOffer.getTroopTypeUuid().equals(troopType.getUuid())){
                     constructible = false;
                 }
             }
@@ -153,16 +155,16 @@ public class TroopPureFunctions {
         return (int) Math.round((100.0 * troop.getCurrentDamageCapacity()) / troop.getDamageCapacity());
     }
 
-    public static List<Troop> getTroopsOnPlanet(Planet aPlanet, Player aPlayer, List<Troop> troops) {
-        return getTroopsOnPlanet(aPlanet, aPlayer, true, troops);
+    public static List<Troop> getTroopsOnPlanet(Planet aPlanet, Player aPlayer, List<Troop> troops, GameWorld gameWorld) {
+        return getTroopsOnPlanet(aPlanet, aPlayer, true, troops, gameWorld);
     }
 
-    public static List<Troop> getTroopsOnPlanet(Planet aPlanet, Player aPlayer, boolean showUnVisible, List<Troop> troops) {
+    public static List<Troop> getTroopsOnPlanet(Planet aPlanet, Player aPlayer, boolean showUnVisible, List<Troop> troops, GameWorld gameWorld) {
         List<Troop> troopsAtPlanet = new ArrayList<>();
         for (Troop aTroop : troops) {
             if (aTroop.getPlanetLocation() == aPlanet) {
                 if (aTroop.getOwner() == aPlayer) {
-                    if (showUnVisible || getTroopTypeByUuid(aTroop.getTypeUuid(), aPlayer.getGalaxy().getGameWorld()).isVisible()) {
+                    if (showUnVisible || getTroopTypeByUuid(aTroop.getTypeUuid(), gameWorld).isVisible()) {
                         troopsAtPlanet.add(aTroop);
                     }
                 }
@@ -171,19 +173,19 @@ public class TroopPureFunctions {
         return troopsAtPlanet;
     }
 
-    public static boolean isPlayerUniqueBuild(Player aPlayer, TroopType troopType) {
-        return troopTypeExist(troopType, null, aPlayer, aPlayer.getGalaxy());
+    public static boolean isPlayerUniqueBuild(Player aPlayer, TroopType troopType, Galaxy galaxy, GameWorld gameWorld) {
+        return troopTypeExist(troopType, null, aPlayer, galaxy, gameWorld);
     }
 
-    public static boolean isWorldUniqueBuild(Galaxy aGalaxy, TroopType troopType) {
-        return troopTypeExist(troopType, null, null, aGalaxy);
+    public static boolean isWorldUniqueBuild(Galaxy aGalaxy, TroopType troopType, GameWorld gameWorld) {
+        return troopTypeExist(troopType, null, null, aGalaxy, gameWorld);
     }
 
-    public static boolean isFactionUniqueBuild(Player aPlayer, TroopType troopType) {
-        return troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), aPlayer.getGalaxy().getGameWorld()), null, aPlayer.getGalaxy());
+    public static boolean isFactionUniqueBuild(Player aPlayer, TroopType troopType, Galaxy galaxy, GameWorld gameWorld) {
+        return troopTypeExist(troopType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld), null, galaxy, gameWorld);
     }
 
-    public static boolean troopTypeExist(TroopType aTroopType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
+    public static boolean troopTypeExist(TroopType aTroopType, Faction aFaction, Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         boolean exist = false;
         List<Troop> troopsToCheck;
         if (aPlayer != null) {// playerUnique
@@ -200,7 +202,7 @@ public class TroopPureFunctions {
         }
 
         for (Troop tempTroop : troopsToCheck) {
-            if (getTroopTypeByUuid(tempTroop.getTypeUuid(), galaxy.getGameWorld()).getName().equals(aTroopType.getName())) {
+            if (getTroopTypeByUuid(tempTroop.getTypeUuid(), gameWorld).getName().equals(aTroopType.getName())) {
                 exist = true;
             }
         }

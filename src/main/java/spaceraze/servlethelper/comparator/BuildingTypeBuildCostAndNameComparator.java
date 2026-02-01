@@ -2,7 +2,7 @@ package spaceraze.servlethelper.comparator;
 
 import java.util.Comparator;
 
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.world.BuildingType;
 
 public class BuildingTypeBuildCostAndNameComparator implements Comparator<BuildingType>{

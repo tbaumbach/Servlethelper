@@ -1,11 +1,10 @@
 package spaceraze.servlethelper.game.planet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import spaceraze.game.*;
 import spaceraze.map.GalaxyMap;
 import spaceraze.map.MapPlanet;
 import spaceraze.servlethelper.comparator.PlanetNameComparator;
-import spaceraze.servlethelper.comparator.PlayerNameComparator;
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
@@ -15,9 +14,9 @@ import spaceraze.util.general.Logger;
 import spaceraze.util.move.FindPlanetCriterion;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyLevel;
-import spaceraze.world.diplomacy.DiplomacyState;
+import spaceraze.game.diplomacy.DiplomacyState;
 import spaceraze.world.enums.SpaceshipRange;
-import spaceraze.world.mapinfo.MapPlanetInfo;
+import spaceraze.game.mapinfo.MapPlanetInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,8 +52,8 @@ public class PlanetPureFunctions {
         return allBuildingsString;
     }
 
-    public static Planet findClosestOwnPlanetFromShip(Planet aLocation, Player aPlayer, Spaceship aSpaceship, Galaxy galaxy) {
-        return findClosestPlanet(aLocation, aPlayer, SpaceshipPureFunctions.getRange(aSpaceship, galaxy), FindPlanetCriterion.OWN_PLANET_NOT_BESIEGED,
+    public static Planet findClosestOwnPlanetFromShip(Planet aLocation, Player aPlayer, Spaceship aSpaceship, Galaxy galaxy, GameWorld gameWorld) {
+        return findClosestPlanet(aLocation, aPlayer, SpaceshipPureFunctions.getRange(aSpaceship, galaxy, gameWorld), FindPlanetCriterion.OWN_PLANET_NOT_BESIEGED,
                 null, galaxy);
     }
 
@@ -199,16 +198,16 @@ public class PlanetPureFunctions {
         return foundPlanet;
     }
 
-    public static Planet getEscapePlanet(Spaceship spaceship, Galaxy galaxy) {
+    public static Planet getEscapePlanet(Spaceship spaceship, Galaxy galaxy, GameWorld gameWorld) {
         Logger.finer("getRunToPlanet aSpaceship: " + spaceship.getName());
         Planet foundPlanet = null;
         Planet firstDestination = null;
         // kolla efter egna planeter
-        foundPlanet = findClosestOwnPlanetFromShip(spaceship.getLocation(), spaceship.getOwner(), spaceship, galaxy);
+        foundPlanet = findClosestOwnPlanetFromShip(spaceship.getLocation(), spaceship.getOwner(), spaceship, galaxy, gameWorld);
         // om en destinationsplanet har hittats skall den 1:a planeten på väg dit hämtas
         if (foundPlanet != null){
             Logger.finer("foundPlanet: " + foundPlanet.getMapPlanetUuid());
-            firstDestination = findFirstJumpTowardsPlanet(spaceship.getLocation(), foundPlanet, SpaceshipPureFunctions.getRange(spaceship, galaxy), galaxy);
+            firstDestination = findFirstJumpTowardsPlanet(spaceship.getLocation(), foundPlanet, SpaceshipPureFunctions.getRange(spaceship, galaxy, gameWorld), galaxy);
             Logger.finer("firstDestination: " + firstDestination.getMapPlanetUuid());
         }else{
             Logger.finer("no planet found");
@@ -300,12 +299,12 @@ public class PlanetPureFunctions {
         return enemyOrNeutralPlanet;
     }
 
-    public static boolean isItAlliesSurveyShipsOnPlanet(Player player, Planet planet, Galaxy galaxy) {
+    public static boolean isItAlliesSurveyShipsOnPlanet(Player player, Planet planet, Galaxy galaxy, GameWorld gameWorld) {
         List<Player> allies = PlayerPureFunctions.getAllies(player, galaxy.getPlayers(), galaxy);
         boolean foundShip = false;
         int i = 0;
         while (!foundShip && allies.size() > i) {
-            if (SpaceshipPureFunctions.findSurveyShip(planet, allies.get(i), galaxy.getSpaceships(), galaxy.getGameWorld()) != null) {
+            if (SpaceshipPureFunctions.findSurveyShip(planet, allies.get(i), galaxy.getSpaceships(), gameWorld) != null) {
                 foundShip = true;
             }
             i++;
@@ -332,12 +331,12 @@ public class PlanetPureFunctions {
         return haveAllied;
     }
 
-    public static boolean isItAlliesSurveyVipOnPlanet(Player player, Planet planet, Galaxy galaxy) {
+    public static boolean isItAlliesSurveyVipOnPlanet(Player player, Planet planet, Galaxy galaxy, GameWorld gameWorld) {
         List<Player> allies = PlayerPureFunctions.getAllies(player, galaxy.getPlayers(), galaxy);
         boolean foundSpy = false;
         int i = 0;
         while (!foundSpy && allies.size() > i) {
-            if (VipPureFunctions.findSurveyVIPonShip(planet, allies.get(i), galaxy) != null) {
+            if (VipPureFunctions.findSurveyVIPonShip(planet, allies.get(i), galaxy, gameWorld) != null) {
                 foundSpy = true;
             }
             i++;
@@ -345,12 +344,12 @@ public class PlanetPureFunctions {
         return foundSpy;
     }
 
-    public static boolean isItAlliedSpyOnPlanet(Player player, Planet planet, Galaxy galaxy) {
+    public static boolean isItAlliedSpyOnPlanet(Player player, Planet planet, Galaxy galaxy, GameWorld gameWorld) {
         List<Player> allies = PlayerPureFunctions.getAllies(player, galaxy.getPlayers(), galaxy);
         boolean foundSpy = false;
         int i = 0;
         while (!foundSpy && allies.size() < i) {
-            if (VipPureFunctions.findVIPSpy(planet, allies.get(i), galaxy) != null) {
+            if (VipPureFunctions.findVIPSpy(planet, allies.get(i), galaxy, gameWorld) != null) {
                 foundSpy = true;
             }
             i++;
@@ -376,8 +375,8 @@ public class PlanetPureFunctions {
         throw new IllegalArgumentException("Planet not found");
     }
 
-    public static boolean checkSurrender(Planet planet, Galaxy galaxy){
-        return (planet.getResistance() + VipPureFunctions.findHighestVIPResistanceBonus(planet, planet.getPlayerInControl(), galaxy)) < 1;
+    public static boolean checkSurrender(Planet planet, Galaxy galaxy, GameWorld gameWorld) {
+        return (planet.getResistance() + VipPureFunctions.findHighestVIPResistanceBonus(planet, planet.getPlayerInControl(), galaxy, gameWorld)) < 1;
     }
 
     public static List<Building> getBuildings(Planet planet, boolean orbitOnly, GameWorld gameWorld) {
@@ -411,10 +410,10 @@ public class PlanetPureFunctions {
         return biggestShield;
     }
 
-    public static boolean getInfectedByAlien(Planet planet, Galaxy galaxy){
+    public static boolean getInfectedByAlien(Planet planet, Galaxy galaxy, GameWorld gameWorld){
         boolean infectedByAlien = false;
         if (planet.getPlayerInControl() != null){
-            if (GameWorldHandler.getFactionByUuid(planet.getPlayerInControl().getFactionUuid(), galaxy.getGameWorld()).isAlien()){
+            if (GameWorldHandler.getFactionByUuid(planet.getPlayerInControl().getFactionUuid(), gameWorld).isAlien()){
                 infectedByAlien = true;
             }
         }
@@ -482,7 +481,7 @@ public class PlanetPureFunctions {
         return galaxyMap.getPlanets().stream().filter(planet -> planet.getName().equals(planetName)).findFirst().orElse(null);
     }
 
-    public static Planet getPlanetByName(Galaxy galaxy,GalaxyMap galaxyMap, String planetName) {
+    public static Planet getPlanetByName(Galaxy galaxy, GalaxyMap galaxyMap, String planetName) {
         MapPlanet mapPlanet = galaxyMap.getPlanets().stream().filter(planet -> planet.getName().equals(planetName)).findFirst().orElse(null);
         if (mapPlanet != null) {
             return getPlanet(mapPlanet.getUuid(), galaxy.getPlanets());

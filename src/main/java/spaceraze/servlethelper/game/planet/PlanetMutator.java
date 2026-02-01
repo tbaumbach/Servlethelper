@@ -1,7 +1,8 @@
 package spaceraze.servlethelper.game.planet;
 
+import spaceraze.game.*;
 import spaceraze.map.MapPlanet;
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.servlethelper.game.vip.VipMutator;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
@@ -32,7 +33,7 @@ public class PlanetMutator {
         planetInformation.setProd(newProd);
     }
 
-    public static void infectedByAttacker(Planet planet, MapPlanet mapPlanet, Player attacker, GameWorld gameWorld){
+    public static void infectedByAttacker(Planet planet, MapPlanet mapPlanet, Player attacker, Galaxy galaxy, GameWorld gameWorld){
         attacker.addToHighlights(mapPlanet.getName(), HighlightType.TYPE_PLANET_INFESTATED);
         attacker.addToGeneral("You have infected the planet " + mapPlanet.getName());
         planet.setProd(0);
@@ -41,7 +42,7 @@ public class PlanetMutator {
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
             // lägg till en slumpvis VIP till infestator spelaren
-            VIP aVIP = VipMutator.maybeAddVIP(attacker, attacker.getGalaxy());
+            VIP aVIP = VipMutator.maybeAddVIP(attacker, galaxy, gameWorld);
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
                 VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld);
@@ -51,7 +52,7 @@ public class PlanetMutator {
         }
     }
 
-    public static  void joinsVisitingInfector(Planet planet, MapPlanet mapPlanet, VIP tempInf, GameWorld gameWorld){
+    public static  void joinsVisitingInfector(Planet planet, MapPlanet mapPlanet, VIP tempInf, Galaxy galaxy, GameWorld gameWorld){
         planet.setPopulation(0);
         planet.setResistance(planet.getResistance() + GameWorldHandler.getFactionByUuid(tempInf.getBoss().getFactionUuid(), gameWorld).getResistanceBonus());
         // destroy all buildings, when an alien conquers a planet it is always razed in the process
@@ -62,7 +63,7 @@ public class PlanetMutator {
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
             // lägg till en slumpvis VIP till denna spelare
-            VIP aVIP = VipMutator.maybeAddVIP(tempInf.getBoss(), tempInf.getBoss().getGalaxy());
+            VIP aVIP = VipMutator.maybeAddVIP(tempInf.getBoss(), galaxy, gameWorld);
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
                 tempInf.getBoss().addToVIPReport("When you conquered " + mapPlanet.getName() + " you have found a " + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getName() + " who has joined your service.");
@@ -76,7 +77,7 @@ public class PlanetMutator {
         planet.setPlayerInControl(tempInf.getBoss());
     }
 
-    public static void joinsVisitingDiplomat(Planet planet, MapPlanet mapPlanet, VIP tempVIP, boolean addInfoToPlayer, GameWorld gameWorld){
+    public static void joinsVisitingDiplomat(Planet planet, MapPlanet mapPlanet, VIP tempVIP, boolean addInfoToPlayer, Galaxy galaxy, GameWorld gameWorld){
         planet.setResistance(planet.getResistance() + tempVIP.getBoss().getResistanceBonus());  // olika typer av spelare får olika res på ny erövrade planeter?
         if(addInfoToPlayer){
             tempVIP.getBoss().addToGeneral("The neutral planet " + mapPlanet.getName() + " has been convinced by your " + VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), gameWorld).getName() + " to join your forces!");
@@ -85,7 +86,7 @@ public class PlanetMutator {
         if (planet.isHasNeverSurrendered()){
             planet.setHasNeverSurrendered(false);
             // l�gg till en slumpvis VIP till denna spelare
-            VIP aVIP = VipMutator.maybeAddVIP(tempVIP.getBoss(), tempVIP.getBoss().getGalaxy());
+            VIP aVIP = VipMutator.maybeAddVIP(tempVIP.getBoss(), galaxy, gameWorld);
             if (aVIP != null){
                 VipMutator.setShipLocation(aVIP, planet);
                 if(addInfoToPlayer){
@@ -109,7 +110,7 @@ public class PlanetMutator {
         if (planet.isOpen()){
             reverseVisibility(planet);
         }
-        planet.setBuildings(new ArrayList<Building>());
+        planet.setBuildings(new ArrayList<>());
         planet.setPlayerInControl(null);
     }
 

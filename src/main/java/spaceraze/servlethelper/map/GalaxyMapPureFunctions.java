@@ -1,7 +1,10 @@
 package spaceraze.servlethelper.map;
 
+import spaceraze.game.*;
+import spaceraze.game.mapinfo.FleetData;
+import spaceraze.game.mapinfo.MapConnectionInfo;
 import spaceraze.map.GalaxyMap;
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.servlethelper.game.DiplomacyPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
@@ -12,18 +15,17 @@ import spaceraze.world.*;
 import spaceraze.servlethelper.comparator.SpaceshipSizeAndBuildCostComparator;
 import spaceraze.map.*;
 import spaceraze.world.enums.SpaceShipSize;
-import spaceraze.world.mapinfo.*;
 
 import java.util.*;
 
 public class GalaxyMapPureFunctions {
 
-    public static List<String> getShipsList(Planet planet, Player player, Galaxy g) {
+    public static List<String> getShipsList(Planet planet, Player player, Galaxy g, GameWorld gameWorld) {
         // list to return
         List<String> shipStrings = new LinkedList<>();
         // get spaceships on this planet, both civ and military
-        List<Spaceship> shipsOnPlanet = SpaceshipPureFunctions.getShips(planet, false, g);
-        shipsOnPlanet.addAll(SpaceshipPureFunctions.getShips(planet, true, g));
+        List<Spaceship> shipsOnPlanet = SpaceshipPureFunctions.getShips(planet, false, g, gameWorld);
+        shipsOnPlanet.addAll(SpaceshipPureFunctions.getShips(planet, true, g, gameWorld));
         List<Spaceship> shipsPlayer = new LinkedList<>();
         for (Spaceship spaceship : shipsOnPlanet) {
             if (spaceship.getOwner() == player) {
@@ -31,7 +33,7 @@ public class GalaxyMapPureFunctions {
             }
         }
         // sort the ships
-        Collections.sort(shipsPlayer, new SpaceshipSizeAndBuildCostComparator(g.getGameWorld()));
+        Collections.sort(shipsPlayer, new SpaceshipSizeAndBuildCostComparator(gameWorld));
         int shipCount = 0;
         int i = 0;
         boolean addShip = false; // anv. för att avgöra när alla skepp av en typ har hittats (så att räknaren blir rätt)
@@ -42,12 +44,12 @@ public class GalaxyMapPureFunctions {
                 addShip = true;
             } else {
                 Spaceship spaceshipNext = shipsPlayer.get(i + 1);
-                if (!SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceshipNext.getTypeUuid(), g.getGameWorld()).getName().equals(SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), g.getGameWorld()).getName())) {
+                if (!SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceshipNext.getTypeUuid(), gameWorld).getName().equals(SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), gameWorld).getName())) {
                     addShip = true;
                 }
             }
             if (addShip) {
-                String tmpShipStr = SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), g.getGameWorld()).getShortName();
+                String tmpShipStr = SpaceshipPureFunctions.getSpaceshipTypeByUuid(spaceship.getTypeUuid(), gameWorld).getShortName();
                 if (shipCount > 1) {
                     tmpShipStr = shipCount + " " + tmpShipStr;
                 }
@@ -57,7 +59,7 @@ public class GalaxyMapPureFunctions {
                 if (tmpVips.size() > 0) {
                     for (Iterator<VIP> iter = tmpVips.iterator(); iter.hasNext(); ) {
                         VIP aVIP = iter.next();
-                        tmpShipStr = tmpShipStr + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld()).getShortName();
+                        tmpShipStr = tmpShipStr + VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getShortName();
                         if (iter.hasNext()) {
                             tmpShipStr = tmpShipStr + ",";
                         }
@@ -74,35 +76,34 @@ public class GalaxyMapPureFunctions {
         return shipStrings;
     }
 
-    public static MapInfoTurn createMapInfoTurn(Player player, MapInfos mapPlanetInfos, int turn) {
-        List<MapPlanetInfo> allPlanetInfos = new ArrayList<>();
+    public static spaceraze.game.mapinfo.MapInfoTurn createMapInfoTurn(Player player, MapInfos mapPlanetInfos, int turn, Galaxy galaxy, GameWorld gameWorld) {
+        List<spaceraze.game.mapinfo.MapPlanetInfo> allPlanetInfos = new ArrayList<>();
         List<MapConnectionInfo> starPortConnections = new ArrayList<>();
 
-        for (Planet planet : player.getGalaxy().getPlanets()) {
-            MapPlanetInfo mapPlanetInfo = GalaxyMapPureFunctions.createMapPlanetInfo(planet, player, mapPlanetInfos, turn, getShipsList(planet, player, player.getGalaxy()), player.getGalaxy());
+        for (Planet planet : galaxy.getPlanets()) {
+            spaceraze.game.mapinfo.MapPlanetInfo mapPlanetInfo = GalaxyMapPureFunctions.createMapPlanetInfo(planet, player, mapPlanetInfos, turn, getShipsList(planet, player, galaxy, gameWorld), galaxy, gameWorld);
             allPlanetInfos.add(mapPlanetInfo);
         }
-        for (PlanetConnection aPlanetConnection : player.getGalaxy().getPlanetConnections()) {
-            if (GalaxyMapPureFunctions.isStarPortConnections(aPlanetConnection, player)) {
+        for (PlanetConnection aPlanetConnection : galaxy.getPlanetConnections()) {
+            if (GalaxyMapPureFunctions.isStarPortConnections(aPlanetConnection, player, galaxy)) {
                 MapConnectionInfo mapConnectionInfo = new MapConnectionInfo(aPlanetConnection);
                 starPortConnections.add(mapConnectionInfo);
             }
         }
 
-        return MapInfoTurn.builder().allPlanetInfos(allPlanetInfos).starPortConnections(starPortConnections).build();
+        return spaceraze.game.mapinfo.MapInfoTurn.builder().allPlanetInfos(allPlanetInfos).starPortConnections(starPortConnections).build();
     }
 
-    public static boolean isStarPortConnections(PlanetConnection planetConnection, Player player) {
+    public static boolean isStarPortConnections(PlanetConnection planetConnection, Player player, Galaxy galaxy) {
         boolean haveStarPort = false;
-        Galaxy g = player.getGalaxy();
-        Planet p1 = g.getPlanet(planetConnection.getPlanetOne().getMapPlanetUuid());
-        Planet p2 = g.getPlanet(planetConnection.getPlanetTwo().getMapPlanetUuid());
+        Planet p1 = galaxy.getPlanet(planetConnection.getPlanetOne().getMapPlanetUuid());
+        Planet p2 = galaxy.getPlanet(planetConnection.getPlanetTwo().getMapPlanetUuid());
         // check if starport make this connection short range
         if ((p1.getPlayerInControl() != null) & (p2.getPlayerInControl() != null)) { // none of the planets are neutral
             if (PlanetPureFunctions.hasSpacePort(p1) && PlanetPureFunctions.hasSpacePort(p2)) { // both have a spacestation
-                if (DiplomacyPureFunctions.friendlySpaceports(p1.getPlayerInControl(), p2.getPlayerInControl(), g.getDiplomacyStates())) {
-                    if (DiplomacyPureFunctions.friendlySpaceports(player, p1.getPlayerInControl(), g.getDiplomacyStates())) {
-                        if (DiplomacyPureFunctions.friendlySpaceports(player, p2.getPlayerInControl(), g.getDiplomacyStates())) {
+                if (DiplomacyPureFunctions.friendlySpaceports(p1.getPlayerInControl(), p2.getPlayerInControl(), galaxy.getDiplomacyStates())) {
+                    if (DiplomacyPureFunctions.friendlySpaceports(player, p1.getPlayerInControl(), galaxy.getDiplomacyStates())) {
+                        if (DiplomacyPureFunctions.friendlySpaceports(player, p2.getPlayerInControl(), galaxy.getDiplomacyStates())) {
                             haveStarPort = true;
                         }
                     }
@@ -181,21 +182,21 @@ public class GalaxyMapPureFunctions {
         return alldest;
     }
 
-    public static MapPlanetInfo createMapPlanetInfo(Planet planet, Player player, MapInfos mapPlanetInfos, int turn, List<String> spaceships, Galaxy galaxy) {
-        MapPlanetInfo mapPlanetInfo = new MapPlanetInfo();
+    public static spaceraze.game.mapinfo.MapPlanetInfo createMapPlanetInfo(Planet planet, Player player, MapInfos mapPlanetInfos, int turn, List<String> spaceships, Galaxy galaxy, GameWorld gameWorld) {
+        spaceraze.game.mapinfo.MapPlanetInfo mapPlanetInfo = new spaceraze.game.mapinfo.MapPlanetInfo();
         Logger.finer("MapPlanetInfo creator, planet: " + planet.getMapPlanetUuid() + ", player: " + player.getGovernorName() + ", turn: " + turn);
         mapPlanetInfo.setPlanetUuid(planet.getMapPlanetUuid());
-        boolean spy = VipPureFunctions.findVIPSpy(planet, player, galaxy) != null;
+        boolean spy = VipPureFunctions.findVIPSpy(planet, player, galaxy, gameWorld) != null;
         boolean shipInSystem = PlayerPureFunctions.playerHasShipsInSystem(player, planet, galaxy);
-        boolean surveyShip = (SpaceshipPureFunctions.findSurveyShip(planet, player, galaxy.getSpaceships(), galaxy.getGameWorld()) != null);
-        boolean surveyVIP = VipPureFunctions.findSurveyVIPonShip(planet, player, galaxy) != null;
+        boolean surveyShip = (SpaceshipPureFunctions.findSurveyShip(planet, player, galaxy.getSpaceships(), gameWorld) != null);
+        boolean surveyVIP = VipPureFunctions.findSurveyVIPonShip(planet, player, galaxy, gameWorld) != null;
         boolean survey = surveyShip | surveyVIP;
         boolean openPlanet = planet.isOpen();
         boolean neutralPlanet = (planet.getPlayerInControl() == null);
         boolean ownsPlanet = planet.getPlayerInControl() == player;
-        MapPlanetInfo lastKnownOwnerMapPlanetInfo = mapPlanetInfos.getLastKnownOwnerInfo(planet);
-        MapPlanetInfo lastKnownProdResMapPlanetInfo = mapPlanetInfos.getLastKnownProdResInfo(planet);
-        MapPlanetInfo lastKnownRazedMapPlanetInfo = mapPlanetInfos.getLastKnownRazedInfo(planet);
+        spaceraze.game.mapinfo.MapPlanetInfo lastKnownOwnerMapPlanetInfo = mapPlanetInfos.getLastKnownOwnerInfo(planet);
+        spaceraze.game.mapinfo.MapPlanetInfo lastKnownProdResMapPlanetInfo = mapPlanetInfos.getLastKnownProdResInfo(planet);
+        spaceraze.game.mapinfo.MapPlanetInfo lastKnownRazedMapPlanetInfo = mapPlanetInfos.getLastKnownRazedInfo(planet);
         // owner, lastKnownOwner, lastInfoTurn, razed, lastKnownMaxShipSize
         if (ownsPlanet) {
             mapPlanetInfo.setOwner(planet.getPlayerInControl().getName());
@@ -215,7 +216,7 @@ public class GalaxyMapPureFunctions {
                     mapPlanetInfo.setRazed(true);
 //					lastKnownRazed = true;
                 } else {
-                    mapPlanetInfo.setOwner(MapPlanetInfo.NEUTRAL);
+                    mapPlanetInfo.setOwner(spaceraze.game.mapinfo.MapPlanetInfo.NEUTRAL);
                     mapPlanetInfo.setRazed(false);
 //					lastKnownRazed = false;
                 }
@@ -276,22 +277,22 @@ public class GalaxyMapPureFunctions {
         mapPlanetInfo.setShipsOwn(spaceships);
         // fleetsOther
         if (spy | shipInSystem | openPlanet | ownsPlanet) {
-            mapPlanetInfo.setFleetsOther(getOtherFleets(planet, player, galaxy));
+            mapPlanetInfo.setFleetsOther(getOtherFleets(planet, player, galaxy, gameWorld));
         }
         // VIPs
-        mapPlanetInfo.setOwnVIPs(getOwnVIPsData(player, planet, galaxy));
+        mapPlanetInfo.setOwnVIPs(getOwnVIPsData(player, planet, galaxy, gameWorld));
         if (openPlanet | spy) {
-            mapPlanetInfo.setOtherVIPs(getOtherVIPsData(player, planet, galaxy));
+            mapPlanetInfo.setOtherVIPs(getOtherVIPsData(player, planet, galaxy, gameWorld));
         }
         // buildingsOrbit, buildingsSurface, lastKnownBuildingsInOrbit, lastKnownBuildingsOnSurface
         if (openPlanet | shipInSystem | spy | ownsPlanet | survey) {
 //			buildingsOrbit = getBuildingsList(planet.getBuildingsInOrbit());
-            mapPlanetInfo.setBuildingsVisible(getBuildingsList(getBuildingsByVisibility(planet, true), galaxy.getGameWorld()));
+            mapPlanetInfo.setBuildingsVisible(getBuildingsList(getBuildingsByVisibility(planet, true), gameWorld));
             mapPlanetInfo.setLastKnownBuildingsInOrbit(null);
 //			if (openPlanet | spy | survey | ownsPlanet){
             if (spy | survey | ownsPlanet) {
 //				buildingsSurface = getBuildingsList(planet.getBuildingsOnSurface());
-                mapPlanetInfo.setBuildingsHidden(getBuildingsList(getBuildingsByVisibility(planet, false), galaxy.getGameWorld()));
+                mapPlanetInfo.setBuildingsHidden(getBuildingsList(getBuildingsByVisibility(planet, false), gameWorld));
                 mapPlanetInfo.setLastKnownBuildingsOnSurface(null);
             }
         } else {
@@ -347,7 +348,7 @@ public class GalaxyMapPureFunctions {
         return buildingsList;
     }
 
-    private static String getLastKnownLargetsSizeShipOnPlanet(MapPlanetInfo lastKnownMapPlanetInfo){
+    private static String getLastKnownLargetsSizeShipOnPlanet(spaceraze.game.mapinfo.MapPlanetInfo lastKnownMapPlanetInfo){
         String maxSizeIncCiv = "";
         if (lastKnownMapPlanetInfo.getFleetsOther() != null){
             int maxSize = 0;
@@ -389,13 +390,13 @@ public class GalaxyMapPureFunctions {
         return sizeString;
     }
 
-    private static List<FleetData> getOtherFleets(Planet planet, Player player, Galaxy g){
+    private static List<FleetData> getOtherFleets(Planet planet, Player player, Galaxy g, GameWorld gameWorld) {
         List<FleetData> fleets = new LinkedList<FleetData>();
         // loopa igenom alla spelare och kolla efter flottor
         for (Player tempPlayer : g.getPlayers()) {
             if (tempPlayer != player){
-                int shipSize = getLargestLookAsMilitaryShipSizeOnPlanet(planet,tempPlayer, g);
-                boolean civilianExists = !getLargestShipSizeOnPlanet(planet,tempPlayer,true, g).equals("");
+                int shipSize = getLargestLookAsMilitaryShipSizeOnPlanet(planet,tempPlayer, g, gameWorld);
+                boolean civilianExists = !getLargestShipSizeOnPlanet(planet,tempPlayer,true, g, gameWorld).equals("");
                 if ((shipSize > -1) | civilianExists){
                     FleetData fleetData = new FleetData(tempPlayer.getGovernorName(),shipSize,civilianExists);
                     fleets.add(fleetData);
@@ -403,7 +404,7 @@ public class GalaxyMapPureFunctions {
             }
         }
         // kolla efter neutrala skepp
-        int shipSize = getLargestLookAsMilitaryShipSizeOnPlanet(planet,null, g);
+        int shipSize = getLargestLookAsMilitaryShipSizeOnPlanet(planet,null, g, gameWorld);
         if (shipSize > -1){
             FleetData fleetData = new FleetData(null,shipSize,false);
             fleets.add(fleetData);
@@ -411,15 +412,15 @@ public class GalaxyMapPureFunctions {
         return fleets;
     }
 
-    public static String getLargestShipSizeOnPlanet(Planet aPlanet, Player aPlayer, boolean civilian, Galaxy galaxy) {
+    public static String getLargestShipSizeOnPlanet(Planet aPlanet, Player aPlayer, boolean civilian, Galaxy galaxy, GameWorld gameWorld) {
         SpaceShipSize maxSize = null;
         for (Spaceship aShip : galaxy.getSpaceships()) {
             if ((aShip.getOwner() == aPlayer) & (aShip.getLocation() == aPlanet)) {
                 if (aShip.isLookAsCivilian() == civilian) {
-                    VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aPlanet, aShip, galaxy);
+                    VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aShip, galaxy, gameWorld);
                     if (aShip.isVisibleOnMap() & (stealthVIP == null)) {
-                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
-                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
+                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize();
                         }
                     }
                 }
@@ -436,7 +437,7 @@ public class GalaxyMapPureFunctions {
      *            find largest size of ships belonging to other players/neutral
      * @return
      */
-    public static String getLargestShipSizeOnPlanet(Planet aPlanet, Player aPlayer, Galaxy galaxy) {
+    public static String getLargestShipSizeOnPlanet(Planet aPlanet, Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         String shipSize = "";
         int maxTonnage = 0;
         SpaceShipSize maxSize = null;
@@ -446,8 +447,8 @@ public class GalaxyMapPureFunctions {
                 if (aShip.isLookAsCivilian()) {
                     civ = true;
                 } else if (aShip.isVisibleOnMap()) {
-                    if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
-                        maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
+                    if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                        maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize();
                     }
                 }
             }
@@ -459,17 +460,17 @@ public class GalaxyMapPureFunctions {
         return shipSize;
     }
 
-    public static int getLargestLookAsMilitaryShipSizeOnPlanet(Planet aPlanet, Player aPlayer, Galaxy galaxy) {
+    public static int getLargestLookAsMilitaryShipSizeOnPlanet(Planet aPlanet, Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         SpaceShipSize maxSize = null;
         for (Spaceship aShip : galaxy.getSpaceships()) {
             if ((aShip.getOwner() == aPlayer) & (aShip.getLocation() == aPlanet)) {
                 if (!aShip.isLookAsCivilian()) {
-                    VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aPlanet, aShip, galaxy);
+                    VIP stealthVIP = VipPureFunctions.findStealthVIPonShip(aShip, galaxy, gameWorld);
                     if (aShip.isVisibleOnMap() & (stealthVIP == null)) {
-                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize().getCompareSize() > maxSize.getCompareSize()) {
+                        if (maxSize == null || SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize().getCompareSize() > maxSize.getCompareSize()) {
                             // Logger.info("aShip name" + aShip.getName());
                             // Logger.info("aShip location" + aShip.getLocation());
-                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), galaxy.getGameWorld()).getSize();
+                            maxSize = SpaceshipPureFunctions.getSpaceshipTypeByUuid(aShip.getTypeUuid(), gameWorld).getSize();
                         }
                     }
                 }
@@ -483,13 +484,13 @@ public class GalaxyMapPureFunctions {
      * @param player om null leta efter vippar från andra spelare
      * @return
      */
-    private static VIPData getOwnVIPsData(Player player, Planet planet, Galaxy g){
-        VIPData vipsData = new VIPData();
+    private static spaceraze.game.mapinfo.VIPData getOwnVIPsData(Player player, Planet planet, Galaxy g, GameWorld gameWorld){
+        spaceraze.game.mapinfo.VIPData vipsData = new spaceraze.game.mapinfo.VIPData();
         vipsData.setPlayerName(player.getName());
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() == player){ // leta efter vippar som tillhör spelaren
                 if (aVIP.getPlanetLocation() == planet){
-                    vipsData.addVipShortName(VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld()).getShortName());
+                    vipsData.addVipShortName(VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld).getShortName());
                 }
             }
         }
@@ -499,11 +500,11 @@ public class GalaxyMapPureFunctions {
         return vipsData;
     }
 
-    private static VIPData getOtherVIPsData(Player player, Planet planet, Galaxy g){
-        VIPData vipsData = new VIPData();
+    private static spaceraze.game.mapinfo.VIPData getOtherVIPsData(Player player, Planet planet, Galaxy g, GameWorld gameWorld){
+        spaceraze.game.mapinfo.VIPData vipsData = new spaceraze.game.mapinfo.VIPData();
         for (VIP aVIP : g.getAllVIPs()) {
             if (aVIP.getBoss() != player){ // leta efter vippar som inte tillhör spelaren
-                VIPType vipType =VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), g.getGameWorld());
+                VIPType vipType =VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld);
                 if (aVIP.getPlanetLocation() == planet){
                     if (vipType.getShowOnOpenPlanet()){
                         vipsData.addVipShortName(vipType.getShortName());

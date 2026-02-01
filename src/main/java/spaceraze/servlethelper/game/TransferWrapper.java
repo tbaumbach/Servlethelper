@@ -7,9 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import spaceraze.game.Message;
+import spaceraze.game.PlanetOrderStatus;
+import spaceraze.game.Player;
+import spaceraze.game.report.old.ReportLevel;
 import spaceraze.world.*;
-import spaceraze.world.orders.Orders;
-import spaceraze.world.spacebattle.ReportLevel;
+import spaceraze.game.orders.Orders;
 
 /**
  * @author WMPABOD
@@ -46,7 +49,7 @@ public class TransferWrapper implements Serializable {
 		return reportLevel;
 	}
 
-	public TransferWrapper(Player aPlayer, String message, int port) {
+	public TransferWrapper(Player aPlayer, String message, int port, int turn) {
 		this.port = port;
 		this.message = message;
 
@@ -56,7 +59,7 @@ public class TransferWrapper implements Serializable {
 			playerName = aPlayer.getName();
 			notes = aPlayer.getNotes();
 			finishedThisTurn = aPlayer.isFinishedThisTurn();
-			turn = aPlayer.getGalaxy().getTurn();
+			this.turn = turn;
 			latestReadMessage = aPlayer.getLatestMessageIdFromServer();
 			messageId = aPlayer.getMessageId();
 			reportLevel = aPlayer.getReportLevel();
@@ -64,8 +67,8 @@ public class TransferWrapper implements Serializable {
 		}
 	}
 
-	public TransferWrapper(Message aMessage, Player aPlayer, String message, int port) {
-		this(aPlayer, message, port);
+	public TransferWrapper(Message aMessage, Player aPlayer, String message, int port, int turn) {
+		this(aPlayer, message, port, turn);
 		this.mailMessage = aMessage;
 
 	}

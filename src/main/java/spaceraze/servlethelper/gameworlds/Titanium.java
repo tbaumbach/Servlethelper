@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import spaceraze.servlethelper.game.AlignmentPureFunctions;
-import spaceraze.servlethelper.game.BuildingPureFunctions;
+import spaceraze.servlethelper.game.building.BuildingPureFunctions;
 import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.game.spaceship.SpaceshipMutator;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
@@ -13,13 +13,12 @@ import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
-import spaceraze.world.Corruption;
+import spaceraze.servlethelper.Corruption;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.ResearchAdvantage;
 import spaceraze.world.SpaceshipType;
 import spaceraze.world.TroopType;
-import spaceraze.world.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.diplomacy.DiplomacyLevel;
 import spaceraze.world.diplomacy.DiplomacyRelation;
@@ -59,12 +58,12 @@ public class Titanium {
         String gStr = "Ghost";
         String tStr = "Templar";
         String mStr = "Mercenary";
-        gw.getAlignments().add(new Alignment(oStr, gw));
-        gw.getAlignments().add(new Alignment(lStr, gw));
-        gw.getAlignments().add(new Alignment(cStr, gw));
-        gw.getAlignments().add(new Alignment(gStr, gw));
-        gw.getAlignments().add(new Alignment(tStr, gw));
-        gw.getAlignments().add(new Alignment(mStr, gw));
+        gw.getAlignments().add(new Alignment(oStr));
+        gw.getAlignments().add(new Alignment(lStr));
+        gw.getAlignments().add(new Alignment(cStr));
+        gw.getAlignments().add(new Alignment(gStr));
+        gw.getAlignments().add(new Alignment(tStr));
+        gw.getAlignments().add(new Alignment(mStr));
         Alignment orb = AlignmentPureFunctions.findAlignmentByName(oStr, gw.getAlignments());
         Alignment lancer = AlignmentPureFunctions.findAlignmentByName(lStr, gw.getAlignments());
         Alignment cyber = AlignmentPureFunctions.findAlignmentByName(cStr, gw.getAlignments());
@@ -98,7 +97,6 @@ public class Titanium {
         // General VIP types
         // *****************
 
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
 
         VIPType tmpVipType = null;
 
@@ -439,8 +437,6 @@ public class Titanium {
 
         String typeName = null;
 
-        UniqueIdCounter uTIC = new UniqueIdCounter();
-
         TroopType tt = new TroopType("Militia", "Mil", 100, 2, 2, 15, 10);
         tt.setDescription("Cheap defensive infantry unit. Cannot travel in spaceships.");
         tt.setShortDescription("Cheap defensive infantry");
@@ -735,7 +731,6 @@ public class Titanium {
 
         // Basic Spaceship types (available from start)
         // ************************************************
-        UniqueIdCounter uSIC = new UniqueIdCounter();
 
         SpaceshipType tempsst = null;
         int sqdBaseSh = 10;
@@ -821,7 +816,6 @@ public class Titanium {
         // Buildings
         // *********        
         // XXX BuildingTypes
-        UniqueIdCounter uBIC = new UniqueIdCounter();
         BuildingType tmpBuildingType = null;
         List<BuildingType> buildings = new ArrayList<>();
         List<BuildingType> bOrb = new ArrayList<>();
@@ -1056,27 +1050,27 @@ public class Titanium {
         String[] longNames1 = {"Orb Academy", "Orb High Academy", "Orb University", "Orb High University", "Orb Elite School"};
         String[] shortNames1 = {"OA", "OHA", "OU", "OHU", "OES"};
         String[] vipNames1 = {"Field Marshal", "Orb Admiral", "Orb Scientist", "Orb Expert Scientist", "Orb Hero"};
-        createVIPBuildings(gw, bOrb, buildings, uBIC, longNames1, shortNames1, vipNames1);
+        createVIPBuildings(gw, bOrb, buildings, longNames1, shortNames1, vipNames1);
 
         String[] longNames2 = {"Lancer Economic School", "Lancer Advanced Economic School", "Lancer University", "Lancer High University", "Lancer Elite School"};
         String[] shortNames2 = {"LES", "LAES", "LE", "LME", "LCha"};
         String[] vipNames2 = {"Lancer Economic Master", "Lancer Economic Genious", "Lancer Engineer", "Lancer Master Engineer", "Lancer Champion"};
-        createVIPBuildings(gw, bLancer, buildings, uBIC, longNames2, shortNames2, vipNames2);
+        createVIPBuildings(gw, bLancer, buildings, longNames2, shortNames2, vipNames2);
 
         String[] longNames3 = {"Cyber Military Academy", "Cyber Advanced Military Academy", "Cyber Sky High University", "Cyber Advanced Sky High University", "Cyber Elite School"};
         String[] shortNames3 = {"CMA", "CAMA", "CSHU", "CASHU", "CES"};
         String[] vipNames3 = {"Cyber Elite Commander", "Cyber Field Marchal", "Cyber Ace", "Cyber Top Ace", "Cybernetic Warrior"};
-        createVIPBuildings(gw, bCyber, buildings, uBIC, longNames3, shortNames3, vipNames3);
+        createVIPBuildings(gw, bCyber, buildings, longNames3, shortNames3, vipNames3);
 
         String[] longNames4 = {"Ghost Covert Ops School", "Ghost Advanced Covert Ops School", "Ghost Subversion University", "Ghost Advanced Subversion University", "Ghost Elite School"};
         String[] shortNames4 = {"GCOS", "GACOS", "GSU", "GASU", "GES"};
         String[] vipNames4 = {"Ghost Spy", "Ghost Assassin", "Ghost Security Chief", "Ghost Smuggler", "Ghost Fighter"};
-        createVIPBuildings(gw, bGhost, buildings, uBIC, longNames4, shortNames4, vipNames4);
+        createVIPBuildings(gw, bGhost, buildings, longNames4, shortNames4, vipNames4);
 
         String[] longNames5 = {"Temple of Reaping", "Templar of Reaping and Pathfinding", "Temple of Harvest", "Temple of Harvest and Mind", "Templar Fortress of Power"};
         String[] shortNames5 = {"ToR", "ToRP", "ToH", "ToHM", "TFoP"};
         String[] vipNames5 = {"Templar Assassin", "Templar Star Navigator", "Templar Counter-Spy", "Templar Infestator", "Templar Knight"};
-        createVIPBuildings(gw, bTemplar, buildings, uBIC, longNames5, shortNames5, vipNames5);
+        createVIPBuildings(gw, bTemplar, buildings, longNames5, shortNames5, vipNames5);
 
         tmpBuildingType = new BuildingType("Mercenary Liason Office", "MLO", 100);
         tmpBuildingType.setDescription("This unique building enables the owner to hire all the different types of mercenary VIPs.");
@@ -2522,7 +2516,6 @@ public class Titanium {
         // ********************
         // XXX Diplomacy
 
-        GameWorldDiplomacy diplomacy = gw.getDiplomacy();
         DiplomacyRelation tempDiplomacyRelation;
 
         // Orb-Orb relation
@@ -2764,7 +2757,7 @@ public class Titanium {
         return tempFactionAdvantage;
     }
 
-    private static void createVIPBuildings(GameWorld gw, List<BuildingType> factionBuildings, List<BuildingType> buildings, UniqueIdCounter uBIC, String[] longNames, String[] shortNames, String[] vipNames) {
+    private static void createVIPBuildings(GameWorld gw, List<BuildingType> factionBuildings, List<BuildingType> buildings, String[] longNames, String[] shortNames, String[] vipNames) {
         BuildingType tmpBuildingType = new BuildingType(longNames[0], shortNames[0], 20);
         tmpBuildingType.setDescription("Can train " + vipNames[0] + " VIPs.");
         tmpBuildingType.addBuildVIPType(gw.getVIPTypeByName(vipNames[0]));

@@ -12,9 +12,9 @@ public class AlignmentHelper {
 
     public static List<Alignment> createDefaultAlignments(GameWorld gameWorld){
         List<Alignment> alignments = new ArrayList<>();
-        alignments.add(new Alignment("Good", gameWorld));
-        alignments.add(new Alignment("Neutral", gameWorld));
-        alignments.add(new Alignment("Evil", gameWorld));
+        alignments.add(new Alignment("Good"));
+        alignments.add(new Alignment("Neutral"));
+        alignments.add(new Alignment("Evil"));
 
         canHaveVIP("Good","Neutral", alignments);
         canHaveVIP("Neutral","Good", alignments);

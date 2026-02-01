@@ -1,6 +1,6 @@
 package spaceraze.servlethelper.game.planet;
 
-import spaceraze.world.PlanetOrderStatus;
+import spaceraze.game.PlanetOrderStatus;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.vip;
 
+import spaceraze.game.report.old.TurnInfo;
 import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.AlignmentPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
@@ -8,18 +9,20 @@ import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.HighlightType;
+import spaceraze.game.*;
 
 import java.util.List;
+import java.util.UUID;
 
 public class VipMutator {
 
     private VipMutator(){}
 
-    public static void checkVIPsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap) {
+    public static void checkVIPsInDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         List<VIP> allVIPsOnShip = VipPureFunctions.findAllVIPsOnShip(aShip, galaxy.getAllVIPs());
         for (int i = 0; i < allVIPsOnShip.size(); i++) {
             VIP tempVIP = allVIPsOnShip.get(i);
-            VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), gameWorld);
             // if VIP is hard to kill he moves to the nearby planet
             String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aShip.getLocation().getMapPlanetUuid());
             if (vipType.isHardToKill()) {
@@ -36,11 +39,11 @@ public class VipMutator {
         }
     }
 
-    public static void checkVIPsInSelfDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap) {
+    public static void checkVIPsInSelfDestroyedShips(Spaceship aShip, Player aPlayer, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aShip.getLocation().getMapPlanetUuid());
         List<VIP> allVIPsOnShip = VipPureFunctions.findAllVIPsOnShip(aShip, galaxy.getAllVIPs());
         for (VIP tempVIP : allVIPsOnShip) {
-            VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), galaxy.getGameWorld());
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(tempVIP.getTypeUuid(), gameWorld);
             if (aShip.getLocation() == null) {
                 // ship is retreating, vip is killed
                 galaxy.removeVIP(tempVIP);
@@ -76,11 +79,11 @@ public class VipMutator {
         }
     }
 
-    public static void checkVIPsInDestroyedTroop(Troop aTroop, Galaxy galaxy, GalaxyMap galaxyMap) {
+    public static void checkVIPsInDestroyedTroop(Troop aTroop, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld) {
         List<VIP> allVIPsOnTroop = VipPureFunctions.findAllVIPsOnTroop(aTroop, galaxy.getAllVIPs());
         Player aPlayer = aTroop.getOwner();
         for (VIP vip : allVIPsOnTroop) {
-            VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), galaxy.getGameWorld());
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(vip.getTypeUuid(), gameWorld);
             String planetName = PlanetPureFunctions.getPlanetName(galaxyMap, aTroop.getPlanetLocation().getMapPlanetUuid());
             // if VIP is hard to kill he moves to the nearby planet
             if (vipType.isHardToKill()) {
@@ -112,11 +115,11 @@ public class VipMutator {
         }
     }
 
-    public static VIP maybeAddVIP(Player aPlayer, Galaxy galaxy) {
+    public static VIP maybeAddVIP(Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         VIP aVIP = null;
         int aRandom = Functions.getRandomInt(1, 2);
         if (aRandom == 1) {
-            aVIP = createPlayerVIP(aPlayer, galaxy);
+            aVIP = createPlayerVIP(aPlayer, galaxy, gameWorld);
         }
         return aVIP;
     }
@@ -128,17 +131,17 @@ public class VipMutator {
      *            the player for whom this VIP will belong
      * @return a VIP compatible with the players faction
      */
-    public static VIP createPlayerVIP(Player aPlayer, Galaxy galaxy) {
-        Logger.finer("createPlayerVIP: " + aPlayer.getName() + ", alignment=" + GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()).getAlignment());
+    public static VIP createPlayerVIP(Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
+        Logger.finer("createPlayerVIP: " + aPlayer.getName() + ", alignment=" + GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld).getAlignment());
         VIP aVIP = null;
         boolean ok = false;
         while (!ok) { // loopa tills det blir en vip som spelaren kan ha
             ok = true;
-            aVIP = createRandomVIP(galaxy);
-            VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), galaxy.getGameWorld());
+            aVIP = createRandomVIP(galaxy, gameWorld);
+            VIPType vipType = VipPureFunctions.getVipTypeByUuid(aVIP.getTypeUuid(), gameWorld);
             Logger.finer(vipType.getName() + ", alignment=" + vipType.getAlignment() + ", canHaveVip="
-                    + AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, galaxy.getGameWorld())));
-            if (!AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, galaxy.getGameWorld()))) {
+                    + AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, gameWorld)));
+            if (!AlignmentPureFunctions.canHaveVip(vipType.getAlignment(), AlignmentPureFunctions.getPlayerAlignment(aPlayer, gameWorld))) {
                 ok = false;
             }
         }
@@ -147,13 +150,20 @@ public class VipMutator {
         return aVIP;
     }
 
-    public static VIP createRandomVIP(Galaxy galaxy) {
-        VIPType tempviptype = VipPureFunctions.getRandomVIPType(galaxy);
+    public static VIP createRandomVIP(Galaxy galaxy, GameWorld gameWorld) {
+        VIPType tempviptype = VipPureFunctions.getRandomVIPType(galaxy, gameWorld);
         return createNewVIP(tempviptype, true);
     }
 
     public static VIP createNewVIP(VIPType vipType, boolean isFanatic) {
-        return new VIP(vipType, isFanatic);
+        VIP vip =  new VIP();
+        vip.setUuid(UUID.randomUUID().toString());
+        vip.setTypeUuid(vipType.getUuid());
+        if (!isFanatic) {
+            vip.setBuildCost(vipType.getBuildCost());
+            vip.setUpkeep(vipType.getUpkeep());
+        }
+        return vip;
     }
 
     public static VIP createNewVIP(VIPType vipType, Player aBoss, Planet planetLocation, boolean isFanatic) {

@@ -1,7 +1,11 @@
-package spaceraze.servlethelper.game;
+package spaceraze.servlethelper.game.building;
 
+import spaceraze.game.*;
+import spaceraze.game.report.incomeExpensesReports.IncomeType;
+import spaceraze.game.report.old.TurnInfo;
 import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.expenses.ExpensePureFunction;
+import spaceraze.servlethelper.game.orders.OrderPureFunctions;
 import spaceraze.servlethelper.game.planet.PlanetPureFunctions;
 import spaceraze.servlethelper.game.player.PlayerPureFunctions;
 import spaceraze.servlethelper.game.vip.VipPureFunctions;
@@ -10,8 +14,7 @@ import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.enums.TypeOfTroop;
-import spaceraze.world.incomeExpensesReports.IncomeType;
-import spaceraze.world.orders.Expense;
+import spaceraze.game.orders.Expense;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,28 +44,28 @@ public class BuildingPureFunctions {
         return tempBuildingTypes;
     }
 
-    public static boolean isConstructable(Galaxy galaxy, Player player, Planet aPlanet, BuildingType buildingType, String buildingKey, PlayerBuildingImprovement improvement){
+    public static boolean isConstructable(Galaxy galaxy, GameWorld gameWorld, Player player, Planet aPlanet, BuildingType buildingType, String buildingKey, PlayerBuildingImprovement improvement){
         Logger.finer("isConstructable, aPlanet: " + aPlanet.getMapPlanetUuid());
         Logger.finer("isConstructable, BuildingType: " + buildingType.getName());
         boolean isConstructable =  true;
         if((improvement != null && !improvement.isDeveloped()) || (improvement == null && !buildingType.isDeveloped())){
             isConstructable = false;
-        }else if((buildingType.isWorldUnique() && isWorldUniqueBuild(galaxy,buildingType)) || (buildingType.isFactionUnique() && isFactionUniqueBuild(player, galaxy, buildingType)) || (buildingType.isPlayerUnique() && isPlayerUniqueBuild(player, galaxy, buildingType))){
+        }else if((buildingType.isWorldUnique() && isWorldUniqueBuild(galaxy, gameWorld, buildingType)) || (buildingType.isFactionUnique() && isFactionUniqueBuild(player, galaxy, buildingType, gameWorld)) || (buildingType.isPlayerUnique() && isPlayerUniqueBuild(player, galaxy, gameWorld, buildingType))){
             isConstructable = false;
         }else if(buildingType.isPlanetUnique() && BuildingPureFunctions.hasBuilding(aPlanet, buildingType.getUuid())){
             isConstructable = false;
         }else if(buildingType.isWorldUnique() || buildingType.isFactionUnique()|| buildingType.isPlayerUnique() || buildingType.isPlanetUnique()){ // kollar om en unik byggnad redan har en child byggnad byggd. Om s� �r fallet s� �r den ocks� unik och d� skall det inte g� att bygga denna byggnad.
             if(buildingType.isWorldUnique() || buildingType.isFactionUnique() || buildingType.isPlayerUnique()){
                 // check if a build order already exists
-                if(player.getOrders().haveBuildingTypeBuildOrder(buildingType, buildingKey)){
+                if (OrderPureFunctions.haveBuildingTypeBuildOrder(player.getOrders(), buildingType, buildingKey)){
                     isConstructable = false;
                 }
             }
             if(isConstructable){
                 for(int i=0; i < aPlanet.getBuildings().size();i++){
-                    BuildingType aBuildingType = BuildingPureFunctions.getBuildingTypeByUuid(aPlanet.getBuildings().get(i).getTypeUuid(), galaxy.getGameWorld());
+                    BuildingType aBuildingType = BuildingPureFunctions.getBuildingTypeByUuid(aPlanet.getBuildings().get(i).getTypeUuid(), gameWorld);
                     Logger.finer("aBuildingType: " + aBuildingType.getName());
-                    if(checkIfAUniqueChildBuildingIsAlreadyBuild(aBuildingType, aPlanet.getPlayerInControl(), buildingType.getName())){
+                    if(checkIfAUniqueChildBuildingIsAlreadyBuild(aBuildingType, aPlanet.getPlayerInControl(), buildingType.getName(), gameWorld)){
                         isConstructable = false;
                     }
                 }
@@ -72,18 +75,18 @@ public class BuildingPureFunctions {
         return isConstructable;
     }
 
-    private static boolean checkIfAUniqueChildBuildingIsAlreadyBuild(BuildingType aBuildingType, Player aPlayer, String buildingName){
+    private static boolean checkIfAUniqueChildBuildingIsAlreadyBuild(BuildingType aBuildingType, Player aPlayer, String buildingName, GameWorld gameWorld){
         boolean childAlreadyBuild = false;
         Logger.finer("aBuildingType.getName(): " + aBuildingType.getName());
         if (aBuildingType.getParentBuildingType() != null){
-            Logger.finer("aBuildingType.getParentBuilding().getName(): " + BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer.getGalaxy().getGameWorld()).getName());
-            if(BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer.getGalaxy().getGameWorld()).getName().equalsIgnoreCase(buildingName)){
+            Logger.finer("aBuildingType.getParentBuilding().getName(): " + BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), gameWorld).getName());
+            if(BuildingPureFunctions.getBuildingTypeByUuid(aBuildingType.getParentBuildingType(), gameWorld).getName().equalsIgnoreCase(buildingName)){
                 childAlreadyBuild = true;// det finns en child byggnad som är byggd och eftersom denna byggnad är unik så måste den också vara det och då stoppa bygge av denna byggnad.
             }else{
-                BuildingType tempBuildingType = PlayerPureFunctions.findBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer);
+                BuildingType tempBuildingType = PlayerPureFunctions.findBuildingTypeByUuid(aBuildingType.getParentBuildingType(), aPlayer, gameWorld);
                 if(tempBuildingType != null){
                     Logger.finer("tempBuildingType.getName(): " + tempBuildingType.getName());
-                    childAlreadyBuild = checkIfAUniqueChildBuildingIsAlreadyBuild(tempBuildingType, aPlayer, buildingName);
+                    childAlreadyBuild = checkIfAUniqueChildBuildingIsAlreadyBuild(tempBuildingType, aPlayer, buildingName, gameWorld);
                 }
             }
         }
@@ -91,27 +94,27 @@ public class BuildingPureFunctions {
         return childAlreadyBuild;
     }
 
-    public static boolean isWorldUniqueBuild(Galaxy galaxy, BuildingType buildingType) {
-        return buildingTypeExist(buildingType, null, null, galaxy);
+    public static boolean isWorldUniqueBuild(Galaxy galaxy, GameWorld gameWorld, BuildingType buildingType) {
+        return buildingTypeExist(buildingType, null, null, galaxy, gameWorld);
     }
 
-    public static boolean isFactionUniqueBuild(Player aPlayer, Galaxy galaxy, BuildingType buildingType) {
-        return buildingTypeExist(buildingType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), galaxy.getGameWorld()), null, galaxy);
+    public static boolean isFactionUniqueBuild(Player aPlayer, Galaxy galaxy, BuildingType buildingType, GameWorld gameWorld) {
+        return buildingTypeExist(buildingType, GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld), null, galaxy, gameWorld);
     }
 
-    public static boolean isPlayerUniqueBuild(Player aPlayer, Galaxy galaxy, BuildingType buildingType) {
-        return buildingTypeExist(buildingType, null, aPlayer, galaxy);
+    public static boolean isPlayerUniqueBuild(Player aPlayer, Galaxy galaxy, GameWorld gameWorld, BuildingType buildingType) {
+        return buildingTypeExist(buildingType, null, aPlayer, galaxy, gameWorld);
     }
 
-    private static boolean buildingTypeExist(BuildingType aBuildingType, Faction aFaction, Player aPlayer, Galaxy galaxy) {
+    private static boolean buildingTypeExist(BuildingType aBuildingType, Faction aFaction, Player aPlayer, Galaxy galaxy, GameWorld gameWorld) {
         boolean exist = false;
         List<Planet> planetsToCheck;
         if (aPlayer != null) {// playerUnique
             planetsToCheck = PlanetPureFunctions.getPlayersPlanets(aPlayer, galaxy);
         } else if (aFaction != null) {// factionUnique
-            planetsToCheck = new ArrayList<Planet>();
+            planetsToCheck = new ArrayList<>();
             for (Player tempPlayer : galaxy.getPlayers()) {
-                if (GameWorldHandler.getFactionByUuid(tempPlayer.getFactionUuid(), galaxy.getGameWorld()).getName().equals(aFaction.getName())) {
+                if (GameWorldHandler.getFactionByUuid(tempPlayer.getFactionUuid(), gameWorld).getName().equals(aFaction.getName())) {
                     planetsToCheck.addAll(PlanetPureFunctions.getPlayersPlanets(tempPlayer, galaxy));
                 }
             }
@@ -160,12 +163,12 @@ public class BuildingPureFunctions {
         return false;
     }
 
-    public static List<BuildingType> getUpgradableBuildingTypes(Galaxy galaxy, Player player, BuildingType buildingType, Building aBuilding, Planet planet, PlayerBuildingImprovement improvement){
-        List<BuildingType> upgradableBuildingTypes = getNextBuildingSteps(buildingType, PlayerPureFunctions.getAvailableBuildingTypes(galaxy, player, planet, null));
+    public static List<BuildingType> getUpgradableBuildingTypes(Galaxy galaxy, GameWorld gameWorld, Player player, BuildingType buildingType, Building aBuilding, Planet planet, PlayerBuildingImprovement improvement){
+        List<BuildingType> upgradableBuildingTypes = getNextBuildingSteps(buildingType, PlayerPureFunctions.getAvailableBuildingTypes(galaxy, gameWorld, player, planet, null));
         List<BuildingType> playerUpgradableBuildingTypes = new ArrayList<>();
 
         for(BuildingType type : upgradableBuildingTypes){
-            if(isConstructable(galaxy, player, planet, type, aBuilding.getUuid(), improvement)){
+            if(isConstructable(galaxy, gameWorld, player, planet, type, aBuilding.getUuid(), improvement)){
                 playerUpgradableBuildingTypes.add(type);
             }
         }
@@ -173,26 +176,26 @@ public class BuildingPureFunctions {
     }
 
     //Gives a planets buildingTypes possible to construct, excludes upgrades of existing buildings.
-    public static List<BuildingType> getAvailableBuildingsToConstruct(Galaxy galaxy, Player player, Planet planet){
+    public static List<BuildingType> getAvailableBuildingsToConstruct(Galaxy galaxy, GameWorld gameWorld, Player player, Planet planet){
 
-        return PlayerPureFunctions.getAvailableBuildingTypes(galaxy, player, planet, null).stream()
+        return PlayerPureFunctions.getAvailableBuildingTypes(galaxy, gameWorld, player, planet, null).stream()
                 .filter(buildingType ->
-                        buildingType.getParentBuildingType() == null  && isConstructable(galaxy, player, planet, buildingType, null, null)).collect(Collectors.toList());
+                        buildingType.getParentBuildingType() == null  && isConstructable(galaxy, gameWorld, player, planet, buildingType, null, null)).collect(Collectors.toList());
 
     }
 
-    public static BuildingType getUpgradeBuilding(Building currentBuilding, Player player, List<Expense> expenses){
+    public static BuildingType getUpgradeBuilding(Building currentBuilding, Player player, List<Expense> expenses, GameWorld gameWorld){
         Optional<Expense> expense1 = expenses.stream().filter(expense -> ExpensePureFunction.isBuilding(expense, currentBuilding)).findFirst();
-        return expense1.isPresent() ? PlayerPureFunctions.findBuildingTypeByUuid(expense1.get().getBuildingTypeUuid(), player) : null;
+        return expense1.isPresent() ? PlayerPureFunctions.findBuildingTypeByUuid(expense1.get().getBuildingTypeUuid(), player, gameWorld) : null;
     }
 
-    public static BuildingType getNewBuilding(Planet currentPlanet, Player player, List<Expense> expenses){
+    public static BuildingType getNewBuilding(Planet currentPlanet, Player player, List<Expense> expenses, GameWorld gameWorld){
         Optional<Expense> expense1 = expenses.stream().filter(expense -> expense.isBuilding(currentPlanet)).findFirst();
-        return expense1.isPresent() ? PlayerPureFunctions.findBuildingTypeByUuid(expense1.get().getBuildingTypeUuid(), player) : null;
+        return expense1.isPresent() ? PlayerPureFunctions.findBuildingTypeByUuid(expense1.get().getBuildingTypeUuid(), player, gameWorld) : null;
     }
 
-    public static List<BuildingType> getRootBuildings(Player player){
-        return getRootBuildings(PlayerPureFunctions.getBuildingTypes(player));
+    public static List<BuildingType> getRootBuildings(Player player, GameWorld gameWorld){
+        return getRootBuildings(PlayerPureFunctions.getBuildingTypes(player, gameWorld));
     }
 
     public static List<BuildingType> getRootBuildings(List<BuildingType> buildingTypes){

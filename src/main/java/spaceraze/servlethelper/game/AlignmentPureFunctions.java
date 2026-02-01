@@ -3,7 +3,7 @@ package spaceraze.servlethelper.game;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.GameWorld;
-import spaceraze.world.Player;
+import spaceraze.game.Player;
 
 import java.util.List;
 

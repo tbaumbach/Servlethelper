@@ -1,6 +1,6 @@
 package spaceraze.servlethelper.game;
 
-import spaceraze.world.diplomacy.DiplomacyState;
+import spaceraze.game.diplomacy.DiplomacyState;
 import spaceraze.world.enums.DiplomacyGameType;
 
 import java.util.List;

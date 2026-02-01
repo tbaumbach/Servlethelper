@@ -1,5 +1,6 @@
 package spaceraze.servlethelper.game.player;
 
+import spaceraze.game.*;
 import spaceraze.map.GalaxyMap;
 import spaceraze.servlethelper.game.troop.TroopPureFunctions;
 import spaceraze.world.*;
@@ -23,7 +24,7 @@ public class CostPureFunctions {
 
     private static int getPlayerFreeUpkeep(Player aPlayer, List<Planet> planets, GameWorld gameWorld) {
         int totUpkeepIncome = getPlayerFreeUpkeepWithoutCorruption(aPlayer, planets, gameWorld);
-        totUpkeepIncome = IncomePureFunctions.getIncomeAfterCorruption(totUpkeepIncome, aPlayer.getCorruptionPoint());
+        totUpkeepIncome = IncomePureFunctions.getIncomeAfterCorruption(totUpkeepIncome, PlayerPureFunctions.getCorruptionPoint(gameWorld, aPlayer.getFactionUuid(), aPlayer.getCorruptionPointUuid()));
         return totUpkeepIncome;
     }
 
@@ -82,11 +83,11 @@ public class CostPureFunctions {
         return upkeep;
     }
 
-    public static boolean isBroke(Player player, Galaxy galaxy, GalaxyMap galaxyMap){
-        return (getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), galaxy.getGameWorld())
+    public static boolean isBroke(Player player, Galaxy galaxy, GalaxyMap galaxyMap, GameWorld gameWorld){
+        return (getPlayerUpkeepShips(player, galaxy.getPlanets(), galaxy.getSpaceships(), gameWorld)
                 + getPlayerUpkeepTroops(player, galaxy.getPlanets(), galaxy.getTroops()))
                 + getPlayerUpkeepVIPs(player, galaxy.getAllVIPs())> (player.getTreasury()
-                + IncomePureFunctions.getPlayerIncome(player,false, galaxyMap));
+                + IncomePureFunctions.getPlayerIncome(player,false, galaxyMap, gameWorld, galaxy));
     }
 
     public static int getPlayerUpkeepVIPs(Player aPlayer, List<VIP> vips) {

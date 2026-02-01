@@ -1,7 +1,10 @@
 package spaceraze.servlethelper.game;
 
+import spaceraze.game.Galaxy;
+import spaceraze.game.StatisticGameType;
+import spaceraze.game.StatisticPost;
+import spaceraze.game.Statistics;
 import spaceraze.util.general.Logger;
-import spaceraze.world.*;
 
 import java.util.*;
 
@@ -19,12 +22,12 @@ public class StatisticsHandler{
 	public static void createStatistics(Galaxy galaxy, StatisticGameType statisticGameType){
 		galaxy.setStatisticGameType(statisticGameType);
 		Logger.fine("statisticGameType: " + statisticGameType);
-		for (StatisticType aStatisticType : StatisticType.values()) {
+		for (spaceraze.game.StatisticType aStatisticType : spaceraze.game.StatisticType.values()) {
 			galaxy.getAllStatistics().add(new Statistics(aStatisticType));
 		}
 	}
 	
-	public static Statistics findStatistics(StatisticType aStatisticType, Galaxy galaxy){
+	public static Statistics findStatistics(spaceraze.game.StatisticType aStatisticType, Galaxy galaxy){
 		Statistics foundStatistics = null;
 		int i = 0;
 		while ((foundStatistics == null) & (i < galaxy.getAllStatistics().size())){
@@ -42,7 +45,7 @@ public class StatisticsHandler{
 	 * Adds a statistics value to the right type.
 	 * Turnnumber will be set automatically.
 	 */
-	public static void addStatistics(StatisticType statisticType, String aPlayerName, int value, boolean cumulative, Galaxy galaxy){
+	public static void addStatistics(spaceraze.game.StatisticType statisticType, String aPlayerName, int value, boolean cumulative, Galaxy galaxy){
 		Logger.finest(statisticType + " " + aPlayerName + " " + value);
 		Statistics foundStatistics = StatisticsHandler.findStatistics(statisticType, galaxy);
 		StatisticsHandler.addStatistics(aPlayerName, value, cumulative, foundStatistics);

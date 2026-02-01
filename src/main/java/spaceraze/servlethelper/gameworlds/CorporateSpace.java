@@ -10,7 +10,7 @@ import spaceraze.world.BuildingType;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
-import spaceraze.world.UniqueIdCounter;
+import spaceraze.game.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.enums.SpaceShipSize;
 import spaceraze.world.enums.SpaceshipRange;

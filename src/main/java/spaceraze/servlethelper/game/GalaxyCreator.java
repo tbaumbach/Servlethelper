@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import spaceraze.game.*;
 import spaceraze.map.GalaxyMap;
 import spaceraze.map.MapPlanet;
 import spaceraze.map.MapPlanetConnection;
@@ -16,9 +17,8 @@ import spaceraze.util.general.Functions;
 import spaceraze.util.general.Logger;
 import spaceraze.world.*;
 import spaceraze.world.diplomacy.DiplomacyRelation;
-import spaceraze.world.diplomacy.DiplomacyState;
-import spaceraze.world.diplomacy.GameDiplomacyRelation;
-import spaceraze.world.diplomacy.GameWorldDiplomacy;
+import spaceraze.game.diplomacy.DiplomacyState;
+import spaceraze.game.diplomacy.GameDiplomacyRelation;
 
 public class GalaxyCreator{
 	
@@ -60,18 +60,18 @@ public class GalaxyCreator{
             planetConnections.add(new PlanetConnection(p1, p2, aConnection.isLongRange()));
         }
 
-    	Galaxy g = new Galaxy(planets, planetConnections, map.getUuid(), map.getVersionId(), map.getFileName(), nameOfGame, steps, aGameWorld, map.getMaxNrStartPlanets());
+    	Galaxy g = new Galaxy(planets, planetConnections, map.getUuid(), map.getVersionId(), map.getFileName(), nameOfGame, steps, aGameWorld.getUuid(), map.getMaxNrStartPlanets());
         Logger.fine("statisticGameType: " + statisticGameType.toString());
     	StatisticsHandler.createStatistics(g, statisticGameType);
     	// randomize planets order
     	Collections.shuffle(g.getPlanets());
     	// randomize planet data
-        randomizeNeutralPlanets(g.getPlanets(),g, true);
+        randomizeNeutralPlanets(g.getPlanets(),g, true, aGameWorld);
         Logger.fine("Galaxy created.");
         return g;
     }
 
-    public static void randomizeNeutralPlanets(List<Planet> allPlanets, Galaxy g, boolean couldBeRazed){
+    public static void randomizeNeutralPlanets(List<Planet> allPlanets, Galaxy g, boolean couldBeRazed, GameWorld gameWorld){
       for (int i = 0; i < allPlanets.size(); i++){
         Planet tempp = allPlanets.get(i);
         if (!tempp.isStartPlanet()){
@@ -84,14 +84,14 @@ public class GalaxyCreator{
             tempp.setResistance(Functions.getRandomInt(1,4));
           }
           int temp = Functions.getRandomInt(1,100);
-          if (temp <= g.getGameWorld().getClosedNeutralPlanetChance()){  // �ndrar s� att �ppna blir st�ngda
+          if (temp <= gameWorld.getClosedNeutralPlanetChance()){  // �ndrar s� att �ppna blir st�ngda
             PlanetMutator.reverseVisibility(tempp);
           }
-          SpaceshipType sst1 = g.getGameWorld().getNeutralSize1();
-          SpaceshipType sst2 = g.getGameWorld().getNeutralSize2();
-          SpaceshipType sst3 = g.getGameWorld().getNeutralSize3();
-          TroopType tt = g.getGameWorld().getNeutralTroopType();
-          if (couldBeRazed && Functions.getRandomInt(1,100) <= g.getGameWorld().getRazedPlanetChance()){ 
+          SpaceshipType sst1 = gameWorld.getNeutralSize1();
+          SpaceshipType sst2 = gameWorld.getNeutralSize2();
+          SpaceshipType sst3 = gameWorld.getNeutralSize3();
+          TroopType tt = gameWorld.getNeutralTroopType();
+          if (couldBeRazed && Functions.getRandomInt(1,100) <= gameWorld.getRazedPlanetChance()){
         	  PlanetMutator.setRazed(tempp);
           }else 
           if (tempp.getPopulation() < 3){ // pop 1-2
@@ -99,7 +99,7 @@ public class GalaxyCreator{
             createNeutralShips(temp,sst1,tempp,g);
             if (tt != null){
             	temp = Functions.getRandomInt(1,2) - 1;
-            	createNeutralTroops(temp, tt, tempp, g);
+            	createNeutralTroops(temp, tt, tempp, g, gameWorld);
             }
           }else
           if ((tempp.getPopulation() >= 3) & (tempp.getPopulation() < 5)){ // pop 3-4
@@ -109,14 +109,14 @@ public class GalaxyCreator{
               createNeutralShips(temp,sst1,tempp,g);
               if (tt != null){
               	temp = Functions.getRandomInt(1,3) - 1;
-              	createNeutralTroops(temp, tt, tempp, g);
+              	createNeutralTroops(temp, tt, tempp, g, gameWorld);
               }
             }else{ // build some medium ships
               temp = Functions.getRandomInt(1,2);
               createNeutralShips(temp,sst2,tempp,g);
               if (tt != null){
               	temp = Functions.getRandomInt(1,2);
-              	createNeutralTroops(temp, tt, tempp, g);
+              	createNeutralTroops(temp, tt, tempp, g, gameWorld);
               }
             }
           }else{  // pop 5+
@@ -126,14 +126,14 @@ public class GalaxyCreator{
               createNeutralShips(temp,sst2,tempp,g);
               if (tt != null){
               	temp = Functions.getRandomInt(1,3);
-              	createNeutralTroops(temp, tt, tempp, g);
+              	createNeutralTroops(temp, tt, tempp, g, gameWorld);
               }
             }else{ // build some large ships
               temp = Functions.getRandomInt(1,3);
               createNeutralShips(temp,sst3,tempp,g);
               if (tt != null){
               	temp = Functions.getRandomInt(2,4);
-              	createNeutralTroops(temp, tt, tempp, g);
+              	createNeutralTroops(temp, tt, tempp, g, gameWorld);
               }
             }
           }
@@ -153,21 +153,21 @@ public class GalaxyCreator{
       g.getSpaceships().add(ssTemp);
     }
 
-    private static void createNeutralTroops(int nr, TroopType tt, Planet aPlanet, Galaxy g){
+    private static void createNeutralTroops(int nr, TroopType tt, Planet aPlanet, Galaxy g, GameWorld gameWorld){
         for (int i = 0; i < nr; i++){
-          addNeutralTroop(aPlanet,tt,g);
+          addNeutralTroop(aPlanet,tt,g, gameWorld);
         }
     }
 
-    private static void addNeutralTroop(Planet aPlanet,TroopType ttTemp, Galaxy g){
-        Troop tTemp = TroopMutator.createTroop(ttTemp, g);
+    private static void addNeutralTroop(Planet aPlanet,TroopType ttTemp, Galaxy g, GameWorld gameWorld){
+        Troop tTemp = TroopMutator.createTroop(ttTemp, g, gameWorld);
         tTemp.setPlanetLocation(aPlanet);
         g.addTroop(tTemp);
     }
 
     static public void createInitialDiplomaticRelations(Player p, GameWorld gw, Galaxy galaxy){
         // create new diplomacy states to all other players (that have already joined this game)
-        GameWorldDiplomacy diplomacy = gw.getDiplomacy();
+        //GameWorldDiplomacy diplomacy = gw.getDiplomacy();
         for (Player aPlayer : galaxy.getPlayers()) {
             DiplomacyRelation tmpRelation = GameWorldCreator.getRelation(GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gw), GameWorldHandler.getFactionByUuid(p.getFactionUuid(), gw), gw);
             GameDiplomacyRelation gameDiplomacyRelation = GameDiplomacyRelation.builder()

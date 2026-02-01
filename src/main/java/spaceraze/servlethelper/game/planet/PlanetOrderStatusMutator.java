@@ -1,7 +1,7 @@
 package spaceraze.servlethelper.game.planet;
 
-import spaceraze.world.Planet;
-import spaceraze.world.PlanetOrderStatus;
+import spaceraze.game.Planet;
+import spaceraze.game.PlanetOrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;

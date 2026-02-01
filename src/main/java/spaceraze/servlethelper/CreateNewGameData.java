@@ -3,7 +3,7 @@ package spaceraze.servlethelper;
 import java.io.Serializable;
 import java.util.List;
 
-import spaceraze.world.StatisticGameType;
+import spaceraze.game.StatisticGameType;
 
 public class CreateNewGameData implements Serializable {
 	static final long serialVersionUID = 1L;

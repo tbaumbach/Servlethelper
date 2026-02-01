@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.world.GameWorld;
-import spaceraze.world.Spaceship;
+import spaceraze.game.Spaceship;
 
 /**
  * @author WMPABOD

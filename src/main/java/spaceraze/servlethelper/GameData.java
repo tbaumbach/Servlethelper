@@ -5,7 +5,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import spaceraze.servlethelper.handlers.GameWorldHandler;
-import spaceraze.world.Player;
+import spaceraze.game.Player;
+import spaceraze.world.GameWorld;
 
 /**
  * Contains all data for a single game to be shown in a list in the client application
@@ -159,7 +160,7 @@ public class GameData implements Serializable {
 		this.updatesWeek = updatesWeek;
 	}
 	
-	public void setPlayers(List<Player> playersList){
+	public void setPlayers(List<Player> playersList, GameWorld gameWorld){
 		players = new String[playersList.size()][4];
 		int i = 0;
 		for (Player aPlayer : playersList) {
@@ -173,7 +174,7 @@ public class GameData implements Serializable {
 				statusChar = "s";
 			}
 			players[i][2] = statusChar;
-			players[i][3] = GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), aPlayer.getGalaxy().getGameWorld()).getColorValues();
+			players[i][3] = GameWorldHandler.getFactionByUuid(aPlayer.getFactionUuid(), gameWorld).getColorValues();
 			i++;
 		}
 	}

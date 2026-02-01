@@ -1,8 +1,8 @@
 package spaceraze.servlethelper.game;
 
 import spaceraze.world.CounterType;
-import spaceraze.world.Galaxy;
-import spaceraze.world.UniqueIdCounter;
+import spaceraze.game.Galaxy;
+import spaceraze.game.UniqueIdCounter;
 
 public class UniqueIdHandler {
 

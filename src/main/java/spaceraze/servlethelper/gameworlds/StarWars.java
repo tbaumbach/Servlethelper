@@ -6,7 +6,6 @@ import spaceraze.world.Alignment;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
-import spaceraze.world.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.enums.BlackMarketFrequency;
 import spaceraze.world.enums.SpaceShipSize;
@@ -50,17 +49,17 @@ public class StarWars {
         String sJedi = "Jedi";
         String sBountyHunter = "BountyHunter";
 
-        gw.getAlignments().add(new Alignment(sEmpire, gw));
-        gw.getAlignments().add(new Alignment(sAlliance, gw));
-        gw.getAlignments().add(new Alignment(sTrade, gw));
-        gw.getAlignments().add(new Alignment(sOldRepublic, gw));
+        gw.getAlignments().add(new Alignment(sEmpire));
+        gw.getAlignments().add(new Alignment(sAlliance));
+        gw.getAlignments().add(new Alignment(sTrade));
+        gw.getAlignments().add(new Alignment(sOldRepublic));
 //	gw.getAlignments().add(sAliens);
 
         //VIP
-        gw.getAlignments().add(new Alignment(sNeutral, gw));
-        gw.getAlignments().add(new Alignment(sEvil, gw));
-        gw.getAlignments().add(new Alignment(sGood, gw));
-        gw.getAlignments().add(new Alignment(sJedi, gw));
+        gw.getAlignments().add(new Alignment(sNeutral));
+        gw.getAlignments().add(new Alignment(sEvil));
+        gw.getAlignments().add(new Alignment(sGood));
+        gw.getAlignments().add(new Alignment(sJedi));
 
         Alignment aEmpire = AlignmentPureFunctions.findAlignmentByName(sEmpire, gw.getAlignments());
         Alignment aAlliance = AlignmentPureFunctions.findAlignmentByName(sAlliance, gw.getAlignments());
@@ -94,7 +93,6 @@ public class StarWars {
         aOldRepublic.addCanHaveVip(aNeutral);
 
         // Spaceship types
-        UniqueIdCounter uniqueShipIdCounter = new UniqueIdCounter();
 
         SpaceshipType tempsst = null;
 
@@ -1142,7 +1140,6 @@ Sulanko Frigate			Poor Hull Small
 //  ######## ( VIPS) ########
         //////////////////////////////////////////////////////////VIP/////////////////////////////////////////
         // vip types
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
 
         VIPType tmpVipType = new VIPType("Emperor Palpatine", "Pal", aEvil);
         tmpVipType.setCanVisitNeutralPlanets(true);

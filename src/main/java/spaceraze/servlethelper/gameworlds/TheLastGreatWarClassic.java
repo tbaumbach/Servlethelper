@@ -6,11 +6,10 @@ import spaceraze.servlethelper.game.spaceship.SpaceshipPureFunctions;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
-import spaceraze.world.Corruption;
+import spaceraze.servlethelper.Corruption;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
-import spaceraze.world.UniqueIdCounter;
 import spaceraze.world.VIPType;
 import spaceraze.world.enums.BlackMarketFrequency;
 import spaceraze.world.enums.SpaceShipSize;
@@ -56,18 +55,18 @@ public class TheLastGreatWarClassic {
         String sStr= "Smuggler";
         String gStr= "Trade";
 
-        gw.getAlignments().add(new Alignment(uStr, gw));
-        gw.getAlignments().add(new Alignment(cStr, gw));
-        gw.getAlignments().add(new Alignment(eStr, gw));
-        gw.getAlignments().add(new Alignment(aStr, gw));
-        gw.getAlignments().add(new Alignment(tStr, gw));
-        gw.getAlignments().add(new Alignment(rStr, gw));
-        gw.getAlignments().add(new Alignment(fStr, gw));
-
-        //VIP
-        gw.getAlignments().add(new Alignment(nStr, gw));
-        gw.getAlignments().add(new Alignment(sStr, gw));
-        gw.getAlignments().add(new Alignment(gStr, gw));
+      		gw.getAlignments().add(new Alignment(uStr));
+        gw.getAlignments().add(new Alignment(cStr));
+        gw.getAlignments().add(new Alignment(eStr));
+        gw.getAlignments().add(new Alignment(aStr));
+        gw.getAlignments().add(new Alignment(tStr));
+        gw.getAlignments().add(new Alignment(rStr));
+        gw.getAlignments().add(new Alignment(fStr));
+		
+		//VIP
+        gw.getAlignments().add(new Alignment(nStr));
+        gw.getAlignments().add(new Alignment(sStr));
+        gw.getAlignments().add(new Alignment(gStr));
 
         Alignment usa = AlignmentPureFunctions.findAlignmentByName(uStr, gw.getAlignments());
         Alignment china = AlignmentPureFunctions.findAlignmentByName(cStr, gw.getAlignments());
@@ -110,9 +109,6 @@ public class TheLastGreatWarClassic {
         federation.addCanHaveVip(smuggler);
 
         // Spaceship types
-        UniqueIdCounter uniqueShipIdCounter = new UniqueIdCounter();
-        UniqueIdCounter uniqueVIPIdCounter = new UniqueIdCounter();
-        UniqueIdCounter uniqueBuildingIdCounter = new UniqueIdCounter();
 
 //������ vip types ������
    /*     VIPType tmpVipType = new VIPType("Governor","Gov",uniqueVIPIdCounter);

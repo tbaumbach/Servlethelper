@@ -6,7 +6,7 @@ import spaceraze.servlethelper.game.GameWorldCreator;
 import spaceraze.servlethelper.handlers.GameWorldHandler;
 import spaceraze.world.Alignment;
 import spaceraze.world.BuildingType;
-import spaceraze.world.Corruption;
+import spaceraze.servlethelper.Corruption;
 import spaceraze.world.Faction;
 import spaceraze.world.GameWorld;
 import spaceraze.world.SpaceshipType;
